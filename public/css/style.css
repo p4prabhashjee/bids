@@ -1,0 +1,45 @@
+.error {
+    color: red;
+}
+
+td {
+    white-space: normal !important;
+}
+
+table {
+    width: 100% !important;
+}
+
+.navbar-vertical.navbar-expand-xs .navbar-collapse{
+    height:100vh !important;
+}
+
+
+
+.pagination li:last-child a.page-link{
+    display: block;  
+    padding: 0;
+    margin: 0 3px;
+    border-radius: 50% !important;
+    width: 36px;
+    height: 36px;
+    font-size: 0;
+    background-image: url(https://icons.veryicon.com/png/o/miscellaneous/test-2/next-28.png);
+    background-size: 16px;
+    background-repeat: no-repeat;
+    background-position: center; 
+}
+.pagination li:first-child a.page-link{
+    display: block;  
+    padding: 0;
+    margin: 0 3px;
+    border-radius: 50% !important;
+    width: 36px;
+    height: 36px;
+    font-size: 0;
+    background-image: url(https://icons.veryicon.com/png/o/miscellaneous/test-2/next-28.png);
+    background-size: 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: rotate(180deg);
+}

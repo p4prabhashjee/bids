@@ -1,0 +1,1 @@
+<textarea id="myeditorinstance" name="{{$name}}">{{$data ?? "Add your content here"}}</textarea>
