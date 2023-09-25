@@ -46,7 +46,7 @@
                     </ul>
                 </div>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#pagesExamples"
                     class="nav-link {{Request::routeIs('admin.countries.*') || Request::routeIs('admin.contact-us-subjects.*') || Request::routeIs('admin.states.*')  ? '' : 'collapsed'}}"
                     aria-controls="pagesExamples" role="button" aria-expanded="false">
@@ -131,8 +131,8 @@
                         </li>
                     </ul>
                 </div>
-            </li>
-            <li class="nav-item">
+            </li> -->
+            <!-- <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#blogSection"
                     class="nav-link {{Request::routeIs('admin.blogs.*') ? '' : 'collapsed'}}"
                     aria-controls="blogSection" role="button" aria-expanded="false">
@@ -157,7 +157,7 @@
                         </li>
                     </ul>
                 </div>
-            </li>
+            </li> -->
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#pageSection"
                     class="nav-link {{Request::routeIs('admin.pages.*') ? '' : 'collapsed'}}"
