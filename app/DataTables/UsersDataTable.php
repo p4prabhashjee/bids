@@ -79,7 +79,7 @@ class UsersDataTable extends DataTable
             ->columns($this->getColumns())
             ->addIndex()
             ->minifiedAjax()
-        //->dom('Bfrtip')
+           //->dom('Bfrtip')
             ->orderBy(0)
             ->selectStyleSingle()
             ->buttons([

@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Blog;
+use App\Models\Auctiontype;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class BlogDataTable extends DataTable
+class AuctiontypeDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -27,16 +27,25 @@ class BlogDataTable extends DataTable
                 $count++;
                 return $count;
             })
-            ->addColumn('action', 'admin.blogs.action')
+            ->addColumn('action', 'admin.auctiontype.action')
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(Blog $model): QueryBuilder
+    public function query(Auctiontype $model): QueryBuilder
     {
-        return $model->newQuery()->with('author');
+        $query = $model->newQuery();
+    
+        if ($this->request->has('created_at')) {
+            $created_at = $this->request->get('created_at');
+            if ($created_at) {
+                $query->whereDate('created_at', '=', $created_at);
+            }
+        }
+    
+        return $query;
     }
 
     /**
@@ -45,7 +54,7 @@ class BlogDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('blog-table')
+                    ->setTableId('auctiontype-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
@@ -54,6 +63,7 @@ class BlogDataTable extends DataTable
                     ->buttons([
                         Button::make('excel'),
                         Button::make('csv'),
+                        Button::make('pdf'),
                         Button::make('print'),
                         Button::make('reset'),
                         Button::make('reload')
@@ -67,16 +77,16 @@ class BlogDataTable extends DataTable
     {
         return [
             Column::make('#'),
-            Column::computed('image')->render('full[\'image\'] ? "<img src=\''.asset("img/blogs/\" + full[\"image\"] + \"").'\' width=\'50\'>" : "<img src=\''.asset("img/noimage.jpg").'\' width=\'50\'>"' )->addClass('text-center'),
-            Column::make('title')->addClass('text-center'),
-            Column::make('author.full_name')->title('Author')->addClass('text-center'),
-            Column::make('status')->render('full[\'status\'] ? \'Published\' : \'Draft\'')->addClass('text-center'),
+            Column::make('name'),
+            Column::make('slug'),
+            Column::make('status')->render('full[\'status\'] ? \'Active\' : \'Inactive\'')->addClass('text-center'),
             Column::make('created_at')->render('new Date(full[\'created_at\']).toLocaleString()' ),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
                   ->width(60)
                   ->addClass('text-center'),
+            
         ];
     }
 
@@ -85,6 +95,6 @@ class BlogDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Blog_' . date('YmdHis');
+        return 'Auctiontype_' . date('YmdHis');
     }
 }

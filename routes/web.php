@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\AuctiontypeController;
+
+
 
 
 
@@ -55,6 +59,9 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::resource('contact-us-subjects', ContactUsSubjectController::class);
     Route::resource('pages', PageController::class);
     Route::resource('settings', SettingController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('auctiontypes', AuctiontypeController::class);
+
 
 
 });

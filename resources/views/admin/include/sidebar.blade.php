@@ -37,16 +37,121 @@
                                 <span class="sidenav-normal"> Users List </span>
                             </a>
                         </li>
-                        <li class="nav-item {{Request::routeIs('admin.users.create') ? 'active' : ''}}">
+                        <!-- <li class="nav-item {{Request::routeIs('admin.users.create') ? 'active' : ''}}">
                             <a class="nav-link {{Request::routeIs('admin.users.create') ? 'active' : ''}}"
                                 href="{{route('admin.users.create')}}">
-                                <span class="sidenav-normal"> Add User </span>
+                                <span class="sidenav-normal"> <strong>Add User </strong></span>
+                            </a>
+                        </li> -->
+                    </ul>
+                </div>
+            </li>
+          
+            <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#categorySection"
+                    class="nav-link {{Request::routeIs('admin.categories.*') ? '' : 'collapsed'}}"
+                    aria-controls="categorySection" role="button" aria-expanded="false">
+                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                        <i class="ni ni-air-baloon text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Category</span>
+                </a>
+                <div class="collapse {{Request::routeIs('admin.categories.*') ? 'show' : ''}}" id="categorySection" style="">
+                    <ul class="nav ms-4">
+                        <li class="nav-item {{Request::routeIs('admin.categories.index') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.categories.index') ? 'active' : ''}}"
+                                href="{{route('admin.categories.index')}}">
+                                <span class="sidenav-normal"> List </span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{Request::routeIs('admin.categories.create') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.categories.create') ? 'active' : ''}}"
+                                href="{{route('admin.categories.create')}}">
+                                <span class="sidenav-normal"> Add Category </span>
                             </a>
                         </li>
                     </ul>
                 </div>
             </li>
-            <!-- <li class="nav-item">
+            <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#auctiontypeSection"
+                    class="nav-link {{Request::routeIs('admin.auctiontypes.*') ? '' : 'collapsed'}}"
+                    aria-controls="auctiontypeSection" role="button" aria-expanded="false">
+                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                        <i class="ni ni-basket text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">AuctionType</span>
+                </a>
+                <div class="collapse {{Request::routeIs('admin.auctiontypes.*') ? 'show' : ''}}" id="auctiontypeSection" style="">
+                    <ul class="nav ms-4">
+                        <li class="nav-item {{Request::routeIs('admin.auctiontypes.index') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.auctiontypes.index') ? 'active' : ''}}"
+                                href="{{route('admin.auctiontypes.index')}}">
+                                <span class="sidenav-normal"> List </span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{Request::routeIs('admin.auctiontypes.create') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.auctiontypes.create') ? 'active' : ''}}"
+                                href="{{route('admin.auctiontypes.create')}}">
+                                <span class="sidenav-normal"> Add AuctionType </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#blogSection"
+                    class="nav-link {{Request::routeIs('admin.blogs.*') ? '' : 'collapsed'}}"
+                    aria-controls="blogSection" role="button" aria-expanded="false">
+                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                        <i class="ni ni-ui-04 text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Blogs</span>
+                </a>
+                <div class="collapse {{Request::routeIs('admin.blogs.*') ? 'show' : ''}}" id="blogSection" style="">
+                    <ul class="nav ms-4">
+                        <li class="nav-item {{Request::routeIs('admin.blogs.index') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.blogs.index') ? 'active' : ''}}"
+                                href="{{route('admin.blogs.index')}}">
+                                <span class="sidenav-normal"> List </span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{Request::routeIs('admin.blogs.create') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.blogs.create') ? 'active' : ''}}"
+                                href="{{route('admin.blogs.create')}}">
+                                <span class="sidenav-normal"> Add Blog </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#pageSection"
+                    class="nav-link {{Request::routeIs('admin.pages.*') ? '' : 'collapsed'}}"
+                    aria-controls="pageSection" role="button" aria-expanded="false">
+                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                        <i class="ni ni-badge text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Pages</span>
+                </a>
+                <div class="collapse {{Request::routeIs('admin.pages.*') ? 'show' : ''}}" id="pageSection" style="">
+                    <ul class="nav ms-4">
+                        <li class="nav-item {{Request::routeIs('admin.pages.index') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.pages.index') ? 'active' : ''}}"
+                                href="{{route('admin.pages.index')}}">
+                                <span class="sidenav-normal"> List </span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{Request::routeIs('admin.pages.create') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.pages.create') ? 'active' : ''}}"
+                                href="{{route('admin.pages.create')}}">
+                                <span class="sidenav-normal"><strong> Add Pages </strong></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#pagesExamples"
                     class="nav-link {{Request::routeIs('admin.countries.*') || Request::routeIs('admin.contact-us-subjects.*') || Request::routeIs('admin.states.*')  ? '' : 'collapsed'}}"
                     aria-controls="pagesExamples" role="button" aria-expanded="false">
@@ -104,7 +209,7 @@
                                 </ul>
                             </div>
                         </li>
-                        <li class="nav-item ">
+                        <!-- <li class="nav-item ">
                             <a class="nav-link {{Request::routeIs('admin.contact-us-subjects.*') ? '' : 'collapsed'}}"
                                 data-bs-toggle="collapse" aria-expanded="false" href="#contactUsSubjectAction">
                                 <span class="sidenav-normal"> Contact Us Subjects <b class="caret"></b></span>
@@ -128,63 +233,11 @@
                                     </li>
                                 </ul>
                             </div>
-                        </li>
-                    </ul>
-                </div>
-            </li> -->
-            <!-- <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#blogSection"
-                    class="nav-link {{Request::routeIs('admin.blogs.*') ? '' : 'collapsed'}}"
-                    aria-controls="blogSection" role="button" aria-expanded="false">
-                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                        <i class="ni ni-ui-04 text-primary text-sm opacity-10"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Blogs</span>
-                </a>
-                <div class="collapse {{Request::routeIs('admin.blogs.*') ? 'show' : ''}}" id="blogSection" style="">
-                    <ul class="nav ms-4">
-                        <li class="nav-item {{Request::routeIs('admin.blogs.index') ? 'active' : ''}}">
-                            <a class="nav-link {{Request::routeIs('admin.blogs.index') ? 'active' : ''}}"
-                                href="{{route('admin.blogs.index')}}">
-                                <span class="sidenav-normal"> List </span>
-                            </a>
-                        </li>
-                        <li class="nav-item {{Request::routeIs('admin.blogs.create') ? 'active' : ''}}">
-                            <a class="nav-link {{Request::routeIs('admin.blogs.create') ? 'active' : ''}}"
-                                href="{{route('admin.blogs.create')}}">
-                                <span class="sidenav-normal"> Add Blog </span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li> -->
-            <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#pageSection"
-                    class="nav-link {{Request::routeIs('admin.pages.*') ? '' : 'collapsed'}}"
-                    aria-controls="pageSection" role="button" aria-expanded="false">
-                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                        <i class="ni ni-badge text-primary text-sm opacity-10"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Pages</span>
-                </a>
-                <div class="collapse {{Request::routeIs('admin.pages.*') ? 'show' : ''}}" id="pageSection" style="">
-                    <ul class="nav ms-4">
-                        <li class="nav-item {{Request::routeIs('admin.pages.index') ? 'active' : ''}}">
-                            <a class="nav-link {{Request::routeIs('admin.pages.index') ? 'active' : ''}}"
-                                href="{{route('admin.pages.index')}}">
-                                <span class="sidenav-normal"> List </span>
-                            </a>
-                        </li>
-                        <li class="nav-item {{Request::routeIs('admin.pages.create') ? 'active' : ''}}">
-                            <a class="nav-link {{Request::routeIs('admin.pages.create') ? 'active' : ''}}"
-                                href="{{route('admin.pages.create')}}">
-                                <span class="sidenav-normal"> Add Pages </span>
-                            </a>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </li>
-            <!-- <li class="nav-item">
+             <!-- <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#settingSection"
                     class="nav-link {{Request::routeIs('admin.settings.*') ? '' : 'collapsed'}}"
                     aria-controls="settingSection" role="button" aria-expanded="false">
@@ -210,6 +263,7 @@
                     </ul>
                 </div>
             </li> -->
+            
             <!-- <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#contactusSection"
                     class="nav-link {{Request::routeIs('admin.contact-us.*') ? 'active' : ''}}"
