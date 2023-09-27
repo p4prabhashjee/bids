@@ -54,7 +54,7 @@ class UserController extends Controller
             'country_code' => 'required|string|max:5', // Adjust the max length as needed
             'phone' => 'required|string|max:20', // Adjust the max length as needed
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            // 'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
         if ($request->hasFile('profile_image')) {
             $data['profile_image'] = $this->verifyAndUpload($request, 'profile_image');
@@ -91,12 +91,13 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email,' . $user->id,
             'country_code' => 'required|string|max:15',
             'phone' => 'required|string|max:20',
+            'status' => 'required|boolean', 
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+            // 'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
         ]);
-        if (empty($data['password'])) {
-            unset($data['password']);
-        }
+        // if (empty($data['password'])) {
+        //     unset($data['password']);
+        // }
         if ($request->hasFile('profile_image')) {
             $data['profile_image'] = $this->verifyAndUpload($request, 'profile_image', $user->profile_image);
         }

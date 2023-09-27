@@ -60,18 +60,40 @@
                                             @endif
                                         </div>
                                     </div>
+                                    <div class="col-12">
+                                        <label>Profile Image</label>
+                                        <input class="form-control" type="file" placeholder="Profile Image"
+                                            onfocus="focused(this)" name="profile_image"
+                                            accept="image/png, image/jpeg, image/jpg" onfocusout="defocused(this)"
+                                            onchange="previewImage(this)">
+                                        @if($errors->has('profile_image'))
+                                        <div class="error">{{$errors->first('profile_image')}}</div>
+                                        @endif
+                                    </div>
+
                                     <div class="row mt-3">
                                         <div class="col-12">
-                                            <label>Profile Image</label>
-                                            <input class="form-control" type="file" placeholder="Profile Image"
-                                                onfocus="focused(this)" name="profile_image"
-                                                accept="image/png, image/jpeg, image/jpg" onfocusout="defocused(this)">
-                                            @if($errors->has('profile_image'))
-                                            <div class="error">{{$errors->first('profile_image')}}</div>
-                                            @endif
+                                            <label>Profile Image Preview</label>
+                                            <img id="profileImagePreview"
+                                                src="{{ asset('img/users/' . $user->profile_image) }}"
+                                                alt="Profile Image Preview" width="100px">
                                         </div>
                                     </div>
-                                    <div class="row mt-3">
+                                    <div class="col-12 col-sm-6 mt-3 mt-sm-0">
+                                        <label>status</label>
+                                        <select class="choices__list choices__list--single form-control" name="status"
+                                            id="choices-gender" tabindex="-1">
+                                            <option {{old('status', $user->status) == 0 ? "selected" : ""}} value="0">
+                                                Inactive</option>
+                                            <option {{old('status', $user->status) == 1 ? "selected" : ""}} value="1">
+                                                Active
+                                            </option>
+                                        </select>
+                                        @if($errors->has('status'))
+                                        <div class="error">{{$errors->first('status')}}</div>
+                                        @endif
+                                    </div>
+                                    <!-- <div class="row mt-3">
                                         <div class="col-12 col-sm-6">
                                             <label>Password</label>
                                             <input class="multisteps-form__input form-control" type="password"
@@ -90,7 +112,7 @@
                                             <div class="error">{{$errors->first('confirmed_password')}}</div>
                                             @endif
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="button-row d-flex mt-4">
                                         <button class="btn bg-gradient-dark ms-auto mb-0 js-btn-next" type="submit"
                                             title="Submit">Update User</button>
@@ -166,6 +188,23 @@
     // on keyup / change flag: reset
     input.addEventListener('change', reset);
     input.addEventListener('keyup', reset);
+    </script>
+    <script>
+    function previewImage(input) {
+        var preview = document.getElementById('profileImagePreview');
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            // If no file is selected, show the default image
+            preview.src = "{{ asset('path_to_default_image.jpg') }}";
+            preview.style.display = 'block';
+        }
+    }
     </script>
     @endpush
 </x-admin-layout>

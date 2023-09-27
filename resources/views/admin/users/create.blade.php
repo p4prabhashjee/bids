@@ -67,7 +67,18 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="row mt-3">
+                                    <div class="col-12 col-sm-6 mt-3 mt-sm-0">
+                                            <label>status</label>
+                                            <select class="choices__list choices__list--single form-control"
+                                                name="status" id="choices-gender" tabindex="-1" data-choice="active">
+                                                <option value="0">Inactve</option>
+                                                <option selected value="1">Active</option>
+                                            </select>
+                                            @if($errors->has('status'))
+                                            <div class="error">{{$errors->first('status')}}</div>
+                                            @endif
+                                        </div>
+                                    <!-- <div class="row mt-3">
                                         <div class="col-12 col-sm-6">
                                             <label>Password</label>
                                             <input class="multisteps-form__input form-control" type="password"
@@ -86,7 +97,7 @@
                                             <div class="error">{{$errors->first('confirmed_password')}}</div>
                                             @endif
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="button-row d-flex mt-4">
                                         <button class="btn bg-gradient-dark ms-auto mb-0 js-btn-next" type="submit"
                                             title="Submit">Add User</button>

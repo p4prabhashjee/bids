@@ -103,6 +103,7 @@ class UsersDataTable extends DataTable
             Column::make('name')->data('full_name')->name('first_name'),
             Column::make('email'),
             Column::make('mobile')->data('mobile')->name('phone'),
+            Column::make('status')->render('full[\'status\'] ? \'Active\' : \'Inactive\'')->addClass('text-center'),
             Column::make('created_at')->render('new Date(full[\'created_at\']).toLocaleString()'),
             Column::computed('action')
                 ->exportable(false)

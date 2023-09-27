@@ -28,7 +28,8 @@ class User extends Authenticatable
         'profile_image',
         'otp',
         'refer_code',
-        'password',
+        'status',
+        // 'password',
     ];
 
     /**
