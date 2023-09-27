@@ -51,8 +51,8 @@ class UserController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'country_code' => 'required|string|max:5', // Adjust the max length as needed
-            'phone' => 'required|string|max:20', // Adjust the max length as needed
+            'country_code' => 'required|string|max:5', 
+            'phone' => 'required|string|max:20', 
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             // 'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
