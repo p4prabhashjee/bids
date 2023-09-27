@@ -78,7 +78,7 @@
                     class="nav-link {{Request::routeIs('admin.subcategories.*') ? '' : 'collapsed'}}"
                     aria-controls="subcategorySection" role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                        <i class="ni ni-air-baloon text-primary text-sm opacity-10"></i>
+                        <i class="ni ni-bag-17 text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Sub-Category</span>
                 </a>
@@ -263,12 +263,12 @@
                     </ul>
                 </div>
             </li>
-             <!-- <li class="nav-item">
+             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#settingSection"
                     class="nav-link {{Request::routeIs('admin.settings.*') ? '' : 'collapsed'}}"
                     aria-controls="settingSection" role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                        <i class="ni ni-basket text-primary text-sm opacity-10"></i>
+                        <i class="ni ni-app text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Settings</span>
                 </a>
@@ -288,7 +288,7 @@
                         </li>
                     </ul>
                 </div>
-            </li> -->
+            </li>
             
             <!-- <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#contactusSection"
