@@ -100,6 +100,32 @@
                 </div>
             </li>
             <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#brandSection"
+                    class="nav-link {{Request::routeIs('admin.brands.*') ? '' : 'collapsed'}}"
+                    aria-controls="brandSection" role="button" aria-expanded="false">
+                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                        <i class="ni ni-badge text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Brand</span>
+                </a>
+                <div class="collapse {{Request::routeIs('admin.brands.*') ? 'show' : ''}}" id="brandSection" style="">
+                    <ul class="nav ms-4">
+                        <li class="nav-item {{Request::routeIs('admin.brands.index') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.brands.index') ? 'active' : ''}}"
+                                href="{{route('admin.brands.index')}}">
+                                <span class="sidenav-normal"> List </span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{Request::routeIs('admin.brands.create') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.brands.create') ? 'active' : ''}}"
+                                href="{{route('admin.brands.create')}}">
+                                <span class="sidenav-normal"><strong> Add Brand </strong></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#auctiontypeSection"
                     class="nav-link {{Request::routeIs('admin.auctiontypes.*') ? '' : 'collapsed'}}"
                     aria-controls="auctiontypeSection" role="button" aria-expanded="false">

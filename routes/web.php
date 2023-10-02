@@ -15,6 +15,8 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AuctiontypeController;
 use App\Http\Controllers\Admin\SubcategoryController;
+use App\Http\Controllers\Admin\BrandController;
+
 
 
 
@@ -64,6 +66,8 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::resource('categories', CategoryController::class);
     Route::resource('subcategories', SubcategoryController::class);
     Route::resource('auctiontypes', AuctiontypeController::class);
+    Route::resource('brands', BrandController::class);
+
 
 });
 
