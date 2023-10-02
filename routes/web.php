@@ -65,8 +65,6 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::resource('subcategories', SubcategoryController::class);
     Route::resource('auctiontypes', AuctiontypeController::class);
 
-
-
 });
 
 require __DIR__.'/auth.php';
