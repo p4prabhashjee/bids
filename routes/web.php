@@ -69,6 +69,7 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::resource('brands', BrandController::class);
 
 
+
 });
 
 require __DIR__.'/auth.php';

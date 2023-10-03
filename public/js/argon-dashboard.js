@@ -752,3 +752,14 @@ function darkMode(el) {
     el.removeAttribute("checked");
   }
 };
+
+    $(document).ready(function () {
+        $(".menu-icon").click(function () {
+          $(".sidenav").addClass("menu-opn-side"); 
+        });
+      }); 
+       $(document).ready(function () {
+        $(".menu-icon").click(function () { 
+          $(".meni-close-icon").removeClass("menu-opn-side"); 
+        });
+      }); 

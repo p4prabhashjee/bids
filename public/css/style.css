@@ -43,3 +43,23 @@ table {
     background-position: center;
     transform: rotate(180deg);
 }
+
+
+.menu-icon svg{
+        width: 20px;
+    height: 20px;
+}
+.menu-icon{
+    display: none;
+}
+@media only screen and (max-width: 1200px){
+    .menu-icon{
+        display: inline-block;
+    }
+    .navbar-vertical.navbar-expand-xs.fixed-start {
+    left: -400px;
+}
+   .navbar-vertical.navbar-expand-xs.fixed-start.menu-opn-side{
+    left: 0;
+   } 
+}
