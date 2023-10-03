@@ -153,6 +153,32 @@
                 </div>
             </li>
             <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#productSection"
+                    class="nav-link {{Request::routeIs('admin.products.*') ? '' : 'collapsed'}}"
+                    aria-controls="productSection" role="button" aria-expanded="false">
+                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                        <i class="ni ni-basket text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Auction Management</span>
+                </a>
+                <div class="collapse {{Request::routeIs('admin.products.*') ? 'show' : ''}}" id="productSection" style="">
+                    <ul class="nav ms-4">
+                        <li class="nav-item {{Request::routeIs('admin.products.index') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.products.index') ? 'active' : ''}}"
+                                href="{{route('admin.products.index')}}">
+                                <span class="sidenav-normal"> List </span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{Request::routeIs('admin.products.create') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.products.create') ? 'active' : ''}}"
+                                href="{{route('admin.products.create')}}">
+                                <span class="sidenav-normal"> Add ProductAuction </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#blogSection"
                     class="nav-link {{Request::routeIs('admin.blogs.*') ? '' : 'collapsed'}}"
                     aria-controls="blogSection" role="button" aria-expanded="false">

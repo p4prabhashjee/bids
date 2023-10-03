@@ -16,6 +16,8 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AuctiontypeController;
 use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\ProductController;
+
 
 
 
@@ -52,7 +54,7 @@ Route::middleware(['user'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
+Route::get('get-subcategories/{category}', [ProductController::class,'getSubcategories'])->name('get-subcategories');
 Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
     Route::resource('users', UserController::class);
@@ -67,7 +69,8 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::resource('subcategories', SubcategoryController::class);
     Route::resource('auctiontypes', AuctiontypeController::class);
     Route::resource('brands', BrandController::class);
-
+    Route::resource('products', ProductController::class);
+    
 
 
 });
