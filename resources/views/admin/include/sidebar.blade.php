@@ -2,8 +2,7 @@
     id="sidenav-main">
     <div class="sidenav-header">
         <i class="meni-close-icon fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0     d-xl-none"
-            aria-hidden="true" id="iconSidenav"> 
-           
+            aria-hidden="true" id="iconSidenav">
         </i>
         <a class="navbar-brand m-0" href="{{route('admin.dashboard')}}">
             <img src="{{asset('img/Group 5610.jpg')}}" class="navbar-brand-img h-100" alt="main_logo">
@@ -331,5 +330,16 @@
             </li> -->
             
         </ul>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+ $(document).ready(function() {
+        $("#iconSidenav").click(function() {
+            console.log("Icon clicked");
+            $("#menu").hide();
+        });
+    });
+</script>
     </div>
+    
+
 </aside>
