@@ -70,7 +70,7 @@
                                             <label>Status</label>
                                             <select class="choices__list choices__list--single form-control"
                                                 name="status" id="choices-gender" tabindex="-1" data-choice="active">
-                                                
+
                                                 <option value="new"
                                                     {{ old('status', 'new') == 'new' ? 'selected' : '' }}>New</option>
                                                 <option value="open" {{ old('status') == 'open' ? 'selected' : '' }}>
@@ -85,26 +85,130 @@
                                             <div class="error">{{ $errors->first('status') }}</div>
                                             @endif
                                         </div>
+                                        <div class="col-12 col-sm-6">
+                                            <label><strong>Auction Start Date</strong></label>
+                                            <input class="multisteps-form__input form-control" type="date"
+                                                id="start_date" name="auction_start_date"
+                                                value="{{ old('auction_start_date') }}" min="{{ date('Y-m-d') }}">
+                                            @if($errors->has('auction_start_date'))
+                                            <div class="error">{{ $errors->first('auction_start_date') }}</div>
+                                            @endif
+                                        </div>
 
+                                        <div class="col-12 col-sm-6">
+                                            <label><strong>Auction End Date</strong></label>
+                                            <input class="multisteps-form__input form-control" type="date" id="end_date"
+                                                name="auction_end_date" value="{{ old('auction_end_date') }}"
+                                                min="{{ date('Y-m-d') }}">
+                                            @if($errors->has('auction_end_date'))
+                                            <div class="error">{{ $errors->first('auction_end_date') }}</div>
+                                            @endif
+                                        </div>
+
+                                        <div class="col-12 col-sm-6">
+                                            <label><strong>Auction Start Time</strong></label>
+                                            <input class="multisteps-form__input form-control" type="time"
+                                                id="start_time" name="auction_start_time"
+                                                value="{{ old('auction_start_time') }}">
+                                            @if($errors->has('auction_start_time'))
+                                            <div class="error">{{ $errors->first('auction_start_time') }}</div>
+                                            @endif
+                                        </div>
+
+                                        <div class="col-12 col-sm-6">
+                                            <label><strong>Auction End Time</strong></label>
+                                            <input class="multisteps-form__input form-control" type="time" id="end_time"
+                                                name="auction_end_time" value="{{ old('auction_end_time') }}">
+                                            @if($errors->has('auction_end_time'))
+                                            <div class="error">{{ $errors->first('auction_end_time') }}</div>
+                                            @endif
+                                        </div>
+                                        <div class="col-12 col-sm-6">
+                                            <label><strong>Reserved Price</strong></label>
+                                            <input class="multisteps-form__input form-control" type="number" step="0.01"
+                                                id="reserved_price" name="reserved_price"
+                                                placeholder="eg. Reserved Price" onfocus="focused(this)"
+                                                onfocusout="defocused(this)" value="{{ old('reserved_price') }}">
+                                            @if($errors->has('reserved_price'))
+                                            <div class="error">{{ $errors->first('reserved_price') }}</div>
+                                            @endif
+                                        </div>
+                                        <div class="col-12 col-sm-6">
+                                            <label><strong>Minimum Bid</strong></label>
+                                            <input class="multisteps-form__input form-control" type="number" step="0.01"
+                                                id="minimum_bid" name="minimum_bid" placeholder="eg. Minimum Bid"
+                                                onfocus="focused(this)" onfocusout="defocused(this)"
+                                                value="{{ old('minimum_bid') }}">
+                                            @if($errors->has('minimum_bid'))
+                                            <div class="error">{{ $errors->first('minimum_bid') }}</div>
+                                            @endif
+                                        </div>
 
                                         <div class="col-12 col-sm-12 mt-3 mt-sm-0">
-                                            <label>Description</label>
-                                            @php $description = old('description') @endphp
-                                            <x-forms.tinymce-editor :name="'description'" :data="$description" />
+                                            <label><strong>Gallery Images</strong></label>
+                                            <input class="multisteps-form__input form-control" type="file" id="gallery"
+                                                name="image_path[]" multiple accept="image/*"
+                                                onchange="previewImages()">
+                                            <div class="image-preview" id="image-preview"></div>
+
+                                            @if($errors->has('image_path'))
+                                            @foreach($errors->get('image_path') as $error)
+                                            <div class="error">{{ $error }}</div>
+                                            @endforeach
+                                            @endif
                                         </div>
-                                        <div class="button-row d-flex mt-4">
-                                            <button class="btn bg-gradient-dark ms-auto mb-0 js-btn-next" type="submit"
-                                                title="Submit">Add Product Auction</button>
+                                        <h6>Product Specification </h6>
+
+                                        <div id="chatFieldsContainer">
+                                            <div class="row">
+                                                <div class="col-12 col-sm-5">
+                                                    <label><strong>Feature Name</strong></label>
+
+                                                    <input class="multisteps-form__input form-control" type="text"
+                                                        name="name[]" placeholder="eg. Feature name"
+                                                        onfocus="focused(this)" onfocusout="defocused(this)"
+                                                        value="{{ old('name') }}">
+
+                                                </div>
+                                                <div class="col-12 col-sm-5">
+                                                    <label><strong>Feature Value</strong></label>
+                                                    <input class="multisteps-form__input form-control" type="text"
+                                                        name="value[]" placeholder="eg. Feature value"
+                                                        onfocus="focused(this)" onfocusout="defocused(this)"
+                                                        value="{{old('value')}}">
+                                                </div>
+                                                <div class="col-12 col-sm-2">
+
+                                                    <button type="button" class="btn btn-danger remove-field"
+                                                        disabled>Remove</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+
+                                    <div class="">
+                                        <button type="button" class="btn btn-primary add-field">Add More
+                                            Feature</button>
+                                    </div>
+
+                                    <div class="col-12 col-sm-12 mt-3 mt-sm-0">
+                                        <label>Description</label>
+                                        @php $description = old('description') @endphp
+                                        <x-forms.tinymce-editor :name="'description'" :data="$description" />
+                                    </div>
+                                    <div class="button-row d-flex mt-4">
+                                        <button class="btn bg-gradient-dark ms-auto mb-0 js-btn-next" type="submit"
+                                            title="Submit">Add Product Auction</button>
+                                    </div>
                                 </div>
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-
+    <!-- subcat script based on category -->
     <script>
     $(document).ready(function() {
         $('#category').on('change', function() {
@@ -132,5 +236,73 @@
         });
     });
     </script>
+    <!-- preview image script -->
+    <script>
+    function previewImages() {
+        var preview = document.getElementById('image-preview');
+        preview.innerHTML = '';
+
+        var files = document.getElementById('gallery').files;
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                var image = document.createElement('img');
+                image.src = e.target.result;
+                preview.appendChild(image);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+    </script>
+    <!-- add remove functionality -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('chatFieldsContainer');
+        const addFieldBtn = document.querySelector('.add-field');
+
+        addFieldBtn.addEventListener('click', function() {
+            const clone = container.firstElementChild.cloneNode(true);
+
+            // Clear values in the cloned row
+            clone.querySelector('[name="name[]"]').value = '';
+            clone.querySelector('[name="value[]"]').value = '';
+
+            // Enable the Remove button in the new row
+            const removeButton = clone.querySelector('.remove-field');
+            removeButton.removeAttribute('disabled');
+
+            container.appendChild(clone);
+        });
+
+        container.addEventListener('click', function(event) {
+            if (event.target && event.target.classList.contains('remove-field')) {
+                // Prevent removing the first row
+                if (container.childElementCount > 1) {
+                    container.removeChild(event.target.closest('.row'));
+                }
+            }
+        });
+    });
+    </script>
     <x-head.tinymce-config />
 </x-admin-layout>
+<style>
+.image-preview {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.image-preview img {
+    max-width: 100px;
+    max-height: 100px;
+    margin: 5px;
+}
+
+.remove-field {
+    margin-top: 30px;
+}
+</style>

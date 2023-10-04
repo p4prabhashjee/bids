@@ -36,7 +36,18 @@ class ProductDataTable extends DataTable
      */
     public function query(Product $model): QueryBuilder
     {
-        return $model->newQuery();
+        $query = $model->newQuery();
+    
+        if ($this->request->has('created_at')) {
+            $created_at = $this->request->get('created_at');
+            if ($created_at) {
+               
+                $date = Carbon::parse($created_at)->toDateString();
+                $query->whereDate('created_at', '=', $date);
+            }
+        }
+        $query->with('category','subcategory','auctiontype','brand');
+        return $query;
     }
 
     /**
@@ -69,10 +80,18 @@ class ProductDataTable extends DataTable
         return [
             Column::make('#'),
             Column::make('title')->title('Title'),
-            Column::make('category_id')->title('Category ID'),
-            Column::make('subcategory_id')->title('Subcategory ID'),
-            Column::make('auction_type_id')->title('Auction Type ID'),
-            Column::make('brand_id')->title('Brand'),
+            Column::computed('category_name')
+                    ->data('category.name') 
+                   ->title('Category'),
+            Column::computed('subcategory')
+                   ->data('subcategory.name') 
+                   ->title('SubCategory'),
+            Column::computed('auctiontype')
+                   ->data('auctiontype.name') 
+                   ->title('Auctiontype'),
+            Column::computed('brand')
+                   ->data('brand.name') 
+                   ->title('Brand'),
             Column::make('auction_start_date')->title('Auction Start Date'),
             Column::make('auction_end_date')->title('Auction End Date'),
             Column::make('auction_start_time')->title('Auction Start Time'),
@@ -81,7 +100,7 @@ class ProductDataTable extends DataTable
             Column::make('minimum_bid')->title('Minimum Bid'),
             Column::make('description')->title('Description'),
             Column::make('status')->title('Status'),
-            Column::make('created_at')->title('Created At'),
+            Column::make('created_at')->render('new Date(full[\'created_at\']).toLocaleString()' ),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
