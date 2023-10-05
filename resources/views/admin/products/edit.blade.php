@@ -126,6 +126,62 @@
                                             @endif
                                         </div>
                                     </div>
+                                    <div class="row mt-3">
+                                       <div class="col-12 col-sm-6">
+                                            <label><strong>Auction Start Time</strong></label>
+                                            <input class="multisteps-form__input form-control" type="time"
+                                                id="start_time" name="auction_start_time"
+                                                value="{{ old('auction_start_time', $product->auction_start_time)}}">
+                                            @if($errors->has('auction_start_time'))
+                                            <div class="error">{{ $errors->first('auction_start_time') }}</div>
+                                            @endif
+                                        </div>
+
+                                        <div class="col-12 col-sm-6">
+                                            <label><strong>Auction End Time</strong></label>
+                                            <input class="multisteps-form__input form-control" type="time" id="end_time"
+                                                name="auction_end_time" value="{{ old('auction_end_time', $product->auction_end_time)}}">
+                                            @if($errors->has('auction_end_time'))
+                                            <div class="error">{{ $errors->first('auction_end_time') }}</div>
+                                            @endif
+                                        </div>   
+                                    </div>
+                                    <div class="row mt-3">
+                                       <div class="col-12 col-sm-6">
+                                            <label><strong>Reserved Price</strong></label>
+                                            <input class="multisteps-form__input form-control" type="number" step="0.01"
+                                                id="reserved_price" name="reserved_price"
+                                                placeholder="eg. Reserved Price" onfocus="focused(this)"
+                                                onfocusout="defocused(this)" value="{{ old('reserved_price', $product->reserved_price)}}">
+                                            @if($errors->has('reserved_price'))
+                                            <div class="error">{{ $errors->first('reserved_price') }}</div>
+                                            @endif
+                                        </div>
+                                        <div class="col-12 col-sm-6">
+                                            <label><strong>Minimum Bid</strong></label>
+                                            <input class="multisteps-form__input form-control" type="number" step="0.01"
+                                                id="minimum_bid" name="minimum_bid" placeholder="eg. Minimum Bid"
+                                                onfocus="focused(this)" onfocusout="defocused(this)"
+                                                value="{{ old('minimum_bid', $product->minimum_bid)}}">
+                                            @if($errors->has('minimum_bid'))
+                                            <div class="error">{{ $errors->first('minimum_bid') }}</div>
+                                            @endif
+                                        </div>
+                                    </div>                   
+                                    <!-- gallery image -->
+                                    <div class="col-12 col-sm-12 mt-3 mt-sm-0">
+                                        <label><strong>Add or Update Gallery Images</strong></label>
+                                        <input class="multisteps-form__input form-control" type="file" id="gallery"
+                                            name="image_path[]" multiple accept="image/*" onchange="previewImages()">
+                                    </div>
+                                    <div class="">
+
+                                    @foreach($galleryImages as $image)
+                                    <div class="image-preview" id="image-preview">
+                                    <img src="{{ asset($image->image_path) }}" alt="Gallery Image">
+                                    </div>
+                                    @endforeach
+                                   </div>
 
                                     <div class="col-12 col-sm-12 mt-3 mt-sm-0">
                                         <label>Description</label>

@@ -114,7 +114,9 @@ class ProductController extends Controller
         $subcat = Subcategory::whereIn('category_id', $categories->pluck('id'))->get();
         $auctiontype = Auctiontype::where('status', 1)->get();
         $brands = Brand::where('status', 1)->get();
-        return view('admin.products.edit', compact('categories', 'subcat', 'auctiontype', 'brands','product'));
+        $galleryImages = Gallery::where('product_id', $product->id)->get();
+
+        return view('admin.products.edit', compact('categories', 'subcat', 'auctiontype', 'brands','product','galleryImages'));
     }
 
     /**
