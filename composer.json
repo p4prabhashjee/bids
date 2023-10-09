@@ -13,6 +13,7 @@
         "maatwebsite/excel": "^3.1",
         "psy/psysh": "^0.11.21",
         "tinymce/tinymce": "^6.6",
+        "tymon/jwt-auth": "^2.0",
         "yajra/laravel-datatables": "^10.1",
         "yajra/laravel-datatables-oracle": "^10.8"
     },

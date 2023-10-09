@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Http\Request;
-use App\Models\UserOtp;
+use GuzzleHttp\Client;
+
 
 function current_location($ip,$lat,$long)
     {
@@ -25,74 +26,88 @@ function p($p,$exit = 1)
 	}
 }
 
-
-
-function get_encrypted_value($key,$encrypt = false){
-	$encrypted_key = null;
-	if (!empty($key)) {
-		if ($encrypt == true) {
-			$key = Crypt::encrypt($key);
-		}
-		$encrypted_key = $key;
-	}
-	return $encrypted_key;
+function isEmail($email) {
+    $find1 = strpos($email, '@');
+    $find2 = strpos($email, '.');
+    return ($find1 !== false && $find2 !== false && $find2 > $find1);
 }
-
-function get_decrypted_value($key, $decrypt = false){
-	$decrypted_key = null;
-	if (!empty($key)) {
-		if ($decrypt == true) {
-			$key = Crypt::decrypt($key);
-		}
-		$decrypted_key = $key;
-	}
-	return $decrypted_key;
-}
-
 
 //send otp function
-function send_otp($mobile){
-    $otpnum = rand(111111, 999999);
-    $curl = curl_init();
-
-      curl_setopt_array($curl, array(
-      CURLOPT_URL => "http://2factor.in/API/V1/3565904e-cc65-11ed-81b6-0200cd936042/SMS/".$mobile."/".$otpnum."/Cityroom%20OTP",
-      CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_ENCODING => "",
-      CURLOPT_MAXREDIRS => 10,
-      CURLOPT_TIMEOUT => 30,
-      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-      CURLOPT_CUSTOMREQUEST => "GET",
-      CURLOPT_POSTFIELDS => "",
-      CURLOPT_HTTPHEADER => array(
-        "content-type: application/x-www-form-urlencoded"
-      ),
-    ));
-
-    $response = curl_exec($curl);
-    $err = curl_error($curl);
+function sendOtp($msg, $mobile, $countryCode)
+{
+    $AccountSid   =  "AC2a3b01d00d1d6778cd3f0a02b646e11e";
+    $AuthToken    = "55f2d9992b0b6a043e0c5545ccee3c3b";
     
-    curl_close($curl);
-
-    if ($err) {
-      return 2;
-    } else {
-       $response;
+    // Create a configuration array
+    $config = [
+        'auth' => [$AccountSid, $AuthToken],
+    ];
+    
+    $client = new Client($config);
+    $contact = $countryCode . $mobile;
+    
+    try {
+        DB::beginTransaction();
+        $client->post('https://api.twilio.com/2010-04-01/Accounts/' . $AccountSid . '/Messages.json', [
+            'auth' => [$AccountSid, $AuthToken],
+            'form_params' => [
+                'To' => $contact,
+                'From' => "+17853902515",
+                'Body' => $msg,
+            ],
+        ]);
+        
+        DB::commit(); // Commit the database transaction
+        
+        $response = [
+            'message' => 'success',
+            'status' => 1,
+        ];
+        
+        return $response;
+    } catch (Exception $e) {
+        DB::rollback(); // Rollback the database transaction in case of an exception
+        
+        $response = [
+            'message' => $e->getMessage(),
+            'status' => 0,
+        ];
+        
+        return $response;
     }
 
-    $otp_user = UserOtp::where('mobile',$mobile)->first();
-    if (!empty($otp_user)) {
-        $userotp = UserOtp::find($otp_user->id);
-    }else{
-        $userotp = new UserOtp;
-    }
-
-    $userotp->mobile        = $mobile;
-    $userotp->otp           = $otpnum;
-    $userotp->save();
-
-    return 1;
+    // $AccountSid   =  "AC2a3b01d00d1d6778cd3f0a02b646e11e";
+    // $AuthToken    = "55f2d9992b0b6a043e0c5545ccee3c3b";
+    // $client       =  new Client($AccountSid, $AuthToken);
+    // $contact      =  $countryCode . $mobile;
+    // try {
+    //     DB::beginTransaction();
+    //     $client->account->messages->create(
+    //         $contact,
+    //         array(
+    //             'from' => "+17853902515",
+    //             'body' => $msg
+    //         )
+    //     );
+    //     // print_r($sms);die;
+    //     $response     =  [
+    //         'message' => 'success',
+    //         'status'  => 1,
+    //     ];
+    //     return $response;
+    // } catch (Exception $e) {
+    //     $response = [
+    //         'message' => $e->getMessage(),
+    //         'status'  => 0,
+    //     ];
+    //     return $response;
+    // }
 }
+
+
+
+
+
 
 //send otp function
 function send_otp1($mobile){
