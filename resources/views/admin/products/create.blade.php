@@ -144,6 +144,28 @@
                                             @endif
                                         </div>
 
+                                        <div class="col-12 col-sm-6">
+                                            <label><strong>Deposit</strong></label>
+                                            <div>
+                                                <input type="radio" id="with_deposit" name="deposit" value="with"
+                                                    onchange="toggleDepositField()">
+                                                <label for="with_deposit"><strong>With Deposit</strong></label>
+                                            </div>
+                                            <div>
+                                                <input type="radio" id="without_deposit" name="deposit"
+                                                    value="without" onchange="toggleDepositField()">
+                                                <label for="without_deposit">Without Deposit</label>
+                                            </div>
+                                            <div id="deposit_field" style="display: none;">
+                                                <input class="multisteps-form__input form-control" type="number"
+                                                    step="0.01" id="deposit_amount" name="deposit_amount"
+                                                    placeholder="eg. Deposit Amount" onfocus="focused(this)"
+                                                    onfocusout="defocused(this)" value="{{ old('deposit_amount') }}">
+                                                @if($errors->has('deposit_amount'))
+                                                <div class="error">{{ $errors->first('deposit_amount') }}</div>
+                                                @endif
+                                            </div>
+                                        </div>
                                         <div class="col-12 col-sm-12 mt-3 mt-sm-0">
                                             <label><strong>Gallery Images</strong></label>
                                             <input class="multisteps-form__input form-control" type="file" id="gallery"
@@ -159,6 +181,7 @@
                                         </div>
                                         <h6>Product Specification </h6>
 
+
                                         <div id="chatFieldsContainer">
                                             <div class="row">
                                                 <div class="col-12 col-sm-5">
@@ -166,16 +189,14 @@
 
                                                     <input class="multisteps-form__input form-control" type="text"
                                                         name="name[]" placeholder="eg. Feature name"
-                                                        onfocus="focused(this)" onfocusout="defocused(this)"
-                                                        value="{{ old('name') }}">
+                                                        onfocus="focused(this)" onfocusout="defocused(this)">
 
                                                 </div>
                                                 <div class="col-12 col-sm-5">
                                                     <label><strong>Feature Value</strong></label>
                                                     <input class="multisteps-form__input form-control" type="text"
                                                         name="value[]" placeholder="eg. Feature value"
-                                                        onfocus="focused(this)" onfocusout="defocused(this)"
-                                                        value="{{old('value')}}">
+                                                        onfocus="focused(this)" onfocusout="defocused(this)">
                                                 </div>
                                                 <div class="col-12 col-sm-2">
 
@@ -286,6 +307,24 @@
             }
         });
     });
+    </script>
+    <script>
+    function toggleDepositField() {
+        var depositField = document.getElementById('deposit_field');
+        var depositOptionWith = document.getElementById('with_deposit');
+        var depositOptionWithout = document.getElementById('without_deposit');
+
+        if (depositOptionWith.checked) {
+            depositField.style.display = 'block';
+        } else {
+            depositField.style.display = 'none';
+            document.getElementById('deposit_amount').value = '';
+        }
+
+        if (depositOptionWithout.checked) {
+            // You can handle logic for the "Without Deposit" option here if needed
+        }
+    }
     </script>
     <x-head.tinymce-config />
 </x-admin-layout>

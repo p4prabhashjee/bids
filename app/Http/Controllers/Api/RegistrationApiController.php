@@ -6,16 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Mail\ResetPasswordMail;
 use App\Models\User;
 use App\Models\Useraddress;
+use App\Traits\ImageTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Validation\Rule;
-use App\Traits\ImageTrait;
-
-
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class RegistrationApiController extends Controller
 {
@@ -44,7 +42,12 @@ class RegistrationApiController extends Controller
             $validator = Validator::make($request->all(), $rules);
 
             if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
+                $firstErrorMessage = $validator->errors()->first();
+                return response()->json([
+                    'ResponseCode' => 422,
+                    'Status' => 'False',
+                    'Message' => $firstErrorMessage,
+                ], 422);
             }
 
             $otp = rand(1000, 9999);
@@ -61,22 +64,36 @@ class RegistrationApiController extends Controller
 
             $user->save();
             $msg = $otp . ' is your Verification code for Bids.Sa ';
+            Mail::to($user->email)->send(new ResetPasswordMail($user->otp));
 
             // $result = sendOtp($msg, $request->phone, $request->country_code);
+
+            $isTerm = (int) $request->input('is_term');
 
             $token = JWTAuth::fromUser($user);
 
             return response()->json([
-                'status' => 'success',
-                'message' => 'Otp Send Successfully',
-                'user' => $user,
-                'authorisation' => [
-                    'token' => $token,
-                    'type' => 'bearer',
+                'ResponseCode' => 200,
+                'Status' => 'true',
+                'Message' => 'Otp Send Successfully',
+                'data' => [
+                    'user' => [
+                        'first_name' => $user->first_name,
+                        'phone' => $user->phone,
+                        'email' => $user->email,
+                        'device_token' => $user->device_token,
+                        'otp' => $user->otp,
+                        'country_code' => $user->country_code,
+                        'is_term' => $isTerm,
+                    ],
                 ],
-            ]);
+            ], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred.'], 500);
+            return response()->json([
+                'ResponseCode' => 500,
+                'Status' => 'False',
+                'Message' => $e->getMessage(),
+            ], 500);
         }
 
     }
@@ -88,13 +105,21 @@ class RegistrationApiController extends Controller
         $rules = [
             'otp' => 'required',
             'phone' => 'required',
-            'country_code' => 'required',
+            'country_code' => '',
         ];
 
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
+            // return response()->json(['errors' => $validator->errors()], 400);
+            if ($validator->fails()) {
+                $firstErrorMessage = $validator->errors()->first();
+                return response()->json([
+                    'ResponseCode' => 422,
+                    'Status' => 'False',
+                    'Message' => $firstErrorMessage,
+                ], 422);
+            }
         }
 
         $otpUser = User::where('country_code', $request->country_code)
@@ -102,11 +127,21 @@ class RegistrationApiController extends Controller
             ->first();
 
         if (!$otpUser) {
-            return response()->json(['error' => 'User not found'], 404);
+            // return response()->json(['error' => 'User not found'], 400);
+            return response()->json([
+                'ResponseCode' => 400,
+                'Status' => 'False',
+                'Message' => 'User not found',
+            ], 400);
         }
 
         if ($otpUser->otp != $request->otp && $request->otp !== '1234') {
-            return response()->json(['error' => 'Invalid OTP'], 400);
+            // return response()->json(['error' => 'Invalid OTP'], 400);
+            return response()->json([
+                'ResponseCode' => 422,
+                'Status' => 'False',
+                'Message' => 'Invalid OTP',
+            ], 422);
         }
         $otpUser->is_otp_verify = 1;
         $otpUser->save();
@@ -116,14 +151,11 @@ class RegistrationApiController extends Controller
             return response()->json(['error' => 'Could not create token'], 500);
         }
         return response()->json([
-            'status' => 'success',
-            'message' => 'Otp Verified Successfully',
-            'user' => $otpUser,
-            'authorisation' => [
-                'token' => $token,
-                'type' => 'bearer',
-            ],
-        ]);
+            'ResponseCode' => 200,
+            'Status' => 'true',
+            'Message' => 'Otp Verified Successfully',
+
+        ], 200);
     }
 
     // login api
@@ -138,7 +170,16 @@ class RegistrationApiController extends Controller
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
+            // return response()->json(['errors' => $validator->errors()], 400);
+            if ($validator->fails()) {
+                $firstErrorMessage = $validator->errors()->first();
+                return response()->json([
+                    'ResponseCode' => 422,
+                    'Status' => 'False',
+                    'Message' => $firstErrorMessage,
+                ], 422);
+            }
+
         }
 
         $credential = $request->input('credential');
@@ -158,17 +199,22 @@ class RegistrationApiController extends Controller
             $token = JWTAuth::fromUser($user);
 
             return response()->json([
-                'status' => 'success',
-                'message' => 'Login Successfully',
-                'user' => $user,
-                'authorisation' => [
+                'ResponseCode' => 200,
+                'Status' => 'true',
+                'Message' => 'Login Successfully',
+                'data' => [
+                    'user' => $user,
                     'token' => $token,
-                    'type' => 'bearer',
                 ],
-            ]);
+
+            ], 200);
         }
 
-        return response()->json(['error' => 'Invalid credentials'], 401);
+        return response()->json([
+            'ResponseCode' => 422,
+            'Status' => 'False',
+            'Message' => 'Invalid credentials',
+        ], 422);
     }
 
     // Resend Otp again api.
@@ -178,7 +224,11 @@ class RegistrationApiController extends Controller
             $user = auth()->user();
 
             if (!$user) {
-                return response()->json(['error' => 'User not authenticated.'], 401);
+                return response()->json([
+                    'ResponseCode' => 400,
+                    'Status' => 'False',
+                    'Message' => 'User not authenticated',
+                ]);
             }
 
             // Generate a new OTP
@@ -190,10 +240,11 @@ class RegistrationApiController extends Controller
             // $result = sendOtp($msg, $user->phone, $user->country_code);
 
             return response()->json([
-                'status' => 'success',
-                'message' => 'New OTP sent successfully',
-                'data' => $user,
-            ]);
+                'ResponseCode' => 200,
+                'Status' => 'true',
+                'Message' => 'New OTP sent successfully',
+
+            ], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error occurred.'], 500);
         }
@@ -207,7 +258,12 @@ class RegistrationApiController extends Controller
         if (filter_var($input, FILTER_VALIDATE_EMAIL)) {
             $user = User::where('email', $input)->first();
             if (!$user) {
-                return response()->json(['error' => 'User not found'], 404);
+                // return response()->json(['error' => 'User not found'], 400);
+                return response()->json([
+                    'ResponseCode' => 400,
+                    'Status' => 'False',
+                    'Message' => 'User not found',
+                ], 400);
             }
 
             // Generate OTP
@@ -218,13 +274,19 @@ class RegistrationApiController extends Controller
             Mail::to($user->email)->send(new ResetPasswordMail($user->otp));
 
             return response()->json([
-                'status' => 'success',
-                'message' => 'OTP sent to the email address',
-            ]);
+                'ResponseCode' => 200,
+                'Status' => 'true',
+                'Message' => 'OTP sent to the email address',
+            ], 200);
         } else {
             $user = User::where('phone', $input)->first();
             if (!$user) {
-                return response()->json(['error' => 'User not found'], 404);
+                // return response()->json(['error' => 'User not found'], 400);
+                return response()->json([
+                    'ResponseCode' => 400,
+                    'Status' => 'False',
+                    'Message' => 'User not found',
+                ], 400);
             }
 
             // Generate OTP
@@ -235,9 +297,10 @@ class RegistrationApiController extends Controller
             // sendOtp($otp, $user->phone, $user->country_code);
 
             return response()->json([
-                'status' => 'success',
-                'message' => 'OTP sent to the phone number',
-            ]);
+                'ResponseCode' => 200,
+                'Status' => 'true',
+                'Message' => 'OTP sent to the phone number',
+            ], 200);
         }
     }
     // reset password
@@ -250,7 +313,15 @@ class RegistrationApiController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
+            // return response()->json(['errors' => $validator->errors()], 400);
+            if ($validator->fails()) {
+                $firstErrorMessage = $validator->errors()->first();
+                return response()->json([
+                    'ResponseCode' => 422,
+                    'Status' => 'False',
+                    'Message' => $firstErrorMessage,
+                ], 422);
+            }
         }
 
         $user = User::where('email', $request->email_or_phone)
@@ -258,18 +329,32 @@ class RegistrationApiController extends Controller
             ->first();
 
         if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
+            // return response()->json(['message' => 'User not found','Status' => 'false'], 400);
+            return response()->json([
+                'ResponseCode' => 400,
+                'Status' => 'False',
+                'Message' => 'User not found',
+            ], 400);
         }
 
         if (Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'New password must be different from previous ones'], 400);
+            return response()->json(['message' => 'New password must be different from previous ones', 'Status' => 'false'], 400);
+            return response()->json([
+                'ResponseCode' => 422,
+                'status' => 'false',
+                'message' => 'New password must be different from previous ones',
+            ], 422);
         }
 
         $user->update([
             'password' => bcrypt($request->password),
         ]);
 
-        return response()->json(['message' => 'Password reset successful. You can now log in.']);
+        return response()->json([
+            'ResponseCode' => 200,
+            'Status' => 'true',
+            'Message' => 'Password reset successful. You can now log in',
+        ], 200);
     }
 
     // change password
@@ -287,22 +372,32 @@ class RegistrationApiController extends Controller
             $validator = Validator::make($request->all(), $rules);
 
             if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
+                $firstErrorMessage = $validator->errors()->first();
+                return response()->json([
+                    'ResponseCode' => 422,
+                    'Status' => 'False',
+                    'Message' => $firstErrorMessage,
+                ], 422);
             }
 
             $user = auth()->user();
 
             if (!Hash::check($request->input('old_password'), $user->password)) {
-                return response()->json(['error' => 'Old password is incorrect'], 401);
+                return response()->json([
+                    'ResponseCode' => 422,
+                    'Status' => 'False',
+                    'Message' => 'Old password is incorrect',
+                ], 422);
             }
 
             $user->password = bcrypt($request->input('password'));
             $user->save();
 
             return response()->json([
-                'status' => 'success',
-                'message' => 'Password changed successfully',
-            ]);
+                'ResponseCode' => 200,
+                'Status' => 'true',
+                'Message' => 'Password changed successfully',
+            ], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error occurred.'], 500);
         }
@@ -325,8 +420,16 @@ class RegistrationApiController extends Controller
 
             $validator = Validator::make($request->all(), $rules);
 
+            // if ($validator->fails()) {
+            //     return response()->json(['errors' => $validator->errors()], 400);
+            // }
             if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
+                $firstErrorMessage = $validator->errors()->first();
+                return response()->json([
+                    'ResponseCode' => 422,
+                    'Status' => 'False',
+                    'Message' => $firstErrorMessage,
+                ], 422);
             }
 
             $user = auth()->user();
@@ -336,14 +439,18 @@ class RegistrationApiController extends Controller
             $userDetails = $user->toArray();
 
             return response()->json([
-                'status' => 'success',
-                'message' => 'User Address added successfully',
-                'user_details' => $userDetails,
-                'user_address' => $userAddress,
-            ]);
+                'ResponseCode' => 200,
+                'Status' => 'true',
+                'Message' => 'User Address added Successfully',
+                'data' => [
+                    'user' => $userDetails,
+                    'user_address' => $userAddress,
+                ],
+            ], 200);
         } catch (\Exception $e) {
 
             return response()->json([
+                'ResponseCode' => 500,
                 'status' => 'error',
                 'message' => 'Error adding user address',
                 'error' => $e->getMessage(),
@@ -369,8 +476,16 @@ class RegistrationApiController extends Controller
 
             $validator = Validator::make($request->all(), $rules);
 
+            // if ($validator->fails()) {
+            //     return response()->json(['errors' => $validator->errors()], 400);
+            // }
             if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
+                $firstErrorMessage = $validator->errors()->first();
+                return response()->json([
+                    'ResponseCode' => 422,
+                    'Status' => 'False',
+                    'Message' => $firstErrorMessage,
+                ], 422);
             }
 
             $user = auth()->user();
@@ -380,22 +495,28 @@ class RegistrationApiController extends Controller
 
             if (!$userAddress) {
                 return response()->json([
-                    'status' => 'error',
-                    'message' => 'User Address not found',
-                ], 404);
+                    'ResponseCode' => 422,
+                    'Status' => 'False',
+                    'Message' => 'User Address not found',
+                ], 422);
+
             }
 
             $userAddress->update($request->all());
             $userDetails = $user->toArray();
 
             return response()->json([
-                'status' => 'success',
-                'message' => 'User Address Updated successfully',
-                'user_details' => $userDetails,
-                'user_address' => $userAddress,
-            ]);
+                'ResponseCode' => 200,
+                'Status' => 'true',
+                'Message' => 'User Address Updated successfully',
+                'data' => [
+                    'user' => $userDetails,
+                    'user_address' => $userAddress,
+                ],
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
+                'ResponseCode' => 500,
                 'status' => 'error',
                 'message' => 'Error updating user address',
                 'error' => $e->getMessage(),
@@ -414,21 +535,25 @@ class RegistrationApiController extends Controller
 
             if (!$userAddress) {
                 return response()->json([
-                    'status' => 'error',
+                    'ResponseCode' => 422,
+                    'status' => 'false',
                     'message' => 'User Address not found',
-                ], 404);
+                ], 422);
             }
 
             $userAddress->delete();
             // $userDetails = $user->toArray();
 
             return response()->json([
-                'status' => 'success',
+
+                'ResponseCode' => 200,
+                'status' => 'true',
                 'message' => 'User Address deleted successfully',
                 // 'user_details' => $userDetails,
-            ]);
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
+                'ResponseCode' => 500,
                 'status' => 'error',
                 'message' => 'Error deleting user address',
                 'error' => $e->getMessage(),
@@ -461,7 +586,15 @@ class RegistrationApiController extends Controller
             $validator = Validator::make($request->all(), $rules);
 
             if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
+                // return response()->json(['errors' => $validator->errors()], 400);
+                if ($validator->fails()) {
+                    $firstErrorMessage = $validator->errors()->first();
+                    return response()->json([
+                        'ResponseCode' => 422,
+                        'Status' => 'False',
+                        'Message' => $firstErrorMessage,
+                    ], 422);
+                }
             }
 
             $data = [
@@ -479,10 +612,13 @@ class RegistrationApiController extends Controller
             $user->update($data);
 
             return response()->json([
-                'status' => 'success',
+                'ResponseCode' => 200,
+                'status' => 'true',
                 'message' => 'Profile updated successfully',
-                'user' => $user,
-            ]);
+                'data' => [
+                    'user' => $user,
+                ],
+            ], 200);
         } catch (\Exception $e) {
             \Log::error('An error occurred: ' . $e->getMessage());
             return response()->json(['error' => 'An error occurred.'], 500);
@@ -494,17 +630,44 @@ class RegistrationApiController extends Controller
     {
         try {
             $user = auth()->user();
-    
+
             if (!$user) {
-                return response()->json(['error' => 'User not found'], 404);
+
+                return response()->json([
+                    'ResponseCode' => 422,
+                    'Status' => 'False',
+                    'Message' => 'User not found',
+                ], 422);
             }
-    
-            return response()->json(['data' => $user]);
+
+            return response()->json([
+                'ResponseCode' => 200,
+                'status' => 'true',
+                'message' => 'Profile Detail Retrived successfully',
+                'data' => [
+                    'user' => $user,
+                ],
+            ], 200);
         } catch (\Exception $e) {
-            
+
             return response()->json(['error' => 'Something went wrong'], 500);
         }
     }
-    
+
+    // /notification on or off
+
+    public function toggleNotifyOn(Request $request)
+    {
+        $user = Auth::user();
+        $user->notify_on = !$user->notify_on;
+        $user->save();
+
+        return response()->json([
+            'ResponseCode' => 200,
+            'status' => 'true',
+            'message' => 'Notify_on status updated successfully.',
+            'notify_on' => $user->notify_on,
+        ]);
+    }
 
 }

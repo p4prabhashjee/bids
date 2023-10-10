@@ -18,14 +18,6 @@ use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProductController;
 
-
-
-
-
-
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -71,8 +63,6 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::resource('brands', BrandController::class);
     Route::resource('products', ProductController::class);
     
-
-
 });
 
 require __DIR__.'/auth.php';

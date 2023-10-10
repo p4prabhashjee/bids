@@ -46,6 +46,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+   
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'category_id' => 'required',
@@ -63,10 +64,17 @@ class ProductController extends Controller
             'name.*' => 'required',
             'value.*' => 'required',
             'image_path.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'deposit' => 'required|in:0,1', 
+            'deposit_amount' => 'required_if:deposit,with', 
         ]);
     
         // Generate the slug
         $validatedData['slug'] = $this->getUniqueSlug($validatedData['title']);
+         
+  
+    $validatedData['deposit'] = $request->input('deposit');
+    $validatedData['deposit_amount'] = ($request->input('deposit') == 'with') ? $request->input('deposit_amount') : null;
+
         $pro = Product::create($validatedData);
         if ($request->hasFile('image_path')) {
             foreach ($request->file('image_path') as $file) {
