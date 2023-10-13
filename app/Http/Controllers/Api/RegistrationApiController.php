@@ -33,7 +33,7 @@ class RegistrationApiController extends Controller
                 'phone' => 'required|numeric|digits:10|unique:users,phone',
                 'email' => 'required|string|email|max:255|unique:users',
                 'device_token' => '',
-                'password' => 'required|string|min:6',
+                'password' => 'required|string|min:8',
                 'confirm_password' => 'required|same:password',
                 'country_code' => 'required',
                 'is_term' => 'required|boolean',
@@ -170,7 +170,6 @@ class RegistrationApiController extends Controller
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-            // return response()->json(['errors' => $validator->errors()], 400);
             if ($validator->fails()) {
                 $firstErrorMessage = $validator->errors()->first();
                 return response()->json([
@@ -279,7 +278,16 @@ class RegistrationApiController extends Controller
                 'Message' => 'OTP sent to the email address',
             ], 200);
         } else {
-            $user = User::where('phone', $input)->first();
+            $phone = $request->input('email_or_phone');
+            $countryCode = $request->input('country_code');
+            if (!$phone || !$countryCode) {
+                return response()->json([
+                    'ResponseCode' => 400,
+                    'Status' => 'False',
+                    'Message' => 'Phone and country code are required',
+                ], 400);
+            }
+          $user = User::where('phone', $phone)->where('country_code', $countryCode)->first();
             if (!$user) {
                 // return response()->json(['error' => 'User not found'], 400);
                 return response()->json([
@@ -364,7 +372,7 @@ class RegistrationApiController extends Controller
         try {
             $rules = [
                 'old_password' => 'required|string',
-                'password' => 'required|string|min:6',
+                'password' => 'required|string|min:8',
                 'confirm_password' => 'required|same:password',
             ];
 
@@ -416,13 +424,11 @@ class RegistrationApiController extends Controller
                 'state' => 'required|string',
                 'zipcode' => 'required|string',
                 'is_save' => 'required|boolean',
+                'address_type' => 'required',
             ];
 
             $validator = Validator::make($request->all(), $rules);
-
-            // if ($validator->fails()) {
-            //     return response()->json(['errors' => $validator->errors()], 400);
-            // }
+            
             if ($validator->fails()) {
                 $firstErrorMessage = $validator->errors()->first();
                 return response()->json([
@@ -460,7 +466,7 @@ class RegistrationApiController extends Controller
 
     // user address edit api
 
-    public function editUserAddress(Request $request, $addressId)
+    public function editUserAddress(Request $request)
     {
         try {
             $rules = [
@@ -471,14 +477,14 @@ class RegistrationApiController extends Controller
                 'country' => 'required|string',
                 'state' => 'required|string',
                 'zipcode' => 'required|string',
+                'address_type' => 'required',
+                'address_id'  =>'required|exists:useraddresses,id',
                 // 'is_save' => 'required|boolean',
+
             ];
 
             $validator = Validator::make($request->all(), $rules);
 
-            // if ($validator->fails()) {
-            //     return response()->json(['errors' => $validator->errors()], 400);
-            // }
             if ($validator->fails()) {
                 $firstErrorMessage = $validator->errors()->first();
                 return response()->json([
@@ -489,7 +495,7 @@ class RegistrationApiController extends Controller
             }
 
             $user = auth()->user();
-            $userAddress = Useraddress::where('id', $addressId)
+            $userAddress = Useraddress::where('id', $request->address_id)
                 ->where('user_id', $user->id)
                 ->first();
 
@@ -525,14 +531,30 @@ class RegistrationApiController extends Controller
     }
 
     // address remove api
-    public function removeuseraddrss($addressId)
+    public function removeuseraddrss(Request $request)
     {
         try {
+            $rules = [
+                'address_id'  => 'required|exists:useraddresses,id',
+            ];
+    
+            $validator = Validator::make($request->all(), $rules);
+    
+            if ($validator->fails()) {
+                $firstErrorMessage = $validator->errors()->first();
+                return response()->json([
+                    'ResponseCode' => 422,
+                    'Status' => 'False',
+                    'Message' => $firstErrorMessage,
+                ], 422);
+            }
             $user = auth()->user();
+            $addressId = $request->input('address_id'); 
+    
             $userAddress = Useraddress::where('id', $addressId)
                 ->where('user_id', $user->id)
                 ->first();
-
+    
             if (!$userAddress) {
                 return response()->json([
                     'ResponseCode' => 422,
@@ -540,26 +562,65 @@ class RegistrationApiController extends Controller
                     'message' => 'User Address not found',
                 ], 422);
             }
-
+    
             $userAddress->delete();
-            // $userDetails = $user->toArray();
-
             return response()->json([
-
                 'ResponseCode' => 200,
-                'status' => 'true',
-                'message' => 'User Address deleted successfully',
-                // 'user_details' => $userDetails,
+                'Message' => 'true',
+                'Message' => 'User Address deleted successfully',
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'ResponseCode' => 500,
-                'status' => 'error',
-                'message' => 'Error deleting user address',
+                'Status' => 'error',
+                'Message'  => 'Error deleting user address',
                 'error' => $e->getMessage(),
             ], 500);
         }
     }
+    // get address
+    public function getUserAddresses(Request $request)
+{
+    try {
+        $user = auth()->user();
+
+        $userAddresses = Useraddress::where('user_id', $user->id)->get();
+
+        if ($userAddresses->isEmpty()) {
+            return response()->json([
+                'ResponseCode' => 422,
+                'Status' => 'false',
+                'Message' => 'User Addresses not found',
+            ], 422);
+        }
+
+        $addresses = [];
+
+        foreach ($userAddresses as $userAddress) {
+            $fullAddress = $userAddress->first_name . ' ' . $userAddress->last_name . '- ' . $userAddress->apartment . ', ' . $userAddress->city . ', ' . $userAddress->state . ', ' . $userAddress->zipcode;
+            
+            // Add the full address to the user address object
+            $userAddress->full_address = $fullAddress;
+
+            $addresses[] = $userAddress;
+        }
+
+        return response()->json([
+            'ResponseCode' => 200,
+            'Status' => 'true',
+            'Message' => 'User Addresses retrieved successfully',
+            'data' => $addresses,
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            'ResponseCode' => 500,
+            'Status' => 'error',
+            'Message' => 'Error retrieving user addresses',
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+}
+    
 
     // user update profile api
     public function profileupdate(Request $request)

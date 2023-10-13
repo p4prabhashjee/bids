@@ -17,6 +17,8 @@ use App\Http\Controllers\Admin\AuctiontypeController;
 use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Frontend\HomepageController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -29,13 +31,21 @@ use App\Http\Controllers\Admin\ProductController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('frontend.homepage');
+// });
+Route::get('/', [HomepageController::class,'homepage']);
+Route::get('contact-us', [HomepageController::class,'contactus'])->name('contact-us');
+Route::get('privacy-policy', [HomepageController::class,'privacy'])->name('privacy-policy');
+Route::get('terms-conditions', [HomepageController::class,'terms'])->name('terms-conditions');
+Route::get('about-us', [HomepageController::class,'about'])->name('about-us');
 
+Route::get('products-list', [HomepageController::class,'productlist'])->name('products-list');
+Route::get('signin', [HomepageController::class,'login'])->name('signin');
+Route::get('register', [HomepageController::class,'registration'])->name('register');
+Route::post('registration', [HomepageController::class,'register'])->name('registration');
 Route::get('/login/google', [SocialController::class,'redirectToGoogle']);
 Route::get('/login/google/callback', [SocialController::class,'handleGoogleCallback']);
-
 
 Route::get('/dashboard', function () {
     return view('dashboard');

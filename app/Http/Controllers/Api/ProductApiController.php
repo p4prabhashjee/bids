@@ -20,54 +20,88 @@ class ProductApiController extends Controller
     {
         $this->middleware('auth:api', ['except' => ['login', 'register', 'verifyOTP', 'forgotpassword', 'resetpassword']]);
     }
+   
     public function homepage(Request $request)
     {
         try {
-
             $category_id = $request->input('category_id');
-            // Get the search query from the request
             $searchQuery = $request->input('search_query');
-
             $names = Category::where('status', 1)->pluck('name');
             $namesArray = $names->toArray();
             $productsQuery = Product::with(['auctionType', 'galleries']);
+
             if (!empty($category_id)) {
                 $productsQuery->where('category_id', $category_id);
             }
-            // Perform a search if a search query is provided
+
             if (!empty($searchQuery)) {
                 $productsQuery->where(function ($query) use ($searchQuery) {
                     $query->where('title', 'like', '%' . $searchQuery . '%')
                         ->orWhere('description', 'like', '%' . $searchQuery . '%');
                 });
             }
-            $products = $productsQuery->get();
 
+            $products = $productsQuery->get();
             $formattedProducts = [];
+            $loggedInUser = Auth::user();
             foreach ($products as $product) {
                 $auctionTypeName = $product->auctionType->name;
+                $formattedProduct = [
+                    'id'    =>$product->id,
+                    'title' => $product->title,
+                    'image_path' => $product->galleries->first()->image_path,
+                    'is_wishlist' => $loggedInUser ? $loggedInUser->wishlists->contains('product_id', $product->id) : false,
+                ];
 
-                // Calculate the time remaining
-                $auctionStartDateTime = Carbon::parse($product->auction_start_date . ' ' . $product->auction_start_time);
-                $now = Carbon::now();
-                $timeRemaining = $auctionStartDateTime->diffForHumans($now, [
-                    'parts' => 5,
-                    'syntax' => Carbon::DIFF_ABSOLUTE,
-                ]);
+                if ($auctionTypeName === 'Private') {
+                    // For Private auctions, show title, reserved price, and current bid (if running)
+                    $formattedProduct['reserved_price'] = $product->reserved_price;
+                    if (optional($product->bids)->isNotEmpty()) {
+                        $formattedProduct['current_bid'] = $product->bids->max('bid_amount');
+                    } else {
+                        $formattedProduct['current_bid'] = 0;
+                    }
+                    
+                    
+                } elseif ($auctionTypeName === 'Live') {
+                    // For Live auctions, show title, reserved price, current bid (if running), and upcoming date
+                    $now = Carbon::now();
+                    $auctionStartDateTime = Carbon::parse($product->auction_start_date . ' ' . $product->auction_start_time);
 
-                // Create a new key if it doesn't exist
+                    if ($auctionStartDateTime > $now) {
+                        $formattedProduct['upcoming'] = $auctionStartDateTime->format('d M Y h:i A');
+                    } else {
+                        $formattedProduct['reserved_price'] = $product->reserved_price;
+                        $formattedProduct['upcoming'] = $auctionStartDateTime->format('d M Y h:i A');
+                        // $formattedProduct['current_bid'] = $product->bids->max('bid_amount') ?? 0;
+                        if (optional($product->bids)->isNotEmpty()) {
+                            $formattedProduct['current_bid'] = $product->bids->max('bid_amount');
+                        } else {
+                            $formattedProduct['current_bid'] = 0;
+                        }
+                        
+
+                    }
+                } elseif ($auctionTypeName === 'Timed') {
+                    // For Timed auctions, show title, minimum bid, and time remaining
+                    $formattedProduct['minimum_bid'] = $product->minimum_bid;
+                    $now = Carbon::now();
+                    // Calculate the time remaining
+                    $auctionEndDateTime = Carbon::parse($product->auction_start_date . ' ' . $product->auction_start_time);
+                    $now = Carbon::now();
+                    // $formattedProduct['time_remaining'] = $auctionEndDateTime->diffForHumans($now, [
+                    //     'parts' => 5,
+                    //     'syntax' => Carbon::DIFF_ABSOLUTE,
+                    // ]);
+                    $auctionEndDateTime = Carbon::parse($product->auction_start_date . ' ' . $product->auction_start_time);
+                    $formattedProduct['time_remaining'] = $auctionEndDateTime->diffInMilliseconds($now);
+                }
+
                 if (!isset($formattedProducts[$auctionTypeName])) {
                     $formattedProducts[$auctionTypeName] = [];
                 }
 
-                // Add product details to the corresponding auction type key
-                $formattedProducts[$auctionTypeName][] = [
-                    'title' => $product->title,
-                    'image_path' => $product->galleries->first()->image_path,
-                    'reserved_price' => $product->reserved_price,
-                    'time_remaining' => $timeRemaining,
-                    // 'current_bid' => $product->bids->max('bid_amount'),
-                ];
+                $formattedProducts[$auctionTypeName][] = $formattedProduct;
             }
 
             return response()->json([
@@ -119,21 +153,25 @@ class ProductApiController extends Controller
             }
 
             // Calculate the time remaining for the auction
-            $auctionStartDateTime = Carbon::parse($product->auction_start_date . ' ' . $product->auction_start_time);
+            // $auctionStartDateTime = Carbon::parse($product->auction_start_date . ' ' . $product->auction_start_time);
             $now = Carbon::now();
-            $timeRemaining = $auctionStartDateTime->diffForHumans($now, [
-                'parts' => 5,
-                'syntax' => Carbon::DIFF_ABSOLUTE,
-            ]);
+            // $timeRemaining = $auctionStartDateTime->diffForHumans($now, [
+            //     'parts' => 5,
+            //     'syntax' => Carbon::DIFF_ABSOLUTE,
+            // ]);
+            $auctionEndDateTime = Carbon::parse($product->auction_start_date . ' ' . $product->auction_start_time);
+            $timeRemaining = $auctionEndDateTime->diffInMilliseconds($now);
 
             // Fetch product specifications for the product
 
             $productSpecifications = Specification::where('product_id', $productId)
                 ->select('name', 'value')
                 ->get();
-
+            $loggedInUser = Auth::user();
+            
             // Prepare the product detail response
             $productDetail = [
+                'id'    =>$product->id,
                 'title' => $product->title,
                 'description' => html_entity_decode(strip_tags($product->description)),
                 'image_paths' => $product->galleries->pluck('image_path')->toArray(),
@@ -141,6 +179,7 @@ class ProductApiController extends Controller
                 'time_remaining' => $timeRemaining,
                 // 'auction_type' => $product->auctionType->name,
                 'product_specifications' => $productSpecifications,
+                'is_wishlist' => $loggedInUser ? $loggedInUser->wishlists->contains('product_id', $product->id) : false,
             ];
 
             return response()->json([
@@ -159,41 +198,42 @@ class ProductApiController extends Controller
     }
 
     // add to wishliist api.
-    public function addToWishlist(Request $request)
-    {
-        $productId = $request->input('product_id');
-        $user = Auth::user();
-        $product = Product::find($productId);
+    public function addOrRemoveFromWishlist(Request $request)
+{
+    $productId = $request->input('product_id');
+    $user = Auth::user();
+    $product = Product::find($productId);
 
-        if (!$product) {
-            return response()->json([
-                'ResponseCode' => 422,
-                'Status' => 'false',
-                'Message' => 'Product not found',
-            ], 422);
-        }
+    if (!$product) {
+        return response()->json([
+            'ResponseCode' => 422,
+            'Status' => 'false',
+            'Message' => 'Product not found',
+        ], 422);
+    }
 
-        // Check if the product is already in the wishlist
-        if ($user->wishlists()->where('product_id', $productId)->exists()) {
-            return response()->json([
-                'ResponseCode' => 422,
-                'Status' => 'false',
-                'Message' => 'Product is already in the wishlist',
-            ], 422);
-        }
+    $wishlistItem = $user->wishlists()->where('product_id', $productId)->first();
 
-        // Add the product to the wishlist
+    if ($wishlistItem) {
+        // If the product is already in the wishlist, remove it
+        $wishlistItem->delete();
+        $message = 'Product removed from wishlist';
+    } else {
+        // If the product is not in the wishlist, add it
         $wishlist = new Wishlist();
         $wishlist->user_id = $user->id;
         $wishlist->product_id = $productId;
         $wishlist->save();
-
-        return response()->json([
-            'ResponseCode' => 200,
-            'Status' => 'true',
-            'Message' => 'Product added to wishlist',
-        ], 200);
+        $message = 'Product added to wishlist';
     }
+
+    return response()->json([
+        'ResponseCode' => 200,
+        'Status' => 'true',
+        'Message' => $message,
+    ], 200);
+}
+
 // my wishlist api
     public function myWishlist()
     {
@@ -296,31 +336,6 @@ class ProductApiController extends Controller
         }
     }
 
-    // remove from wishlist
-
-    public function removeFromWishlist(Request $request)
-    {
-        $productId = $request->input('product_id');
-        $user = Auth::user();
-
-        $wishlistItem = $user->wishlists()->where('product_id', $productId)->first();
-
-        if (!$wishlistItem) {
-            return response()->json([
-                'ResponseCode' => 422,
-                'Status' => 'false',
-                'Message' => 'Product is not in the wishlist',
-            ], 422);
-        }
-
-        // Remove the product from the wishlist
-        $wishlistItem->delete();
-
-        return response()->json([
-            'ResponseCode' => 200,
-            'Status' => 'true',
-            'Message' => 'Product removed from wishlist',
-        ], 200);
-    }
+  
 
 }

@@ -32,8 +32,10 @@ Route::group(['namespace' => 'API'], function () {
     Route::post('changepassword', [RegistrationApiController::class, 'changepassword']);
     // add edit and delete user address
     Route::post('adduseraddress', [RegistrationApiController::class, 'adduseraddress']);
-    Route::post('edituseraddress/{addressId}', [RegistrationApiController::class, 'editUserAddress']);
-    Route::post('removeuseraddrss/{addressId}', [RegistrationApiController::class, 'removeuseraddrss']);
+    Route::post('edituseraddress', [RegistrationApiController::class, 'editUserAddress']);
+    Route::post('removeuseraddrss', [RegistrationApiController::class, 'removeuseraddrss']);
+    Route::get('myaddress', [RegistrationApiController::class, 'getUserAddresses']);
+
     Route::post('user/notify', [RegistrationApiController::class, 'toggleNotifyOn']);
     // profile update api.
     Route::post('profileupdate', [RegistrationApiController::class, 'profileupdate']);
@@ -42,14 +44,13 @@ Route::group(['namespace' => 'API'], function () {
     Route::post('homepage', [ProductApiController::class, 'homepage']);
     Route::post('productdetail', [ProductApiController::class, 'getProductDetail']);
      // wishlist related api 
-    Route::post('addtowishlist', [ProductApiController::class,'addToWishlist']);
+    Route::post('addtowishlist', [ProductApiController::class,'addOrRemoveFromWishlist']);
     Route::get('myWishlist', [ProductApiController::class,'myWishlist']);
-    Route::post('wishlist/remove', [ProductApiController::class, 'removeFromWishlist']);
     // help support
 
     Route::post('help-support', [ProductApiController::class, 'helpsupport']);
 
-
+    
 
 
  

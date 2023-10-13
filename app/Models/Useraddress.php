@@ -19,5 +19,13 @@ class Useraddress extends Model
         'state',
         'zipcode',
         'is_save',
+        'address_type',
+
     ];
+
+    public function userAddress()
+    {
+        return $this->hasOne(Useraddress::class);
+
+    }
 }
