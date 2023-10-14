@@ -133,7 +133,7 @@
                                             <div class="error">{{ $errors->first('reserved_price') }}</div>
                                             @endif
                                         </div>
-                                        <div class="col-12 col-sm-6">
+                                        <!-- <div class="col-12 col-sm-6">
                                             <label><strong>Minimum Bid</strong></label>
                                             <input class="multisteps-form__input form-control" type="number" step="0.01"
                                                 id="minimum_bid" name="minimum_bid" placeholder="eg. Minimum Bid"
@@ -141,6 +141,16 @@
                                                 value="{{ old('minimum_bid') }}">
                                             @if($errors->has('minimum_bid'))
                                             <div class="error">{{ $errors->first('minimum_bid') }}</div>
+                                            @endif
+                                        </div> -->
+                                        <div class="col-12 col-sm-6">
+                                            <label><strong>No Of Entries</strong></label>
+                                            <input class="multisteps-form__input form-control" type="number" step="0.01"
+                                                id="no_of_entries" name="no_of_entries" placeholder="eg. No Of Entries"
+                                                onfocus="focused(this)" onfocusout="defocused(this)"
+                                                value="{{ old('no_of_entries') }}">
+                                            @if($errors->has('no_of_entries'))
+                                            <div class="error">{{ $errors->first('no_of_entries') }}</div>
                                             @endif
                                         </div>
 
@@ -151,7 +161,8 @@
                                                     onchange="toggleDepositField()">
                                                 <label for="with_deposit"><strong>With Deposit</strong></label>
                                             </div>
-                                            <div>
+                                           
+                                            <div class="col-12 col-sm-6">
                                                 <input type="radio" id="without_deposit" name="deposit"
                                                     value="without" onchange="toggleDepositField()">
                                                 <label for="without_deposit">Without Deposit</label>

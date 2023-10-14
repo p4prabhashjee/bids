@@ -57,9 +57,10 @@ class ProductController extends Controller
             'auction_start_time' => 'required',
             'auction_end_time' => 'required',
             'reserved_price' => 'required',
-            'minimum_bid' => 'required',
+            // 'minimum_bid' => 'required',
             'brand_id' => 'required',
             'description' => 'required|string',
+            'no_of_entries' => 'required',
             'status' => 'required',
             'name.*' => 'required',
             'value.*' => 'required',
@@ -71,7 +72,6 @@ class ProductController extends Controller
         // Generate the slug
         $validatedData['slug'] = $this->getUniqueSlug($validatedData['title']);
          
-  
     $validatedData['deposit'] = $request->input('deposit');
     $validatedData['deposit_amount'] = ($request->input('deposit') == 'with') ? $request->input('deposit_amount') : null;
 

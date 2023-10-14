@@ -282,10 +282,10 @@ class RegistrationApiController extends Controller
             $countryCode = $request->input('country_code');
             if (!$phone || !$countryCode) {
                 return response()->json([
-                    'ResponseCode' => 400,
+                    'ResponseCode' => 422,
                     'Status' => 'False',
                     'Message' => 'Phone and country code are required',
-                ], 400);
+                ], 422);
             }
           $user = User::where('phone', $phone)->where('country_code', $countryCode)->first();
             if (!$user) {
@@ -523,8 +523,8 @@ class RegistrationApiController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'ResponseCode' => 500,
-                'status' => 'error',
-                'message' => 'Error updating user address',
+                'Status' => 'error',
+                'Message' => 'Error updating user address',
                 'error' => $e->getMessage(),
             ], 500);
         }
@@ -674,8 +674,8 @@ class RegistrationApiController extends Controller
 
             return response()->json([
                 'ResponseCode' => 200,
-                'status' => 'true',
-                'message' => 'Profile updated successfully',
+                'Status' => 'true',
+                'Message' => 'Profile updated successfully',
                 'data' => [
                     'user' => $user,
                 ],
@@ -703,8 +703,8 @@ class RegistrationApiController extends Controller
 
             return response()->json([
                 'ResponseCode' => 200,
-                'status' => 'true',
-                'message' => 'Profile Detail Retrived successfully',
+                'Status' => 'true',
+                'Message' => 'Profile Detail Retrived successfully',
                 'data' => [
                     'user' => $user,
                 ],
@@ -725,8 +725,8 @@ class RegistrationApiController extends Controller
 
         return response()->json([
             'ResponseCode' => 200,
-            'status' => 'true',
-            'message' => 'Notify_on status updated successfully.',
+            'Status' => 'true',
+            'Message' => 'Notify_on status updated successfully.',
             'notify_on' => $user->notify_on,
         ]);
     }

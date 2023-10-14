@@ -20,7 +20,7 @@ class ProductApiController extends Controller
     {
         $this->middleware('auth:api', ['except' => ['login', 'register', 'verifyOTP', 'forgotpassword', 'resetpassword']]);
     }
-   
+
     public function homepage(Request $request)
     {
         try {
@@ -47,7 +47,7 @@ class ProductApiController extends Controller
             foreach ($products as $product) {
                 $auctionTypeName = $product->auctionType->name;
                 $formattedProduct = [
-                    'id'    =>$product->id,
+                    'id' => $product->id,
                     'title' => $product->title,
                     'image_path' => $product->galleries->first()->image_path,
                     'is_wishlist' => $loggedInUser ? $loggedInUser->wishlists->contains('product_id', $product->id) : false,
@@ -61,8 +61,7 @@ class ProductApiController extends Controller
                     } else {
                         $formattedProduct['current_bid'] = 0;
                     }
-                    
-                    
+
                 } elseif ($auctionTypeName === 'Live') {
                     // For Live auctions, show title, reserved price, current bid (if running), and upcoming date
                     $now = Carbon::now();
@@ -79,7 +78,6 @@ class ProductApiController extends Controller
                         } else {
                             $formattedProduct['current_bid'] = 0;
                         }
-                        
 
                     }
                 } elseif ($auctionTypeName === 'Timed') {
@@ -168,10 +166,10 @@ class ProductApiController extends Controller
                 ->select('name', 'value')
                 ->get();
             $loggedInUser = Auth::user();
-            
+
             // Prepare the product detail response
             $productDetail = [
-                'id'    =>$product->id,
+                'id' => $product->id,
                 'title' => $product->title,
                 'description' => html_entity_decode(strip_tags($product->description)),
                 'image_paths' => $product->galleries->pluck('image_path')->toArray(),
@@ -181,7 +179,6 @@ class ProductApiController extends Controller
                 'product_specifications' => $productSpecifications,
                 'is_wishlist' => $loggedInUser ? $loggedInUser->wishlists->contains('product_id', $product->id) : false,
             ];
-
             return response()->json([
                 'ResponseCode' => 200,
                 'Status' => 'true',
@@ -199,40 +196,40 @@ class ProductApiController extends Controller
 
     // add to wishliist api.
     public function addOrRemoveFromWishlist(Request $request)
-{
-    $productId = $request->input('product_id');
-    $user = Auth::user();
-    $product = Product::find($productId);
+    {
+        $productId = $request->input('product_id');
+        $user = Auth::user();
+        $product = Product::find($productId);
 
-    if (!$product) {
+        if (!$product) {
+            return response()->json([
+                'ResponseCode' => 422,
+                'Status' => 'false',
+                'Message' => 'Product not found',
+            ], 422);
+        }
+
+        $wishlistItem = $user->wishlists()->where('product_id', $productId)->first();
+
+        if ($wishlistItem) {
+            // If the product is already in the wishlist, remove it
+            $wishlistItem->delete();
+            $message = 'Product removed from wishlist';
+        } else {
+            // If the product is not in the wishlist, add it
+            $wishlist = new Wishlist();
+            $wishlist->user_id = $user->id;
+            $wishlist->product_id = $productId;
+            $wishlist->save();
+            $message = 'Product added to wishlist';
+        }
+
         return response()->json([
-            'ResponseCode' => 422,
-            'Status' => 'false',
-            'Message' => 'Product not found',
-        ], 422);
+            'ResponseCode' => 200,
+            'Status' => 'true',
+            'Message' => $message,
+        ], 200);
     }
-
-    $wishlistItem = $user->wishlists()->where('product_id', $productId)->first();
-
-    if ($wishlistItem) {
-        // If the product is already in the wishlist, remove it
-        $wishlistItem->delete();
-        $message = 'Product removed from wishlist';
-    } else {
-        // If the product is not in the wishlist, add it
-        $wishlist = new Wishlist();
-        $wishlist->user_id = $user->id;
-        $wishlist->product_id = $productId;
-        $wishlist->save();
-        $message = 'Product added to wishlist';
-    }
-
-    return response()->json([
-        'ResponseCode' => 200,
-        'Status' => 'true',
-        'Message' => $message,
-    ], 200);
-}
 
 // my wishlist api
     public function myWishlist()
@@ -255,24 +252,19 @@ class ProductApiController extends Controller
 
             $auctionStartDateTime = Carbon::parse($product->auction_start_date . ' ' . $product->auction_start_time);
             $now = Carbon::now();
-            $timeRemaining = $auctionStartDateTime->diffForHumans($now, [
-                'parts' => 5,
-                'syntax' => Carbon::DIFF_ABSOLUTE,
-            ]);
-
+            $auctionEndDateTime = Carbon::parse($product->auction_start_date . ' ' . $product->auction_start_time);
+            $timeRemaining = $auctionEndDateTime->diffInMilliseconds($now);
+            $loggedInUser = Auth::user();
             $auctionTypeName = $product->auction_type;
 
-            // Create a new key if it doesn't exist
-            if (!isset($formattedProducts[$auctionTypeName])) {
-                $formattedProducts[$auctionTypeName] = [];
-            }
-
             // Add product details to the corresponding auction type key
-            $formattedProducts[$auctionTypeName][] = [
+            $formattedProducts[] = [
+                'id' => $product->id,
                 'title' => $product->title,
                 'image_path' => $product->galleries->first()->image_path,
                 'reserved_price' => $product->reserved_price,
                 'time_remaining' => $timeRemaining,
+                'is_wishlist' => $loggedInUser ? $loggedInUser->wishlists->contains('product_id', $product->id) : false,
                 // 'current_bid' => $product->bids->max('bid_amount'),
             ];
         }
@@ -335,7 +327,5 @@ class ProductApiController extends Controller
             ], 500);
         }
     }
-
-  
 
 }

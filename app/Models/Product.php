@@ -22,11 +22,12 @@ class Product extends Model
         'auction_start_time',
         'auction_end_time',
         'reserved_price',
-        'minimum_bid',
+        // 'minimum_bid',
         'brand_id',
         'status',
         'deposit',
-        'deposit_amount'
+        'deposit_amount',
+        'no_of_entries',
     ];
 
     public function category()
