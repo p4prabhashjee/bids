@@ -97,7 +97,7 @@ class ProductDataTable extends DataTable
             Column::make('auction_start_time')->title('Auction Start Time'),
             Column::make('auction_end_time')->title('Auction End Time'),
             Column::make('reserved_price')->title('Reserved Price'),
-            Column::make('minimum_bid')->title('Minimum Bid'),
+            Column::make('no_of_entries')->title('No Of Entries'),
             Column::make('description')->title('Description'),
             Column::make('status')->title('Status'),
             Column::make('created_at')->render('new Date(full[\'created_at\']).toLocaleString()' ),

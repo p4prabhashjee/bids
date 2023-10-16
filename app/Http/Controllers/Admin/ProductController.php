@@ -46,7 +46,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-   
+       
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'category_id' => 'required',
@@ -57,7 +57,8 @@ class ProductController extends Controller
             'auction_start_time' => 'required',
             'auction_end_time' => 'required',
             'reserved_price' => 'required',
-            // 'minimum_bid' => 'required',
+            'Is_It_Bid_Increment' =>'required',
+            'Bid_Increment'   =>'',
             'brand_id' => 'required',
             'description' => 'required|string',
             'no_of_entries' => 'required',
@@ -65,15 +66,16 @@ class ProductController extends Controller
             'name.*' => 'required',
             'value.*' => 'required',
             'image_path.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'deposit' => 'required|in:0,1', 
-            'deposit_amount' => 'required_if:deposit,with', 
+            'deposit' => 'required', 
+            'deposit_amount' => 'required_if:deposit,1'
+            
         ]);
     
         // Generate the slug
         $validatedData['slug'] = $this->getUniqueSlug($validatedData['title']);
          
     $validatedData['deposit'] = $request->input('deposit');
-    $validatedData['deposit_amount'] = ($request->input('deposit') == 'with') ? $request->input('deposit_amount') : null;
+    $validatedData['deposit_amount'] = ($request->input('deposit') == '1') ? $request->input('deposit_amount') : null;
 
         $pro = Product::create($validatedData);
         if ($request->hasFile('image_path')) {
@@ -88,19 +90,19 @@ class ProductController extends Controller
             }
         }
        // Extract name and value arrays
-            $names = $request->input('name');
-            $values = $request->input('value');
+       $names = $request->input('name');
+       $values = $request->input('value');
+       
+       // Create FeaturedChat records for each pair
+       foreach ($names as $index => $name) {
+           Specification::create([
+               'product_id' => $pro->id,
+               'name' => htmlspecialchars($name),
+               'value' => htmlspecialchars($values[$index]),
+           ]);
+       }
+        
 
-            // Create FeaturedChat records for each pair
-            foreach ($names as $index => $name) {
-                Specification::create([
-                    'product_id' => $pro->id,
-                    'name' => $name,
-                    'value' => $values[$index],
-                ]);
-            }
-
-    
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully!');
     }
     
@@ -123,6 +125,8 @@ class ProductController extends Controller
         $auctiontype = Auctiontype::where('status', 1)->get();
         $brands = Brand::where('status', 1)->get();
         $galleryImages = Gallery::where('product_id', $product->id)->get();
+        // p($galleryImages);
+        
 
         return view('admin.products.edit', compact('categories', 'subcat', 'auctiontype', 'brands','product','galleryImages'));
     }

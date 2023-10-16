@@ -14,7 +14,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{route('admin.dashboard')}}">
                     <div
-                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        class="icon icon-shape icon-sm border-radius-md text-center d-flex align-items-center justify-content-center">
                         <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Dashboard</span>
@@ -359,9 +359,11 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
  $(document).ready(function() {
+        $(".menu-icon").click(function() {
+            $("#sidenav-main").toggleClass('menu_open');
+        });
         $("#iconSidenav").click(function() {
-            console.log("Icon clicked");
-            $("#menu").hide();
+            $("#sidenav-main").removeClass('menu_open');
         });
     });
 </script>

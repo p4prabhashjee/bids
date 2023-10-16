@@ -59,7 +59,7 @@ table {
     .navbar-vertical.navbar-expand-xs.fixed-start {
     left: -400px;
 }
-   .navbar-vertical.navbar-expand-xs.fixed-start.menu-opn-side{
+   .navbar-vertical.navbar-expand-xs.fixed-start.menu_open{
     left: 0;
    } 
 }

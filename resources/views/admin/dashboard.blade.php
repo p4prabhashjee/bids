@@ -1,7 +1,7 @@
 <x-admin-layout>
     <main class="main-content position-relative border-radius-lg ">
         @include('admin.include.navbar')
-        <div class="container-fluid py-4">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                     <div class="card">

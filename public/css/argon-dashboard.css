@@ -26939,3 +26939,77 @@ pre[class*="language-"] {
 }
 
 /*# sourceMappingURL=dashboard-free.css.map */
+
+
+
+
+.card {
+    padding: 15px;
+    overflow: auto;
+}
+.table th, .table td {
+    font-size: 14px;
+}
+.table thead th, table.dataTable thead>tr>th.sorting, table.dataTable thead>tr>th.sorting_asc, table.dataTable thead>tr>th.sorting_desc, table.dataTable thead>tr>th.sorting_asc_disabled, table.dataTable thead>tr>th.sorting_desc_disabled, table.dataTable thead>tr>td.sorting, table.dataTable thead>tr>td.sorting_asc, table.dataTable thead>tr>td.sorting_desc, table.dataTable thead>tr>td.sorting_asc_disabled, table.dataTable thead>tr>td.sorting_desc_disabled {
+    padding-left: 0.5rem;
+}
+.btn-group .btn {
+    margin: 0;
+}
+.dataTables_length .form-select {
+    min-width: 70px;
+}
+.table td, .table th {
+    border: .5px solid #e8e8e8 !important;
+}
+td.sorting_1 {
+    width: 140px !important;
+}
+.table .btn i.me-2 {
+    margin: 0 !important;
+}
+.table .btn {
+    padding: 10px !important;
+}
+div.dataTables_wrapper div.dataTables_info {
+    padding-top: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+.page-item .page-link, .page-item span {
+    color: #fff;
+}
+.col1.mt-4 {
+    margin-top: 33px !important;
+}
+.dataTable td img {
+    height: 40px !important;
+    width: auto;
+}
+.btn-group .btn {
+    padding: 10px !important;
+}
+.blue_dark_bg {
+    background: #3E0269;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 300px;
+    width: 100%;
+}
+.radio_listing {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.radio_list {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+}
+.radio_list label {
+    margin: 0 0 0 6px;
+}
+.radio_list label {
+    color: #495057;
+}

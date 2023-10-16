@@ -2,12 +2,13 @@
     <main class="main-content position-relative border-radius-lg ">
         @include('admin.include.navbar', ['module' => 'Brand', 'link' => 'admin.brands.index', 'page' => 'Edit
         Brand'])
-        <div class="container-fluid py-4">
-            <div class="row mt-4">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
                 <div class="card">
                     <div class="col-12 col-lg-8 m-auto">
-                        <form class="mb-8" action="{{route('admin.brands.update', $brand)}}" method="POST"
-                            enctype="multipart/form-data" style="height: 408px;">
+                        <form action="{{route('admin.brands.update', $brand)}}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <div class="card p-3 border-radius-xl bg-white js-active" data-animation="FadeIn">
@@ -55,6 +56,7 @@
                         </form>
                     </div>
                 </div>
+            </div>
             </div>
         </div>
     </main>

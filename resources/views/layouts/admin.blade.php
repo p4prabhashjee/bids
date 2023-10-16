@@ -28,7 +28,7 @@
 
 <body class="font-sans text-gray-900 antialiased">
     @if(Auth::check())
-    <div class="min-height-300  test position-absolute w-100"></div>
+    <div class="blue_dark_bg"></div>
     @include('admin.include.sidebar')
     @endif
     {{ $slot }}
