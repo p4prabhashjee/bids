@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\AuctiontypeController;
 use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\BidvalueController;
 use App\Http\Controllers\Frontend\HomepageController;
 
 
@@ -41,6 +42,8 @@ Route::get('terms-conditions', [HomepageController::class,'terms'])->name('terms
 Route::get('about-us', [HomepageController::class,'about'])->name('about-us');
 
 Route::get('products-list', [HomepageController::class,'productlist'])->name('products-list');
+Route::get('/products/{auction_type_slug}', [HomepageController::class,'productsByAuctionType'])->name('products.by_auction_type');
+Route::get('/productsdetail/{slug}', [HomepageController::class,'productsdetail'])->name('productsdetail');
 Route::get('signin', [HomepageController::class,'login'])->name('signin');
 Route::get('register', [HomepageController::class,'registration'])->name('register');
 Route::post('registration', [HomepageController::class,'register'])->name('registration');
@@ -72,6 +75,7 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::resource('auctiontypes', AuctiontypeController::class);
     Route::resource('brands', BrandController::class);
     Route::resource('products', ProductController::class);
+    Route::resource('bidvalues', BidvalueController::class);
     
 });
 

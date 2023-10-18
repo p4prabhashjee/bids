@@ -5,21 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Bidvalue extends Model
 {
     use HasFactory;
+    protected $table ='bid_values';
     protected $fillable = [
         'id',
-        'name',
-        'slug',
-        'description',
+        'bidvalue',
         'status',
        
     ];
-
-    public function products()
-{
-    return $this->hasMany(Product::class, 'category_id');
-}
-
 }

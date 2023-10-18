@@ -158,7 +158,7 @@
                                                 <div class="error">{{ $errors->first('reserved_price') }}</div>
                                                 @endif
                                             </div>
-                                            <div class="col-12 col-sm-6">
+                                            <!-- <div class="col-12 col-sm-6">
                                                 <label><strong>No Of Entries</strong></label>
                                                 <input class="multisteps-form__input form-control" type="number"
                                                     name="no_of_entries" placeholder="eg. No Of Entries"
@@ -167,9 +167,9 @@
                                                 @if($errors->has('no_of_entries'))
                                                 <div class="error">{{$errors->first('no_of_entries')}}</div>
                                                 @endif
-                                            </div>
+                                            </div> -->
                                         </div>  
-                                        <div class="col-12 col-sm-6">
+                                        <!-- <div class="col-12 col-sm-6">
                                             <label><strong>Deposit</strong></label>
                                             <div class="radio_listing">
                                                 <div class="radio_list">
@@ -184,7 +184,7 @@
                                                 </div>
                                             </div>
                                             <div id="deposit_field" style="display: block;">
-                                                <!-- The "value" attribute ensures that the value of the input is preserved when it's displayed -->
+                                              
                                                 <input class="multisteps-form__input form-control" type="number" id="deposit_amount" name="deposit_amount"
                                                     placeholder="eg. Deposit Amount" onfocus="focused(this)" onfocusout="defocused(this)"
                                                     value="{{ old('deposit_amount',$product->deposit_amount) }}">
@@ -192,8 +192,8 @@
                                                 <div class="error">{{ $errors->first('deposit_amount') }}</div>
                                                 @endif
                                             </div>
-                                        </div>
-                                        <div class="col-12 col-sm-6">
+                                        </div> -->
+                                        <!-- <div class="col-12 col-sm-6">
                                             <label><strong>Is_It_Bid_Increment</strong></label>
                                             <div class="radio_listing">
                                                 <div class="radio_list">
@@ -211,16 +211,18 @@
                                                     <div class="error">{{ $errors->first('Bid_Increment') }}</div>
                                                 @endif
                                             </div>
-                                        </div>   
+                                        </div>    -->
                                         <!-- gallery image -->
                                         <div class="col-12 col-sm-12 mt-3 mt-sm-0">
                                             <label><strong>Add or Update Gallery Images</strong></label>
                                             <input class="multisteps-form__input form-control" type="file" id="gallery" name="image_path[]" multiple accept="image/*" onchange="previewImages()">
                                             <div class="image-preview" id="image-preview">
                                                 @foreach($galleryImages as $image)
-                                                    <div class="image-container ">
+                                                    <div class="image-container">
                                                         <img src="{{ asset($image->image_path) }}" alt="Gallery Image">
-                                                        <button class="remove-image" data-image-id="{{ $image->id }}" onclick="removeImage(this)"><i class="fa fa-remove" style="font-size:24px"></i></button>
+                                                        @if ($image->id)
+                                                            <button class="remove-image" data-image-id="{{ $image->id }}" onclick="removeImage(this)"><i class="fa fa-remove" style="font-size:24px"></i></button>
+                                                        @endif
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -249,27 +251,6 @@
         var preview = document.getElementById('image-preview');
         preview.innerHTML = '';
 
-        @foreach($galleryImages as $image)
-            var existingImage = document.createElement('div');
-            existingImage.className = 'image-container';
-            var img = document.createElement('img');
-            img.src = '{{ asset($image->image_path) }}';
-            img.alt = 'Gallery Image';
-            var removeButton = document.createElement('button');
-            removeButton.className = 'remove-image';
-            removeButton.dataset.imageId = '{{ $image->id }}';
-            removeButton.onclick = function() {
-                removeImage(this);
-            };
-            var icon = document.createElement('i');
-            icon.className = 'fa fa-remove';
-            icon.style.fontSize = '24px';
-            removeButton.appendChild(icon);
-            existingImage.appendChild(img);
-            existingImage.appendChild(removeButton);
-            preview.appendChild(existingImage);
-        @endforeach
-
         var files = document.getElementById('gallery').files;
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
@@ -284,7 +265,7 @@
             reader.readAsDataURL(file);
         }
     }
-  </script>
+</script>
 
     <script>
     window.addEventListener('DOMContentLoaded', (event) => {

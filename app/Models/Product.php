@@ -22,13 +22,8 @@ class Product extends Model
         'auction_start_time',
         'auction_end_time',
         'reserved_price',
-        'Is_It_Bid_Increment',
-        'Bid_Increment',
         'brand_id',
         'status',
-        'deposit',
-        'deposit_amount',
-        'no_of_entries',
     ];
 
     public function category()
@@ -53,6 +48,13 @@ class Product extends Model
     {
         return $this->hasMany(Gallery::class, 'product_id');
     }
+   
+    public function specifications()
+    {
+        return $this->hasMany(Specification::class, 'product_id');
+    }
+
+   
     
 
 }

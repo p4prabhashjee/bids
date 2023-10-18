@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Product;
+use App\Models\Bidvalue;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class ProductDataTable extends DataTable
+class BidvalueDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -22,31 +22,29 @@ class ProductDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-             ->addColumn('#', function () {
+            ->addColumn('#', function () {
                 static $count = 0;
                 $count++;
                 return $count;
-             })
-            ->addColumn('action', 'admin.products.action')
+            })
+            ->addColumn('action', 'admin.bidvalues.action')
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(Product $model): QueryBuilder
+    public function query(Bidvalue $model): QueryBuilder
     {
         $query = $model->newQuery();
     
         if ($this->request->has('created_at')) {
             $created_at = $this->request->get('created_at');
             if ($created_at) {
-               
-                $date = Carbon::parse($created_at)->toDateString();
-                $query->whereDate('created_at', '=', $date);
+                $query->whereDate('created_at', '=', $created_at);
             }
         }
-        $query->with('category','subcategory','auctiontype','brand');
+    
         return $query;
     }
 
@@ -56,7 +54,7 @@ class ProductDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('product-table')
+                    ->setTableId('bidvalue-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
@@ -79,28 +77,8 @@ class ProductDataTable extends DataTable
     {
         return [
             Column::make('#'),
-            Column::make('title')->title('Title'),
-            Column::computed('category_name')
-                    ->data('category.name') 
-                   ->title('Category'),
-            Column::computed('subcategory')
-                   ->data('subcategory.name') 
-                   ->title('SubCategory'),
-            Column::computed('auctiontype')
-                   ->data('auctiontype.name') 
-                   ->title('Auctiontype'),
-            Column::computed('brand')
-                   ->data('brand.name') 
-                   ->title('Brand'),
-            Column::make('auction_start_date')->title('Auction Start Date'),
-            Column::make('auction_end_date')->title('Auction End Date'),
-            Column::make('auction_start_time')->title('Auction Start Time'),
-            Column::make('auction_end_time')->title('Auction End Time'),
-            Column::make('reserved_price')->title('Reserved Price'),
-            // Column::make('no_of_entries')->title('No Of Entries'),
-            Column::make('description')->title('Description'),
-            Column::make('status')->title('Status'),
-            // Column::make('created_at')->render('new Date(full[\'created_at\']).toLocaleString()' ),
+            Column::make('bidvalue'),
+            Column::make('status')->render('full[\'status\'] ? \'Published\' : \'Draft\'')->addClass('text-center'),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
@@ -114,6 +92,6 @@ class ProductDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Product_' . date('YmdHis');
+        return 'Bidvalue_' . date('YmdHis');
     }
 }

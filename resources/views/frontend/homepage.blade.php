@@ -21,289 +21,60 @@
         <h2>Trending Auctions</h2>
         <p>See what’s popular across thousands of items.</p>
       </div>
+      @foreach($auctionTypesWithProductCount as $at)
       <div class="row">
         <div class="col-lg-3 col-md-12">
-          <div class="auction-type   align-just">
+          <div class="auction-type  align-just">
            <div> 
-            <h2>Private</h2>
-            <p>1200 Product</p>
-            <a href="product-list.html" class="border-white-btn">VIEW ALL ITEMS</a>
+            <h2>{{$at->name}}</h2>
+            <p>{{$at->products_count}} Product</p>
+            <a href="{{ url('products', $at->slug) }}" class="border-white-btn">VIEW ALL ITEMS</a>
             </div>
           </div>
         </div>
         <div class="col-lg-9 col-md-12">
           <div class="row">
+          @foreach($at->products as $product)
             <div class="col-lg-6 col-md-12">
-              <a href="detail.html">
+              <a href="{{ url('productsdetail', $product->slug) }}">
                 <div class="card-product">
-                  <div class="product-image">
-                    <img src="{{asset('frontend/images/product-img.png')}}" alt="">
+                <div class="product-image">
+                @if ($product->galleries->isNotEmpty())
+                        <img src="{{ asset($product->galleries->first()->image_path) }}" alt="">
+                    @else
+                        <img src="{{asset('frontend/images/default-product-image.png')}}" alt="Default Image">
+                    @endif
                     <i class="fa fa-heart-o"></i>
-                  </div>
+               </div>
                   <div class="card-product-dtl">
-                    <h3>luxurious golden jewelry  </h3>
-                    <h5>$1200.00</h5>
+                    <h3>{{$product->title}}</h3>
+                    <h5>${{$product->reserved_price}}</h5>
                     <p>Current Bid: <span> $1400.00</span></p>
+                    @if ($at->name == 'Live')
+                  <p>Upcoming :  <span class="text-dark">{{ date('d M Y', strtotime($product->auction_start_date)) }} <span class="ms-2 text-dark">{{ date('h:i A', strtotime($product->auction_start_time)) }}</span></span></p>
+
+                    @endif
+                    @if ($at->name == 'Timed')
+                    <div class="countdown-time">
+                      <ul>
+                        <li><span id="days-{{$product->id}}"></span>days</li>
+                        <li><span id="hours-{{$product->id}}"></span>Hours</li>
+                        <li><span id="minutes-{{$product->id}}"></span>Minutes</li>
+                        <li><span id="seconds-{{$product->id}}"></span>Seconds</li>
+                      </ul>
+                    </div>
+                    @endif
                     <button class="text-btn">Bid Now <img class="img-fluid ms-2" src="{{asset('frontend/images/next-arrow.svg')}}" alt=""></button>
                   </div>
                 </div>
               </a>
             </div>
-            <div class="col-lg-6 col-md-12">
-              <a href="detail.html">
-                <div class="card-product">
-                  <div class="product-image">
-                    <img src="{{asset('frontend/images/product-img-2.png')}}" alt="">
-                    <i class="fa fa-heart-o"></i>
-                  </div>
-                  <div class="card-product-dtl">
-                    <h3>luxurious golden jewelry  </h3>
-                    <h5>$1200.00</h5>
-                    <p>Current Bid: <span> $1400.00</span></p>
-                    <button class="text-btn">Bid Now <img class="img-fluid ms-2" src="{{asset('frontend/images/next-arrow.svg')}}" alt=""></button>
-                  </div>
-                </div>
-              </a>
-            </div>
-            <div class="col-lg-6 col-md-12">
-              <a href="detail.html">
-                <div class="card-product">
-                  <div class="product-image">
-                    <img src="{{asset('frontend/images/product-img-3.png')}}" alt="">
-                    <i class="fa fa-heart-o"></i>
-                  </div>
-                  <div class="card-product-dtl">
-                    <h3>luxurious golden jewelry</h3>
-                    <h5>$1200.00</h5>
-                    <p>Current Bid: <span> $1400.00</span></p>
-                    <button class="text-btn">Bid Now <img class="img-fluid ms-2" src="{{asset('frontend/images/next-arrow.svg')}}"alt=""></button>
-                  </div>
-                </div>
-              </a>
-            </div>
-            <div class="col-lg-6 col-md-12">
-              <a href="detail.html">
-                <div class="card-product">
-                  <div class="product-image">
-                    <img src="{{asset('frontend/images/product-img-4.png')}}" alt="">
-                    <i class="fa fa-heart-o"></i>
-                  </div>
-                  <div class="card-product-dtl">
-                    <h3>luxurious golden jewelry  </h3>
-                    <h5>$1200.00</h5>
-                    <p>Current Bid: <span> $1400.00</span></p>
-                    <button class="text-btn">Bid Now <img class="img-fluid ms-2" src="{{asset('frontend/images/next-arrow.svg')}}" alt=""></button>
-                  </div>
-                </div>
-              </a>
-            </div>
+            @endforeach
           </div>
         </div>
+       
       </div>
-
-
-      <div class="row mt-5">
-        <div class="col-lg-3 col-md-12">
-          <div class="auction-type light-clr  align-just">
-           <div> 
-            <h2>Live</h2>
-            <p>1200 Product</p>
-            <a href="product-list.html" class="border-white-btn">VIEW ALL ITEMS</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-9 col-md-12">
-          <div class="row">
-            <div class="col-lg-6 col-md-12">
-              <a href="detail.html">
-                <div class="card-product live-procut">
-                  <div class="product-image">
-                    <img src="{{asset('frontend/images/product-img-5.png')}}" alt="">
-                    <i class="fa fa-heart-o"></i>
-                  </div>
-                  <div class="card-product-dtl">
-                    <h3>luxurious golden jewelry  </h3>
-                    <h5>$1200.00</h5>
-                    <p>Current Bid: <span> $1400.00</span></p>
-                    <p>Upcoming :  <span class="text-dark"> 01 Oct 2023     <span class="ms-2 text-dark">10:00 AM </span></span></p>
-                     
-                    <button class="text-btn">Bid Now <img class="img-fluid ms-2" src="{{asset('frontend/images/next-arrow.svg')}}" alt=""></button>
-                  </div>
-                </div>
-              </a>
-            </div>
-            <div class="col-lg-6 col-md-12">
-              <a href="detail.html">
-                <div class="card-product live-procut">
-                  <div class="product-image">
-                    <img src="{{asset('frontend/images/product-img-6.png')}}" alt="">
-                    <i class="fa fa-heart-o"></i>
-                  </div>
-                  <div class="card-product-dtl">
-                    <h3>luxurious golden jewelry  </h3>
-                    <h5>$1200.00</h5>
-                    <p>Current Bid: <span> $1400.00</span></p>
-                     <p>Upcoming :  <span class="text-dark"> 01 Oct 2023     <span class="ms-2 text-dark">10:00 AM </span></span></p>
-                    <button class="text-btn">Bid Now <img class="img-fluid ms-2" src="{{asset('frontend/images/next-arrow.svg')}}" alt=""></button>
-                  </div>
-                </div>
-              </a>
-            </div>
-            <div class="col-lg-6 col-md-12">
-              <a href="detail.html">
-                <div class="card-product live-procut">
-                  <div class="product-image">
-                    <img src="{{asset('frontend/images/product-img-4.png')}}" alt="">
-                    <i class="fa fa-heart-o"></i>
-                  </div>
-                  <div class="card-product-dtl">
-                    <h3>luxurious golden jewelry  </h3>
-                    <h5>$1200.00</h5>
-                    <p>Current Bid: <span> $1400.00</span></p>
-                     <p>Upcoming :  <span class="text-dark"> 01 Oct 2023     <span class="ms-2 text-dark">10:00 AM </span></span></p>
-                    <button class="text-btn">Bid Now <img class="img-fluid ms-2" src="{{asset('frontend/images/next-arrow.svg')}}" alt=""></button>
-                  </div>
-                </div>
-              </a>
-            </div>
-            
-            
-            <div class="col-lg-6 col-md-12">
-              <a href="detail.html">
-                <div class="card-product live-procut">
-                  <div class="product-image">
-                    <img src="{{asset('frontend/images/product-img-3.png')}}" alt="">
-                    <i class="fa fa-heart-o"></i>
-                  </div>
-                  <div class="card-product-dtl">
-                    <h3>luxurious golden jewelry  </h3>
-                    <h5>$1200.00</h5>
-                    <p>Current Bid: <span> $1400.00</span></p>
-                     <p>Upcoming :  <span class="text-dark"> 01 Oct 2023     <span class="ms-2 text-dark">10:00 AM </span></span></p>
-                    <button class="text-btn">Bid Now <img class="img-fluid ms-2" src="{{asset('frontend/images/next-arrow.svg')}}" alt=""></button>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      <div class="row mt-5">
-        <div class="col-lg-3 col-md-12">
-          <div class="auction-type light-clr timed-prct align-just">
-           <div> 
-            <h2>Timed</h2>
-            <p>1200 Product</p>
-            <a href="product-list.html" class="border-white-btn">VIEW ALL ITEMS</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-9 col-md-12">
-          <div class="row">
-            <div class="col-lg-6 col-md-12">
-              <a href="private-product.html">
-                <div class="card-product live-procut">
-                  <div class="product-image">
-                    <img src="{{asset('frontend/images/product-img-5.png')}}" alt="">
-                    <i class="fa fa-heart-o"></i>
-                  </div>
-                  <div class="card-product-dtl">
-                    <h3>luxurious golden jewelry  </h3>
-                    <h5>$1200.00</h5>
-                    <p>Starting bid: <span> $1400.00</span></p>
-                    <div class="countdown-time" id="countdown">
-                      <ul>
-                        <li><span id="days"></span>days</li>
-                        <li><span id="hours"></span>Hours</li>
-                        <li><span id="minutes"></span>Minutes</li>
-                        <li><span id="seconds"></span>Seconds</li>
-                      </ul>
-                    </div>
-                    <button class="text-btn">View Product <img class="img-fluid ms-2" src="{{asset('frontend/images/next-arrow.svg')}}" alt=""></button>
-                  </div>
-                </div>
-              </a>
-            </div>
-            <div class="col-lg-6 col-md-12">
-              <a href="private-product.html">
-                <div class="card-product live-procut">
-                  <div class="product-image">
-                    <img src="{{asset('frontend/images/product-img-6.png')}}" alt="">
-                    <i class="fa fa-heart-o"></i>
-                  </div>
-                  <div class="card-product-dtl">
-                    <h3>luxurious golden jewelry  </h3>
-                    <h5>$1200.00</h5>
-                    <p>Starting bid: <span> $1400.00</span></p>
-                    <div class="countdown-time" id="countdown">
-                      <ul>
-                        <li><span id="days"></span>days</li>
-                        <li><span id="hours"></span>Hours</li>
-                        <li><span id="minutes"></span>Minutes</li>
-                        <li><span id="seconds"></span>Seconds</li>
-                      </ul>
-                    </div>
-                    <button class="text-btn">View Product <img class="img-fluid ms-2" src="{{asset('frontend/images/next-arrow.svg')}}" alt=""></button>
-                  </div>
-                </div>
-              </a>
-            </div>
-            <div class="col-lg-6 col-md-12">
-              <a href="private-product.html">
-                <div class="card-product live-procut">
-                  <div class="product-image">
-                    <img src="{{asset('frontend/images/product-img-4.png')}}" alt="">
-                    <i class="fa fa-heart-o"></i>
-                  </div>
-                  <div class="card-product-dtl">
-                    <h3>luxurious golden jewelry  </h3>
-                    <h5>$1200.00</h5>
-                    <p>Starting bid: <span> $1400.00</span></p>
-                    <div class="countdown-time" id="countdown1">
-                      <ul>
-                        <li><span id="days1"></span>days</li>
-                        <li><span id="hours1"></span>Hours</li>
-                        <li><span id="minutes1"></span>Minutes</li>
-                        <li><span id="seconds1"></span>Seconds</li>
-                      </ul>
-                    </div>
-                    <button class="text-btn">View Product <img class="img-fluid ms-2" src="{{asset('frontend/images/next-arrow.svg')}}" alt=""></button>
-                  </div>
-                </div>
-              </a>
-            </div>
-            
-            
-            <div class="col-lg-6 col-md-12">
-              <a href="private-product.html">
-                <div class="card-product live-procut">
-                  <div class="product-image">
-                    <img src="{{asset('frontend/images/product-img-3.png')}}" alt="">
-                    <i class="fa fa-heart-o"></i>
-                  </div>
-                  <div class="card-product-dtl">
-                    <h3>luxurious golden jewelry  </h3>
-                    <h5>$1200.00</h5>
-                    <p>Starting bid: <span> $1400.00</span></p>
-                    <div class="countdown-time" id="countdown">
-                      <ul>
-                        <li><span id="days"></span>days</li>
-                        <li><span id="hours"></span>Hours</li>
-                        <li><span id="minutes"></span>Minutes</li>
-                        <li><span id="seconds"></span>Seconds</li>
-                      </ul>
-                    </div>
-                    <button class="text-btn">View Product <img class="img-fluid ms-2" src="{{asset('frontend/images/next-arrow.svg')}}" alt=""></button>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      @endforeach
   </section>
 
   <section class="most-view-product">
@@ -664,5 +435,34 @@
         </div>
       </div>
     </section>
+    <script>
+            (function () {
+              const second = 1000,
+                  minute = second * 60,
+                  hour = minute * 60,
+                  day = hour * 24;
+              
+              let auctionStartDate = new Date("{{$product->auction_start_date}} {{$product->auction_start_time}}").getTime();
+                // console.log(auctionStartDate);
+              
+              const x = setInterval(function() {    
+                const now = new Date().getTime(),
+                  distance = auctionStartDate - now;
+
+                  document.getElementById("days-{{$product->id}}").textContent = Math.floor(distance / (day));
+                  document.getElementById("hours-{{$product->id}}").textContent = Math.floor((distance % (day)) / (hour));
+                  document.getElementById("minutes-{{$product->id}}").textContent = Math.floor((distance % (hour)) / (minute));
+                  document.getElementById("seconds-{{$product->id}}").textContent = Math.floor((distance % (minute)) / second);
+              
+                if (distance < 0) {
+                  document.getElementById("headline").innerText = "Auction Timed!";
+                  document.getElementById("countdown").style.display = "none";
+                  document.getElementById("content").style.display = "block";
+                  clearInterval(x);
+                } 
+              }, 1000); 
+            })();
+          </script>
  
     @include('frontend.layouts.footer')
+  

@@ -153,6 +153,32 @@
                 </div>
             </li>
             <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#bidvaluesSection"
+                    class="nav-link {{Request::routeIs('admin.bidvalues.*') ? '' : 'collapsed'}}"
+                    aria-controls="bidvaluesSection" role="button" aria-expanded="false">
+                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                        <i class="ni ni-basket text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Bid Values</span>
+                </a>
+                <div class="collapse {{Request::routeIs('admin.bidvalues.*') ? 'show' : ''}}" id="bidvaluesSection" style="">
+                    <ul class="nav ms-4">
+                        <li class="nav-item {{Request::routeIs('admin.bidvalues.index') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.bidvalues.index') ? 'active' : ''}}"
+                                href="{{route('admin.bidvalues.index')}}">
+                                <span class="sidenav-normal"> List </span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{Request::routeIs('admin.bidvalues.create') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.bidvalues.create') ? 'active' : ''}}"
+                                href="{{route('admin.bidvalues.create')}}">
+                                <span class="sidenav-normal"> Add Bid Values </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#productSection"
                     class="nav-link {{Request::routeIs('admin.products.*') ? '' : 'collapsed'}}"
                     aria-controls="productSection" role="button" aria-expanded="false">

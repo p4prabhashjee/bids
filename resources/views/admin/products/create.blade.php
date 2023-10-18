@@ -140,7 +140,7 @@
                                                 @endif
                                             </div>
 
-                                            <div class="col-12 col-sm-6">
+                                            <!-- <div class="col-12 col-sm-6">
                                                 <label><strong>Deposit</strong></label>
                                                 <div class="radio_listing">
                                                     <div class="radio_list">
@@ -174,9 +174,9 @@
                                                 @if($errors->has('no_of_entries'))
                                                 <div class="error">{{$errors->first('no_of_entries')}}</div>
                                                 @endif
-                                            </div>
+                                            </div> -->
 
-                                            <div class="col-12 col-sm-6">
+                                            <!-- <div class="col-12 col-sm-6">
                                                 <label><strong>Is_It_Bid_Increment</strong></label>
                                                 <div class="radio_listing">
                                                     <div class="radio_list">
@@ -199,7 +199,7 @@
                                                     <div class="error">{{ $errors->first('Bid_Increment') }}</div>
                                                     @endif
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="col-12 col-sm-12 mt-3 mt-sm-0">
                                                 <label><strong>Gallery Images</strong></label>
                                                 <input class="multisteps-form__input form-control" type="file"
@@ -336,7 +336,7 @@
         });
     });
     </script>
-    <script>
+    <!-- <script>
     function toggleDepositField() {
         var depositField = document.getElementById('deposit_field');
         var depositOptionWith = document.getElementById('with_deposit');
@@ -350,11 +350,11 @@
         }
 
         if (depositOptionWithout.checked) {
-            // You can handle logic for the "Without Deposit" option here if needed
+            
         }
     }
-    </script>
-    <script>
+    </script> -->
+    <!-- <script>
     function togglebidincrementField() {
         var bidincrementField = document.getElementById('bidincrement_field');
         var depositOptionWith = document.getElementById('yes_radio');
@@ -368,10 +368,10 @@
         }
 
         if (depositOptionWithout.checked) {
-            // You can handle logic for the "Without Deposit" option here if needed
+           
         }
     }
-    </script>
+    </script> -->
     <x-head.tinymce-config />
 </x-admin-layout>
 <style>

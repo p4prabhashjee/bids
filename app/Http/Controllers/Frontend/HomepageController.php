@@ -9,23 +9,48 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
+use App\Models\Product;
+use App\Models\Gallery;
 use App\Mail\ResetPasswordMail;
 use Redirect;
+use App\Models\Auctiontype;
+
 
 
 class HomepageController extends Controller
 {
     public function homepage(Request $request)
     {
-        return view('frontend.homepage');
+       $auctionTypesWithProductCount = AuctionType::withCount('products')->where('status', 1)->get();
+       //p($auctionTypesWithProductCount);
+        return view('frontend.homepage',compact('auctionTypesWithProductCount'));
+    }
+    public function productsByAuctionType($slug) {
+        $auctionType = AuctionType::where('slug', $slug)->first();
+        $products = Product::where('auction_type_id', $auctionType->id)->get();
+    
+        return view('frontend.products.index', ['products' => $products]);
     }
 
-//    contact us
+ 
+    public function productsdetail($slug)
+    {
+        $product = Product::where('slug', $slug)->first();
+
+        if (!$product) {
+            abort(404);
+        }
+        return view('frontend.products.detail', ['product' => $product]);
+    }
+
+
+
+   //contact us
     public function contactus(Request $request)
     {
         return view('frontend.contact');
     }
-// privacy policy
+    // privacy policy
     public function privacy(Request $request)
     {
         return view('frontend.privacy');
@@ -44,6 +69,11 @@ class HomepageController extends Controller
     // product listing
 
     public function productlist(Request $request)
+    {
+        return view('frontend.products.list');
+    }
+
+    public function productlists(Request $request,$slug)
     {
         return view('frontend.products.list');
     }

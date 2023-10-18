@@ -57,25 +57,19 @@ class ProductController extends Controller
             'auction_start_time' => 'required',
             'auction_end_time' => 'required',
             'reserved_price' => 'required',
-            'Is_It_Bid_Increment' =>'required',
-            'Bid_Increment'   =>'',
             'brand_id' => 'required',
             'description' => 'required|string',
-            'no_of_entries' => 'required',
             'status' => 'required',
             'name.*' => 'required',
             'value.*' => 'required',
             'image_path.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'deposit' => 'required', 
-            'deposit_amount' => 'required_if:deposit,1'
-            
         ]);
     
         // Generate the slug
         $validatedData['slug'] = $this->getUniqueSlug($validatedData['title']);
          
-    $validatedData['deposit'] = $request->input('deposit');
-    $validatedData['deposit_amount'] = ($request->input('deposit') == '1') ? $request->input('deposit_amount') : null;
+    // $validatedData['deposit'] = $request->input('deposit');
+    // $validatedData['deposit_amount'] = ($request->input('deposit') == '1') ? $request->input('deposit_amount') : null;
 
         $pro = Product::create($validatedData);
         if ($request->hasFile('image_path')) {

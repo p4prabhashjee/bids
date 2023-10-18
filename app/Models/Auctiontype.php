@@ -16,4 +16,14 @@ class Auctiontype extends Model
         'description',
         'status',
     ];
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'auction_type_id');
+    }
+
+    public function productss()
+{
+    return $this->hasMany(Product::class);
+}
 }
