@@ -102,14 +102,14 @@
                     <h4>Current Bid <span>$20,0379.00</span></h4>
                     <div class="countdown-time" id="countdown">
                         <ul>
-                            <li><span id="days"></span>D</li>
+                            <li><span id="days-{{$product->id}}"></span>D</li>
                             <li>:</li>
-                            <li><span id="hours"></span>H</li>
+                            <li><span id="hours-{{$product->id}}"></span>H</li>
                             <li>:</li>
 
-                            <li><span id="minutes"></span>M</li>
+                            <li><span id="minutes-{{$product->id}}"></span>M</li>
                             <li>:</li>
-                            <li><span id="seconds"></span>S</li>
+                            <li><span id="seconds-{{$product->id}}"></span>S</li>
                         </ul>
                     </div>
                 </div>
@@ -122,7 +122,7 @@
                             <img src="{{ asset($gallery->image_path) }}" alt="shoe image">
                             @endforeach
                             @else
-                            <img src="{{ asset('frontend/images/default-product-image.svg') }}" alt="shoe image" />
+                            <img src="{{ asset('frontend/images/default-product-image.png') }}" alt="shoe image" />
                             @endif
                         </div>
 
@@ -132,14 +132,14 @@
                         @foreach ($product->galleries as $gallery)
                         <div class="img-item">
                             <a href="#" data-id="{{ $loop->index + 1 }}">
-                                <img src="{{ asset($gallery->image_path) }}" alt="shoe image" />
+                                <img src="{{ asset($gallery->image_path) }}" alt="shoe image"/>
                             </a>
                         </div>
                         @endforeach
                         @else
                         <div class="img-item">
                             <a href="#" data-id="1">
-                                <img src="{{ asset('frontend/images/default-product-image.svg') }}" alt="shoe image" />
+                                <img src="{{ asset('frontend/images/default-product-image.svg') }}" alt="shoe image"/>
                             </a>
                         </div>
                         @endif
@@ -401,4 +401,32 @@ if ($('#revese-timer').length) {
 
 }
 </script>
+<script>
+            (function () {
+              const second = 1000,
+                  minute = second * 60,
+                  hour = minute * 60,
+                  day = hour * 24;
+              
+              let auctionStartDate = new Date("{{$product->auction_start_date}} {{$product->auction_start_time}}").getTime();
+                // console.log(auctionStartDate);
+              
+              const x = setInterval(function() {    
+                const now = new Date().getTime(),
+                  distance = auctionStartDate - now;
+
+                  document.getElementById("days-{{$product->id}}").textContent = Math.floor(distance / (day));
+                  document.getElementById("hours-{{$product->id}}").textContent = Math.floor((distance % (day)) / (hour));
+                  document.getElementById("minutes-{{$product->id}}").textContent = Math.floor((distance % (hour)) / (minute));
+                  document.getElementById("seconds-{{$product->id}}").textContent = Math.floor((distance % (minute)) / second);
+              
+                if (distance < 0) {
+                  document.getElementById("headline").innerText = "Auction Timed!";
+                  document.getElementById("countdown").style.display = "none";
+                  document.getElementById("content").style.display = "block";
+                  clearInterval(x);
+                } 
+              }, 1000); 
+            })();
+          </script>
 @include('frontend.layouts.footer')
