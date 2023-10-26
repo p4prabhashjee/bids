@@ -1,28 +1,48 @@
 <x-admin-layout>
     <main class="main-content position-relative border-radius-lg ">
-        @include('admin.include.navbar', ['module' => 'Categories', 'link' => 'admin.categories.index', 'page' => 'Create
-        Blog'])
+        @include('admin.include.navbar', ['module' => 'Banner', 'link' => 'admin.banners.index', 'page' => 'Create
+        Banner'])
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="col-12 col-lg-8 m-auto">
-                            <form action="{{route('admin.categories.store')}}" method="POST"
+                            <form action="{{route('admin.banners.store')}}" method="POST"
                                 enctype="multipart/form-data">
                                 @csrf
                                 <div class="card p-3 border-radius-xl bg-white js-active" data-animation="FadeIn">
-                                    <h5 class="font-weight-bolder mb-0">Add Category</h5>
+                                    <h5 class="font-weight-bolder mb-0">Add Banner</h5>
                                     <p class="mb-0 text-sm">Mandatory informations</p>
                                     <div class="multisteps-form__content">
                                         <div class="row mt-3">
                                             <div class="col-12 col-sm-6">
-                                                <label>Name</label>
-                                                <input class="multisteps-form__input form-control" type="text" name="name"
-                                                    placeholder="eg. Name" onfocus="focused(this)"
-                                                    onfocusout="defocused(this)" value="{{old('name')}}">
-                                                @if($errors->has('name'))
-                                                <div class="error">{{$errors->first('name')}}</div>
+                                                <label>Title</label>
+                                                <input class="multisteps-form__input form-control" type="text" name="title"
+                                                    placeholder="eg. Title" onfocus="focused(this)"
+                                                    onfocusout="defocused(this)" value="{{old('title')}}">
+                                                @if($errors->has('title'))
+                                                <div class="error">{{$errors->first('title')}}</div>
                                                 @endif
+                                            </div>
+                                            <!-- <div class="col-12 col-sm-6">
+                                                <label>Url</label>
+                                                <input class="multisteps-form__input form-control" type="text" name="url"
+                                                    placeholder="eg. Url" onfocus="focused(this)"
+                                                    onfocusout="defocused(this)" value="{{old('url')}}">
+                                                @if($errors->has('url'))
+                                                <div class="error">{{$errors->first('url')}}</div>
+                                                @endif
+                                            </div> -->
+                                            <div class="col-12 col-sm-6 mt-3 mt-sm-0">
+                                                <label><strong>Choose Project Url:</strong></label>
+                                                <select name="url"
+                                                    class="choices__list choices__list--single form-control" id="brand"
+                                                    tabindex="-1" data-choice="active">
+                                                    <option value="">Choose Project Url</option>
+                                                    @foreach ($project as $at)
+                                                    <option value="{{ $at->slug }}">{{ $at->name }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                             <div class="col-12 col-sm-6 mt-3 mt-sm-0">
                                                 <label>Banner Image</label>
@@ -51,14 +71,14 @@
                                             </div>
                                             <div class="button-row d-flex mt-4">
                                                 <button class="btn bg-gradient-dark ms-auto mb-0 js-btn-next" type="submit"
-                                                    title="Submit">Add Category</button>
+                                                    title="Submit">Add Blog</button>
                                             </div>
                                         </div>
                                     </div>
                             </form>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </main>

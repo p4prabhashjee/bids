@@ -14,6 +14,8 @@ use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
+    use ImageTrait;
+
     /**
      * Display a listing of the resource.
      */
@@ -37,10 +39,14 @@ class CategoryController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
+            'image_path' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|boolean', 
         ]);
         // Generate the slug
         $data['slug'] = $this->getUniqueSlug($data['name']);
+        if ($request->hasFile('image_path')) {
+            $data['image_path'] = $this->verifyAndUpload($request, 'image_path');
+        }
         $blog = Category::create($data);
 
         return redirect()->route('admin.categories.index')->with('success', 'Category created successfully!');
@@ -70,11 +76,15 @@ class CategoryController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
+            'image_path' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|boolean', 
         ]);
 
         // Generate the slug
         $data['slug'] = $this->getUniqueSlug($data['name']);
+        if ($request->hasFile('image_path')) {
+            $data['image_path'] = $this->verifyAndUpload($request, 'image_path');
+        }
         $category->update($data);
         
         return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully!');

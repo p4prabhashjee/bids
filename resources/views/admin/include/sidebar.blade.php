@@ -47,6 +47,58 @@
                     </ul>
                 </div>
             </li>
+            <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#bannerSection"
+                    class="nav-link {{Request::routeIs('admin.banners.*') ? '' : 'collapsed'}}"
+                    aria-controls="bannerSection" role="button" aria-expanded="false">
+                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                        <i class="ni ni-air-baloon text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Banner</span>
+                </a>
+                <div class="collapse {{Request::routeIs('admin.banners.*') ? 'show' : ''}}" id="bannerSection" style="">
+                    <ul class="nav ms-4">
+                        <li class="nav-item {{Request::routeIs('admin.banners.index') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.banners.index') ? 'active' : ''}}"
+                                href="{{route('admin.banners.index')}}">
+                                <span class="sidenav-normal"> List </span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{Request::routeIs('admin.banners.create') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.banners.create') ? 'active' : ''}}"
+                                href="{{route('admin.banners.create')}}">
+                                <span class="sidenav-normal"> Add Banner </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#projectSection"
+                    class="nav-link {{Request::routeIs('admin.projects.*') ? '' : 'collapsed'}}"
+                    aria-controls="projectSection" role="button" aria-expanded="false">
+                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                        <i class="ni ni-air-baloon text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Projects</span>
+                </a>
+                <div class="collapse {{Request::routeIs('admin.projects.*') ? 'show' : ''}}" id="projectSection" style="">
+                    <ul class="nav ms-4">
+                        <li class="nav-item {{Request::routeIs('admin.projects.index') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.projects.index') ? 'active' : ''}}"
+                                href="{{route('admin.projects.index')}}">
+                                <span class="sidenav-normal"> List </span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{Request::routeIs('admin.projects.create') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.projects.create') ? 'active' : ''}}"
+                                href="{{route('admin.projects.create')}}">
+                                <span class="sidenav-normal"> Add Projects </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
           
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#categorySection"

@@ -18,6 +18,8 @@ use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\BidvalueController;
+use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Frontend\HomepageController;
 
 
@@ -76,6 +78,8 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::resource('brands', BrandController::class);
     Route::resource('products', ProductController::class);
     Route::resource('bidvalues', BidvalueController::class);
+    Route::resource('banners', BannerController::class);
+    Route::resource('projects', ProjectController::class);
     
 });
 

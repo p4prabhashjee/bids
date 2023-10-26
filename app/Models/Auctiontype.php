@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Auctiontype extends Model
 {
     use HasFactory;
-    protected $table ='auction_types';
+    protected $table = 'auction_types';
 
     protected $fillable = [
         'name',
@@ -23,7 +23,13 @@ class Auctiontype extends Model
     }
 
     public function productss()
-{
-    return $this->hasMany(Product::class);
-}
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class, 'auction_type_id');
+    }
+    
 }
