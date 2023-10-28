@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->boolean('deposit')->default(0); // 0 or 1 (boolean)
-            $table->decimal('deposit_amount', 10, 2)->default(0.00); 
+        Schema::table('categories', function (Blueprint $table) {
+            $table->integer('auction_type_id')->after('description');
         });
     }
 
@@ -22,11 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
+        Schema::table('categories', function (Blueprint $table) {
             //
         });
     }
 };
-
-
-

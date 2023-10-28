@@ -15,6 +15,7 @@ class Category extends Model
         'description',
         'image_path',
         'status',
+        'auction_type_id',
        
     ];
 

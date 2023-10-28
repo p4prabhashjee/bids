@@ -50,6 +50,19 @@
                                                 <div class="error">{{$errors->first('status')}}</div>
                                                 @endif
                                             </div>
+                                            <div class="col-12 col-sm-6 mt-3 mt-sm-0">
+                                                <label><strong>Choose a AuctionType::</strong></label>
+                                                <select name="auction_type_id"
+                                                    class="choices__list choices__list--single form-control" id="category"
+                                                    tabindex="-1" data-choice="active">
+                                                    <option value="">Select AuctionType</option>
+                                                    @foreach ($auctiontype as $at)
+                                                    <option value="{{ $at->id }}"
+                                                        {{ old('auction_type_id', $category->auction_type_id) == $at->id ? 'selected' : '' }}>
+                                                        {{ $at->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
                                         <div class="col-12 col-sm-12 mt-3 mt-sm-0">
                                             <label>Description</label>

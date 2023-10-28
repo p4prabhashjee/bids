@@ -25,6 +25,30 @@
                                                 <div class="error">{{$errors->first('title')}}</div>
                                                 @endif
                                             </div>
+                                           
+                                            <div class="col-12 col-sm-6 mt-3 mt-sm-0">
+                                                <label><strong>Choose AuctionType:</strong></label>
+                                                <select name="auction_type_id"
+                                                    class="choices__list choices__list--single form-control" id="brand"
+                                                    tabindex="-1" data-choice="active">
+                                                    <option value="">Select AuctionType</option>
+                                                    @foreach ($auctiontype as $at)
+                                                    <option value="{{ $at->id }}">{{ $at->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="col-12 col-sm-6 mt-3 mt-sm-0">
+                                                <label><strong>Choose Project:</strong></label>
+                                                <select name="auction_type_id"
+                                                    class="choices__list choices__list--single form-control" id="project"
+                                                    tabindex="-1" data-choice="active">
+                                                    <option value="">Select Project</option>
+                                                    @foreach ($projects as $pr)
+                                                    <option value="{{ $pr->id }}">{{ $pr->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                             <div class="col-12 col-sm-6 mt-3 mt-sm-0">
                                                 <label><strong>Choose a Category:</strong></label>
                                                 <select name="category_id"
@@ -37,35 +61,15 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-12 col-sm-6 mt-3 mt-sm-0">
-                                                <label><strong>Choose a SubCategory:</strong></label>
-                                                <select name="subcategory_id"
-                                                    class="choices__list choices__list--single form-control"
-                                                    id="subcategory" tabindex="-1" data-choice="active">
-                                                    <option value="">Select Subcategory</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-12 col-sm-6 mt-3 mt-sm-0">
-                                                <label><strong>Choose a Brand:</strong></label>
-                                                <select name="brand_id"
-                                                    class="choices__list choices__list--single form-control" id="brand"
-                                                    tabindex="-1" data-choice="active">
-                                                    <option value="">Select Brand</option>
-                                                    @foreach ($brands as $br)
-                                                    <option value="{{ $br->id }}">{{ $br->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="col-12 col-sm-6 mt-3 mt-sm-0">
-                                                <label><strong>Choose AuctionType:</strong></label>
-                                                <select name="auction_type_id"
-                                                    class="choices__list choices__list--single form-control" id="brand"
-                                                    tabindex="-1" data-choice="active">
-                                                    <option value="">Select AuctionType</option>
-                                                    @foreach ($auctiontype as $at)
-                                                    <option value="{{ $at->id }}">{{ $at->name }}</option>
-                                                    @endforeach
-                                                </select>
+
+                                            <div class="col-12 col-sm-6" id="end-date-container">
+                                                <label><strong>End Date & Time</strong></label>
+                                                <input class="multisteps-form__input form-control" type="text" id="end_date" name="auction_end_date"
+                                                    value="{{ old('auction_end_date') }}" data-input data-enable-time data-date-format="Y-m-d H:i"
+                                                    data-min-date="{{ date('Y-m-d') }}">
+                                                @if($errors->has('auction_end_date'))
+                                                <div class="error">{{ $errors->first('auction_end_date') }}</div>
+                                                @endif
                                             </div>
                                             <div class="col-12 col-sm-6 mt-3 mt-sm-0">
                                                 <label>Status</label>
@@ -90,49 +94,15 @@
                                                 <div class="error">{{ $errors->first('status') }}</div>
                                                 @endif
                                             </div>
-                                            <div class="col-12 col-sm-6">
-                                                <label><strong>Auction Start Date</strong></label>
-                                                <input class="multisteps-form__input form-control" type="date"
-                                                    id="start_date" name="auction_start_date"
-                                                    value="{{ old('auction_start_date') }}" min="{{ date('Y-m-d') }}">
-                                                @if($errors->has('auction_start_date'))
-                                                <div class="error">{{ $errors->first('auction_start_date') }}</div>
-                                                @endif
+                                            <div class="col-12 col-sm-6 mt-3 test">
+                                                <label><strong>Is Popular:</strong></label>
+                                                <input type="checkbox" name="is_popular" value="1">
                                             </div>
-
+                                            <h6>Estimated Price Range </h6>
                                             <div class="col-12 col-sm-6">
-                                                <label><strong>Auction End Date</strong></label>
-                                                <input class="multisteps-form__input form-control" type="date"
-                                                    id="end_date" name="auction_end_date"
-                                                    value="{{ old('auction_end_date') }}" min="{{ date('Y-m-d') }}">
-                                                @if($errors->has('auction_end_date'))
-                                                <div class="error">{{ $errors->first('auction_end_date') }}</div>
-                                                @endif
-                                            </div>
-
-                                            <div class="col-12 col-sm-6">
-                                                <label><strong>Auction Start Time</strong></label>
-                                                <input class="multisteps-form__input form-control" type="time"
-                                                    id="start_time" name="auction_start_time"
-                                                    value="{{ old('auction_start_time') }}">
-                                                @if($errors->has('auction_start_time'))
-                                                <div class="error">{{ $errors->first('auction_start_time') }}</div>
-                                                @endif
-                                            </div>
-
-                                            <div class="col-12 col-sm-6">
-                                                <label><strong>Auction End Time</strong></label>
-                                                <input class="multisteps-form__input form-control" type="time"
-                                                    id="end_time" name="auction_end_time"
-                                                    value="{{ old('auction_end_time') }}">
-                                                @if($errors->has('auction_end_time'))
-                                                <div class="error">{{ $errors->first('auction_end_time') }}</div>
-                                                @endif
-                                            </div>
-                                            <div class="col-12 col-sm-6">
-                                                <label><strong>Reserved Price</strong></label>
+                                                <label><strong> Price</strong></label>
                                                 <input class="multisteps-form__input form-control" type="number"
-                                                    step="0.01" id="reserved_price" name="reserved_price"
+                                                    id="reserved_price" name="reserved_price"
                                                     placeholder="eg. Reserved Price" onfocus="focused(this)"
                                                     onfocusout="defocused(this)" value="{{ old('reserved_price') }}">
                                                 @if($errors->has('reserved_price'))
@@ -140,66 +110,25 @@
                                                 @endif
                                             </div>
 
-                                            <!-- <div class="col-12 col-sm-6">
-                                                <label><strong>Deposit</strong></label>
-                                                <div class="radio_listing">
-                                                    <div class="radio_list">
-                                                        <input type="radio" id="with_deposit" name="deposit"
-                                                            value="1" onchange="toggleDepositField()">
-                                                        <label for="with_deposit"><strong>With Deposit</strong></label>
-                                                    </div>
-                                                    <div class="radio_list">
-                                                        <input type="radio" id="without_deposit" name="deposit"
-                                                            value="0" onchange="toggleDepositField()">
-                                                        <label for="without_deposit">Without Deposit</label>
-                                                    </div>
-                                                </div>
-                                                <div id="deposit_field" style="display: none;">
-                                                    <input class="multisteps-form__input form-control" type="number"
-                                                         id="deposit_amount" name="deposit_amount"
-                                                        placeholder="eg. Deposit Amount" onfocus="focused(this)"
-                                                        onfocusout="defocused(this)"
-                                                        value="{{ old('deposit_amount') }}">
-                                                    @if($errors->has('deposit_amount'))
-                                                    <div class="error">{{ $errors->first('deposit_amount') }}</div>
-                                                    @endif
-                                                </div>
-                                            </div>
                                             <div class="col-12 col-sm-6">
-                                                <label><strong>No Of Entries</strong></label>
+                                                <label><strong>Estimated Price</strong></label>
                                                 <input class="multisteps-form__input form-control" type="number"
-                                                    name="no_of_entries" placeholder="eg. No Of Entries"
-                                                    onfocus="focused(this)" onfocusout="defocused(this)"
-                                                    value="{{old('no_of_entries')}}">
-                                                @if($errors->has('no_of_entries'))
-                                                <div class="error">{{$errors->first('no_of_entries')}}</div>
+                                                    id="estimated_price" name="estimated_price"
+                                                    placeholder="eg. Estimated Price" onfocus="focused(this)"
+                                                    onfocusout="defocused(this)" value="{{ old('estimated_price') }}">
+                                                @if($errors->has('estimated_price'))
+                                                <div class="error">{{ $errors->first('estimated_price') }}</div>
                                                 @endif
-                                            </div> -->
+                                            </div>
 
-                                            <!-- <div class="col-12 col-sm-6">
-                                                <label><strong>Is_It_Bid_Increment</strong></label>
-                                                <div class="radio_listing">
-                                                    <div class="radio_list">
-                                                        <input type="radio" id="yes_radio" name="Is_It_Bid_Increment"
-                                                            value="1" onchange="togglebidincrementField()">
-                                                        <label for="yes_radio"><strong>Yes</strong></label>
-                                                    </div>
-                                                    <div class="radio_list">
-                                                        <input type="radio" id="no_radio" name="Is_It_Bid_Increment"
-                                                            value="0" onchange="togglebidincrementField()">
-                                                        <label for="no_radio">No</label>
-                                                    </div>
-                                                </div>
-                                                <div id="bidincrement_field" style="display: none;">
-                                                    <input class="multisteps-form__input form-control" type="number"
-                                                        id="Bid_Increment" name="Bid_Increment"
-                                                        placeholder="eg. Bid_Increment" onfocus="focused(this)"
-                                                        onfocusout="defocused(this)" value="{{ old('Bid_Increment') }}">
-                                                    @if($errors->has('Bid_Increment'))
-                                                    <div class="error">{{ $errors->first('Bid_Increment') }}</div>
-                                                    @endif
-                                                </div>
-                                            </div> -->
+                                            <div class="col-12 col-sm-6">
+                                                <label><strong>Increment Percentage</strong></label>
+                                                <input class="multisteps-form__input form-control" type="number" id="increment_percentage" name="increment_percentage" placeholder="eg. Increment Percentage" onfocus="focused(this)" onfocusout="defocused(this)" value="{{ old('increment_percentage') }}">
+                                                @if($errors->has('increment_percentage'))
+                                                <div class="error">{{ $errors->first('increment_percentage') }}</div>
+                                                @endif
+                                            </div>
+                                           
                                             <div class="col-12 col-sm-12 mt-3 mt-sm-0">
                                                 <label><strong>Gallery Images</strong></label>
                                                 <input class="multisteps-form__input form-control" type="file"
@@ -213,30 +142,7 @@
                                                 @endforeach
                                                 @endif
                                             </div>
-                                            <h6>Product Specification </h6>
-
-                                            <div id="chatFieldsContainer">
-                                                <div class="row">
-                                                <div class="col-12 col-sm-5">
-                                                    <label><strong>Feature Name</strong></label>
-                                                    <input class="multisteps-form__input form-control" type="text" name="name[]" placeholder="eg. Feature name" onfocus="focused(this)" onfocusout="defocused(this)">
-                                                </div>
-                                                <div class="col-12 col-sm-5">
-                                                    <label><strong>Feature Value</strong></label>
-                                                    <input class="multisteps-form__input form-control" type="text" name="value[]" placeholder="eg. Feature value" onfocus="focused(this)" onfocusout="defocused(this)">
-                                                </div>
-                                                    <div class="col-12 col-sm-2">
-
-                                                        <button type="button" class="btn btn-danger remove-field"
-                                                            disabled>Remove</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="">
-                                            <button type="button" class="btn btn-primary add-field">Add More
-                                                Feature</button>
+                                           
                                         </div>
 
                                         <div class="col-12 col-sm-12 mt-3 mt-sm-0">
@@ -258,34 +164,59 @@
         </div>
     </main>
     <!-- subcat script based on category -->
-    <script>
-    $(document).ready(function() {
-        $('#category').on('change', function() {
-            var categoryId = $(this).val();
-            if (categoryId) {
+   
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Add an event listener to the auction type select element -->
+<script>
+    $(document).ready(function () {
+        $('#brand').on('change', function () {
+            var selectedAuction = $(this).val();
+            
+            if (selectedAuction) {
+                // Make an AJAX request to get the categories based on the selected auction
                 $.ajax({
-                    url: '{{ route("get-subcategories", ["category" => "__categoryId__"]) }}'
-                        .replace('__categoryId__', categoryId),
+                    url: "{{ route('get-categories', ':auction') }}".replace(':auction', selectedAuction),
                     type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        $('#subcategory').empty();
-                        $('#subcategory').append($('<option>').text('Select Subcategory')
-                            .attr('value', ''));
-                        $.each(data, function(key, value) {
-                            $('#subcategory').append($('<option>').text(value.name)
-                                .attr('value', value.id));
+                    success: function (data) {
+                        // Populate the category select element with the retrieved categories
+                        var categorySelect = $('#category');
+                        categorySelect.empty();
+                        categorySelect.append($('<option value="">Select Category</option>'));
+                        $.each(data, function (key, value) {
+                            categorySelect.append($('<option value="' + value.id + '">' + value.name + '</option>'));
                         });
                     }
                 });
             } else {
-                $('#subcategory').empty();
-                $('#subcategory').append($('<option>').text('Select Subcategory').attr('value', ''));
+                // If no auction type is selected, clear the category select options
+                $('#category').empty().append('<option value="">Select Category</option>');
             }
         });
     });
-    </script>
-    <!-- preview image script -->
+</script>
+
+<script>
+    $('#brand').on('change', function () {
+    var auctionType = $(this).val();
+    if (auctionType) {
+        $.ajax({
+            type: 'GET',
+            url: '/get-project/' + auctionType,
+            success: function (data) {
+                $('#project').empty();
+                $('#project').append($('<option value="">Select Project</option>'));
+                $.each(data, function (key, value) {
+                    $('#project').append($('<option value="' + value.id + '">' + value.name + '</option>'));
+                });
+            }
+        });
+    } else {
+        $('#project').empty();
+        $('#project').append($('<option value="">Select Project</option>'));
+    }
+});
+</script>
     <script>
     function previewImages() {
         var preview = document.getElementById('image-preview');
@@ -306,74 +237,41 @@
         }
     }
     </script>
-    <!-- add remove functionality -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const container = document.getElementById('chatFieldsContainer');
-        const addFieldBtn = document.querySelector('.add-field');
+$(document).ready(function() {
+    // Function to handle the change event of the auction type select
+    $("#brand").on("change", function() {
+        // Get the selected value
+        var selectedValue = $(this).val();
 
-        addFieldBtn.addEventListener('click', function() {
-            const clone = container.firstElementChild.cloneNode(true);
-
-            // Clear values in the cloned row
-            clone.querySelector('[name="name[]"]').value = '';
-            clone.querySelector('[name="value[]"]').value = '';
-
-            // Enable the Remove button in the new row
-            const removeButton = clone.querySelector('.remove-field');
-            removeButton.removeAttribute('disabled');
-
-            container.appendChild(clone);
-        });
-
-        container.addEventListener('click', function(event) {
-            if (event.target && event.target.classList.contains('remove-field')) {
-                // Prevent removing the first row
-                if (container.childElementCount > 1) {
-                    container.removeChild(event.target.closest('.row'));
-                }
-            }
-        });
+        // Check if the selected value is "3" (which corresponds to "Live" in your database)
+        if (selectedValue === "3") {
+            // Hide the "End Date & Time" container
+            $("#end-date-container").hide();
+        } else {
+            // Show the "End Date & Time" container for other auction types
+            $("#end-date-container").show();
+        }
     });
-    </script>
-    <!-- <script>
-    function toggleDepositField() {
-        var depositField = document.getElementById('deposit_field');
-        var depositOptionWith = document.getElementById('with_deposit');
-        var depositOptionWithout = document.getElementById('without_deposit');
 
-        if (depositOptionWith.checked) {
-            depositField.style.display = 'block';
-        } else {
-            depositField.style.display = 'none';
-            document.getElementById('deposit_amount').value = '';
-        }
+    // Trigger the change event initially to set the initial state
+    $("#brand").trigger("change");
+});
+</script>
 
-        if (depositOptionWithout.checked) {
-            
-        }
-    }
-    </script> -->
-    <!-- <script>
-    function togglebidincrementField() {
-        var bidincrementField = document.getElementById('bidincrement_field');
-        var depositOptionWith = document.getElementById('yes_radio');
-        var depositOptionWithout = document.getElementById('no_radio');
-
-        if (depositOptionWith.checked) {
-            bidincrementField.style.display = 'block';
-        } else {
-            bidincrementField.style.display = 'none';
-            document.getElementById('Bid_Increment').value = '';
-        }
-
-        if (depositOptionWithout.checked) {
-           
-        }
-    }
-    </script> -->
     <x-head.tinymce-config />
 </x-admin-layout>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+    flatpickr("#end_date", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        minDate: "{{ date('Y-m-d') }}",
+    });
+</script>
+
+
 <style>
 .image-preview {
     display: flex;
@@ -389,5 +287,8 @@
 
 .remove-field {
     margin-top: 30px;
+}
+.test {
+    margin-top: 2rem !important;
 }
 </style>

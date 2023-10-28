@@ -61,7 +61,9 @@ Route::middleware(['user'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::get('get-subcategories/{category}', [ProductController::class,'getSubcategories'])->name('get-subcategories');
+Route::get('get-categories/{auction}', [ProductController::class,'getcategories'])->name('get-categories');
+Route::get('get-project/{auction}', [ProductController::class,'getprojects'])->name('get-project');
+
 Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
     Route::resource('users', UserController::class);

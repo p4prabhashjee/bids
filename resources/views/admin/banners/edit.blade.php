@@ -25,16 +25,7 @@
                                                 <div class="error">{{$errors->first('title')}}</div>
                                                 @endif
                                             </div>
-                                            <!-- <div class="col-12 col-sm-6">
-                                                <label>Url</label>
-                                                <input class="multisteps-form__input form-control" type="text" name="url"
-                                                    placeholder="eg. Url" onfocus="focused(this)"
-                                                    onfocusout="defocused(this)" value="{{old('url', $banner->url)}}">
-                                                @if($errors->has('url'))
-                                                <div class="error">{{$errors->first('url')}}</div>
-                                                @endif
-                                            </div> -->
-                                           
+                                        
                                             <div class="col-12 col-sm-6 mt-3 mt-sm-0">
                                                 <label><strong>Choose Project Url:</strong></label>
                                                 <select name="url"

@@ -9,6 +9,8 @@ use App\Models\Category;
 use Auth;
 use App\Traits\ImageTrait;
 use Illuminate\Support\Str;
+use App\Models\Auctiontype;
+
 
 
 
@@ -28,7 +30,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('admin.categories.create');
+        $auctiontype = Auctiontype::where('status', 1)->get();
+        return view('admin.categories.create',compact('auctiontype'));
     }
 
     /**
@@ -41,6 +44,7 @@ class CategoryController extends Controller
             'description' => 'required|string',
             'image_path' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|boolean', 
+            'auction_type_id' =>'required'
         ]);
         // Generate the slug
         $data['slug'] = $this->getUniqueSlug($data['name']);
@@ -65,7 +69,8 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return view('admin.categories.edit', compact('category'));
+        $auctiontype = Auctiontype::where('status', 1)->get();
+        return view('admin.categories.edit', compact('category','auctiontype'));
     }
 
     /**
@@ -78,6 +83,7 @@ class CategoryController extends Controller
             'description' => 'required|string',
             'image_path' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|boolean', 
+            'auction_type_id' => ''
         ]);
 
         // Generate the slug

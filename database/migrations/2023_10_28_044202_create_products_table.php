@@ -14,16 +14,14 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->integer('category_id');
-            $table->integer('subcategory_id');
+            $table->string('slug')->unique()->nullable();
             $table->integer('auction_type_id');
-            $table->date('auction_start_date');
-            $table->date('auction_end_date');
-            $table->time('auction_start_time');
-            $table->time('auction_end_time');
+            $table->integer('category_id');
             $table->decimal('reserved_price', 10, 2);
-            $table->decimal('minimum_bid', 10, 2);
+            $table->decimal('Increment', 10, 2)->nullable();
+            $table->datetime('auction_end_date');
             $table->text('description'); 
+            $table->boolean('is_popular')->default(false);
             $table->enum('status', ['new', 'open', 'suspended', 'closed']);
             $table->timestamps();
         });
