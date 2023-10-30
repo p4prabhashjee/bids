@@ -41,7 +41,7 @@ class BannerController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image_path' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_path' => 'required|image|max:2048',
             'url'        => 'required',
             'status' => 'required|boolean', 
         ]);
@@ -79,7 +79,7 @@ class BannerController extends Controller
         $data = $request->validate([
             'title' => 'string|max:255',
             'description' => 'string',
-            'image_path' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_path' => 'image|max:2048',
             'url'        => '',
             'status' => 'boolean', 
         ]);

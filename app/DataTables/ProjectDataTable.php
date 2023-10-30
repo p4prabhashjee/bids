@@ -81,8 +81,9 @@ class ProjectDataTable extends DataTable
             Column::make('name'),
             Column::computed('image_path')->render('full[\'image_path\'] ? "<img src=\'' . asset("img/projects/\" + full[\"image_path\"] + \"") . '\' width=\'50\'>" : "<img src=\'' . asset("img/noimage.jpg") . '\' width=\'50\'>"')->addClass('text-center'),
             Column::make('start_date_time')->title('Start Date & Time'),
-            Column::computed('auctiontype.name')
-                 ->title('Auctiontype'),
+            Column::computed('auctiontype')
+                   ->data('auctiontype.name') 
+                   ->title('Auctiontype'),
             Column::make('status')->render('full[\'status\'] ? \'Active\' : \'Inactive\'')->addClass('text-center'),
             Column::make('is_trending')->render('full[\'is_trending\'] ? \'Yes\' : \'No\'')->addClass('text-center'),
             Column::make('created_at')->render('new Date(full[\'created_at\']).toLocaleString()' ),

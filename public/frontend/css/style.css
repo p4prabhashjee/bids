@@ -9,7 +9,12 @@ body {
     font-size: 16px;
     color: #212529;
 }
-
+a {
+    color: #000;
+}
+a:hover{
+    color: #3E0269;
+}
 a,
 a:hover {
     text-decoration: none;
@@ -281,7 +286,7 @@ input[type="radio"]:checked::after {
     color: #3E0269;
 }
 
-.drop-lange-select, .category-lst {
+.drop-lange-select, .category-lst, .category-2nd {
     position: absolute;
     top: 50px;
     width: 250px;
@@ -679,7 +684,7 @@ img.input-lft-icon {
 
 
 
-.home {
+/*.home {
     width: 100%;
     height: 85vh;
     background-image: url(../images/slider-bg.png);
@@ -687,16 +692,37 @@ img.input-lft-icon {
     background-repeat: no-repeat;
     background-position: right;
     padding-left: 100px;
-}
+}*/
 
+.home_slider .item {
+    background-position: right;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-left: 100px;
+}
+.home_slider .owl-dots {
+    margin-top: -25px !important;
+    z-index: 1;
+    position: relative;
+}
+.home_slider .hero-section {
+    min-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.owl-theme .owl-dots .owl-dot.active span, .owl-theme .owl-dots .owl-dot:hover span {
+    background: #7810d1;
+}
+.owl-theme .owl-dots .owl-dot span {
+    background: #dab8f8;
+}
 .hero-section h1 {
-    margin-top: 200px;
     color: #3E0269;
     font-size: 70px;
     font-weight: 700;
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
-
 .hero-section p {
     font-size: 20px;
     margin-bottom: 50px;
@@ -748,6 +774,7 @@ img.input-lft-icon {
     color: #fff;
     font-size: 34px;
     font-weight: 700;
+    margin-bottom: 30px;
 }
 
 .auction-type p {
@@ -864,6 +891,7 @@ i.fa.fa-heart-o {
     padding: 14px;
     border-radius: 10px;
     display: inline-block;
+    width: 100%;
 }
 
 
@@ -935,9 +963,29 @@ section.most-view-product .row::-webkit-scrollbar-thumb {
 }
 
 .most-bid {
-    margin: 50px 0;
+    margin: 70px 0;
 }
-
+.bid-box-status-ic {
+    background: #f5f6f6;
+    padding: 4px 10px;
+    border-radius: 30px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+}
+.bid-box-status-ic span{font-size: 14px;margin-top: 0;margin-left: 6px;color: #7f12dd;}
+.most-bid button.text-btn {
+    margin-top: 10px;
+}
+.wts_fixed {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    z-index: 1;
+}
 .bid-box {
     position: relative;
     background-color: #fff;
@@ -946,6 +994,7 @@ section.most-view-product .row::-webkit-scrollbar-thumb {
     align-items: center;
     gap: 20px;
     margin-bottom: 15px;
+    padding: 5px 0;
 }
 
 .bid-box h3 {
@@ -983,10 +1032,10 @@ section.most-view-product .row::-webkit-scrollbar-thumb {
 
 
 .box-img {
-    width: 150px;
+    width: 120px;
     height: 150px;
     flex: 0 0 auto;
-
+    padding: 10px;
 }
 
 .heat-like {
@@ -1700,7 +1749,9 @@ section.detail-section h3 {
 .bid-and-time .countdown-time li span {
     margin-right: 5px;
 }
-
+.countdown-time ul li:first-child{
+    padding-left: 0;
+}
 .card-wrapper {
     max-width: 1100px;
     margin: 0 auto;
@@ -1816,6 +1867,13 @@ section.detail-section h3 {
     border-radius: 5px;
     border: 1px solid #ADADAD;
     padding: 14px;
+    width: 100%;
+}
+.product-feature-box form.news-letter select {
+    border-radius: 5px 0 0 5px;
+    border: 1px solid #ADADAD;
+    padding: 14px;
+    width: calc(100% - 106px);
 }
 
 .no-enteres {
@@ -2274,6 +2332,61 @@ section.account-hero-section h1 {
 #addressman input[type="checkbox"]{
     height: auto;
 }
+.category-2nd {
+    left: 100%;
+    top: 0;
+}
+.popular_lnt {
+    display: flex;
+    justify-content: space-between;
+}
+.popular_slider_item .countdown-time ul{
+    margin-bottom: 0;
+}
+.popular_slider_item .countdown-time ul li, .most-bid .countdown-time ul li{
+    line-height: 1.3;
+}
+.most-bid .countdown-time ul li:first-child{
+    padding-left: 0;
+}
+.most-bid .countdown-time ul {
+    margin: 0 0 5px;
+}
+.most-bid p {
+    font-size: 16px;
+}
+.most-bid p span {
+    font-size: 13px;
+}
+.inner_header h1 {
+    font-size: 40px;
+}
+.inner_header_status {
+    display: inline-flex;
+    justify-content: center;
+    background: #fff;
+    position: relative;
+    width: auto;
+    padding: 10px 10px 10px 20px;
+    border-radius: 20px;
+}
+.inner_header_status .countdown-time ul {
+    margin: 0;
+}
+.crt_bid h6 {
+    margin: 0;
+    color: #fff;
+    font-weight: 200;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+#myModal form {
+    padding: 0 20px 20px;
+}
+#myModal form .form-group {
+    margin-bottom: 15px;
+}
+#myModal form h3{font-size: 20px;font-weight: bold;margin-bottom: 10px;}
 @media screen and (max-width: 1400px) {
     .my-order-tabs button {
         padding: 10px 30px;
@@ -2392,7 +2505,7 @@ section.account-hero-section h1 {
         padding: 0 20px !important;
         color: #000;
     }
-    .drop-lange-select, .notification-all, .category-lst {
+    .drop-lange-select, .notification-all, .category-lst, .category-2nd {
         position: inherit;
         top: 0;
         width: 100%;
@@ -2524,6 +2637,4 @@ section.account-hero-section h1 {
     width: 43%;
     margin-bottom: 15px;
 }
-
-
 }

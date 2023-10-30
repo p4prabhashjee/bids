@@ -13,18 +13,22 @@ class Product extends Model
     protected $fillable = [
         'title',
         'slug',
-        'description',
-        'category_id',
-        'subcategory_id',
         'auction_type_id',
-        'auction_start_date',
         'auction_end_date',
-        'auction_start_time',
-        'auction_end_time',
+        'project_id',
+        'category_id',
         'reserved_price',
-        'brand_id',
-        'status',
+        'description',
+        'status', 
+        'Increment',
+        'is_popular', 
+        'slug', 
+        'lot_no',
+        'end_price',
     ];
+
+   
+    
 
     public function category()
     {
@@ -39,10 +43,11 @@ class Product extends Model
     {
         return $this->belongsTo(Auctiontype::class,'auction_type_id');
     }
-    public function brand()
-    {
-        return $this->belongsTo(Brand::class,'brand_id');
-    }
+    public function project()
+{
+    return $this->belongsTo(Project::class);
+}
+
 
     public function galleries()
     {

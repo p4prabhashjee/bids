@@ -29,7 +29,14 @@ class Auctiontype extends Model
 
     public function projects()
     {
-        return $this->hasMany(Project::class, 'auction_type_id');
+        return $this->hasMany(Project::class,'auction_type_id');
     }
+
+
+    
+
+   
+
+    
     
 }

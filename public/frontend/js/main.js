@@ -15,6 +15,9 @@ $('.category-tile').click(function() {
   $('.drop-lange-select').hide("slow");
   $('.notification-all').hide("slow"); 
 });
+$('.category-tile-inner').click(function() {
+  $('.category-2nd').slideToggle("slow"); 
+});
 
 
 $(window).scroll(function() {
@@ -37,50 +40,62 @@ $('.menu-show-mn').click(function () {
 });
 
 
-// (function () {
-//     const second = 1000,
-//           minute = second * 60,
-//           hour = minute * 60,
-//           day = hour * 24;
-//     let today = new Date(),
-//         dd = String(today.getDate()).padStart(2, "0"),
-//         mm = String(today.getMonth() + 1).padStart(2, "0"),
-//         yyyy = today.getFullYear(),
-//         nextYear = yyyy + 1,
-//         dayMonth = "09/30/",
-//         birthday = dayMonth + yyyy;
+(function () {
+    const second = 1000,
+          minute = second * 60,
+          hour = minute * 60,
+          day = hour * 24;
+  
+    //I'm adding this section so I don't have to keep updating this pen every year :-)
+    //remove this if you don't need it
+    let today = new Date(),
+        dd = String(today.getDate()).padStart(2, "0"),
+        mm = String(today.getMonth() + 1).padStart(2, "0"),
+        yyyy = today.getFullYear(),
+        nextYear = yyyy + 1,
+        dayMonth = "09/30/",
+        birthday = dayMonth + yyyy;
     
-//     today = mm + "/" + dd + "/" + yyyy;
-//     if (today > birthday) {
-//       birthday = dayMonth + nextYear;
-//     }
-//     //end
+    today = mm + "/" + dd + "/" + yyyy;
+    if (today > birthday) {
+      birthday = dayMonth + nextYear;
+    }
+    //end
     
-//     const countDown = new Date(birthday).getTime(),
-//         x = setInterval(function() {    
+    const countDown = new Date(birthday).getTime(),
+        x = setInterval(function() {    
   
-//           const now = new Date().getTime(),
-//                 distance = countDown - now;
+          const now = new Date().getTime(),
+                distance = countDown - now;
   
-//             $("[id^='days']").text(Math.floor(distance / (day)));
-//             $("[id^='hours']").text(Math.floor((distance % (day)) / (hour)));
-//             $("[id^='minutes']").text(Math.floor((distance % (hour)) / (minute)));
-//             $("[id^='seconds']").text(Math.floor((distance % (minute)) / second));
+        //   document.getElementById("days").innerText = Math.floor(distance / (day)),
+            // document.getElementById("hours").innerText = Math.floor((distance % (day)) / (hour)),
+            // document.getElementById("minutes").innerText = Math.floor((distance % (hour)) / (minute)),
+            // document.getElementById("seconds").innerText = Math.floor((distance % (minute)) / second);
+            
+            // // document.getElementById("days1").innerText = Math.floor(distance / (day)),
+            // document.getElementById("hours1").innerText = Math.floor((distance % (day)) / (hour)),
+            // document.getElementById("minutes1").innerText = Math.floor((distance % (hour)) / (minute)),
+            // document.getElementById("seconds1").innerText = Math.floor((distance % (minute)) / second);
+            $("[id^='days']").text(Math.floor(distance / (day)));
+            $("[id^='hours']").text(Math.floor((distance % (day)) / (hour)));
+            $("[id^='minutes']").text(Math.floor((distance % (hour)) / (minute)));
+            $("[id^='seconds']").text(Math.floor((distance % (minute)) / second));
   
-//           //do something later when date is reached
-//           if (distance < 0) {
-//             document.getElementById("headline").innerText = "It's my birthday!";
-//             document.getElementById("countdown").style.display = "none";
-//             document.getElementById("content").style.display = "block";
-//             clearInterval(x);
-//           }
-//           //seconds
-//         }, 0)
-//     }());
+          //do something later when date is reached
+          if (distance < 0) {
+            document.getElementById("headline").innerText = "It's my birthday!";
+            document.getElementById("countdown").style.display = "none";
+            document.getElementById("content").style.display = "block";
+            clearInterval(x);
+          }
+          //seconds
+        }, 0)
+    }());
  
 
 
-    $(document).ready(function() {
+/*    $(document).ready(function() {
       $('.testimonial-slider').slick({
           autoplay: true,
           autoplaySpeed: 1000,
@@ -129,7 +144,7 @@ $('.menu-show-mn').click(function () {
 			$(".next-btn").removeClass("slick-disabled");
 		}
 	});
-  }); 
+  }); */
 
 
   $("#mobile_code").intlTelInput({
@@ -137,6 +152,7 @@ $('.menu-show-mn').click(function () {
     separateDialCode: true,
   });
 
- 
+
+
 
 

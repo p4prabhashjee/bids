@@ -46,7 +46,7 @@ class ProductDataTable extends DataTable
                 $query->whereDate('created_at', '=', $date);
             }
         }
-        $query->with('category','subcategory','auctiontype','brand');
+        $query->with('category','subcategory','auctiontype','project');
         return $query;
     }
 
@@ -79,28 +79,21 @@ class ProductDataTable extends DataTable
     {
         return [
             Column::make('#'),
+            Column::make('lot_no')->title('Lot No'),
             Column::make('title')->title('Title'),
             Column::computed('category_name')
                     ->data('category.name') 
                    ->title('Category'),
-            Column::computed('subcategory')
-                   ->data('subcategory.name') 
-                   ->title('SubCategory'),
             Column::computed('auctiontype')
                    ->data('auctiontype.name') 
                    ->title('Auctiontype'),
-            Column::computed('brand')
-                   ->data('brand.name') 
-                   ->title('Brand'),
-            Column::make('auction_start_date')->title('Auction Start Date'),
+            Column::computed('project')
+                   ->data('project.name') 
+                   ->title('Project'),
             Column::make('auction_end_date')->title('Auction End Date'),
-            Column::make('auction_start_time')->title('Auction Start Time'),
-            Column::make('auction_end_time')->title('Auction End Time'),
             Column::make('reserved_price')->title('Reserved Price'),
-            // Column::make('no_of_entries')->title('No Of Entries'),
             Column::make('description')->title('Description'),
             Column::make('status')->title('Status'),
-            // Column::make('created_at')->render('new Date(full[\'created_at\']).toLocaleString()' ),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)

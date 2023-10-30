@@ -10,6 +10,7 @@ use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Banner;
 use App\Models\Gallery;
 use App\Mail\ResetPasswordMail;
 use Redirect;
@@ -21,9 +22,20 @@ class HomepageController extends Controller
 {
     public function homepage(Request $request)
     {
-       $auctionTypesWithProductCount = AuctionType::withCount('products')->where('status', 1)->get();
+       $auctionTypesWithProject = AuctionType::with(['projects' => function ($query) {
+        $query->where('status', 1)
+            ->where('is_trending', 1)
+            ->take(4);
+       }])->where('status', 1)->get();
+    
+       $banners = Banner::where('status', 1)->take(4)->get();
+       $productauction = AuctionType::with(['products' => function ($query) {
+                            $query->where('status', 1)
+                                ->where('is_popular', 1);
+                        }])->where('status', 1)->get();
+
        //p($auctionTypesWithProductCount);
-        return view('frontend.homepage',compact('auctionTypesWithProductCount'));
+        return view('frontend.homepage',compact('auctionTypesWithProject','banners','productauction'));
     }
     public function productsByAuctionType($slug) {
         $auctionType = AuctionType::where('slug', $slug)->first();

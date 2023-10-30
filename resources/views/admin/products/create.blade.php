@@ -24,6 +24,7 @@
                                                 @if($errors->has('title'))
                                                 <div class="error">{{$errors->first('title')}}</div>
                                                 @endif
+
                                             </div>
                                            
                                             <div class="col-12 col-sm-6 mt-3 mt-sm-0">
@@ -40,7 +41,7 @@
 
                                             <div class="col-12 col-sm-6 mt-3 mt-sm-0">
                                                 <label><strong>Choose Project:</strong></label>
-                                                <select name="auction_type_id"
+                                                <select name="project_id"
                                                     class="choices__list choices__list--single form-control" id="project"
                                                     tabindex="-1" data-choice="active">
                                                     <option value="">Select Project</option>
@@ -98,7 +99,7 @@
                                                 <label><strong>Is Popular:</strong></label>
                                                 <input type="checkbox" name="is_popular" value="1">
                                             </div>
-                                            <h6>Estimated Price Range </h6>
+                                           
                                             <div class="col-12 col-sm-6">
                                                 <label><strong> Price</strong></label>
                                                 <input class="multisteps-form__input form-control" type="number"
@@ -109,21 +110,31 @@
                                                 <div class="error">{{ $errors->first('reserved_price') }}</div>
                                                 @endif
                                             </div>
-
+                                            <h6>Estimated Price Range </h6>
                                             <div class="col-12 col-sm-6">
-                                                <label><strong>Estimated Price</strong></label>
+                                                <label><strong>Start Price</strong></label>
                                                 <input class="multisteps-form__input form-control" type="number"
-                                                    id="estimated_price" name="estimated_price"
+                                                    id="estimated_price" name="	start_price"
                                                     placeholder="eg. Estimated Price" onfocus="focused(this)"
-                                                    onfocusout="defocused(this)" value="{{ old('estimated_price') }}">
-                                                @if($errors->has('estimated_price'))
-                                                <div class="error">{{ $errors->first('estimated_price') }}</div>
+                                                    onfocusout="defocused(this)" value="{{ old('start_price') }}">
+                                                @if($errors->has('start_price'))
+                                                <div class="error">{{ $errors->first('start_price') }}</div>
+                                                @endif
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <label><strong>End  Price</strong></label>
+                                                <input class="multisteps-form__input form-control" type="number"
+                                                    id="estimated_price" name="end_price"
+                                                    placeholder="eg. Estimated Price" onfocus="focused(this)"
+                                                    onfocusout="defocused(this)" value="{{ old('end_price') }}">
+                                                @if($errors->has('end_price'))
+                                                <div class="error">{{ $errors->first('end_price') }}</div>
                                                 @endif
                                             </div>
 
                                             <div class="col-12 col-sm-6">
                                                 <label><strong>Increment Percentage</strong></label>
-                                                <input class="multisteps-form__input form-control" type="number" id="increment_percentage" name="increment_percentage" placeholder="eg. Increment Percentage" onfocus="focused(this)" onfocusout="defocused(this)" value="{{ old('increment_percentage') }}">
+                                                <input class="multisteps-form__input form-control" type="number" id="increment_percentage" name="Increment" placeholder="eg. Increment Percentage" onfocus="focused(this)" onfocusout="defocused(this)" value="{{ old('increment_percentage') }}">
                                                 @if($errors->has('increment_percentage'))
                                                 <div class="error">{{ $errors->first('increment_percentage') }}</div>
                                                 @endif

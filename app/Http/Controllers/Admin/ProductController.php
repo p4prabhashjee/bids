@@ -13,6 +13,10 @@ use App\Models\Project;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Traits\ImageTrait;
+use Auth;
+use Illuminate\Validation\Rules;
+
 
 class ProductController extends Controller
 {
@@ -32,8 +36,7 @@ class ProductController extends Controller
         $projects = Project::where('status', 1)->get();
         $auctiontype = Auctiontype::where('status', 1)->get();
         $categories = Category::whereIn('auction_type_id', $auctiontype->pluck('id'))->get();
-        $brands = Brand::where('status', 1)->get();
-        return view('admin.products.create', compact('categories', 'auctiontype', 'brands','projects'));
+        return view('admin.products.create', compact('categories', 'auctiontype','projects'));
     }
 
     /**
@@ -41,25 +44,35 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-
-        $validatedData = $request->validate([
+    //    return $request->all();
+        $data = $request->validate([
             'title' => 'required|string|max:255',
             'auction_type_id' => 'required',
-            'auction_end_date' => 'required',
+            'auction_end_date' => '',
             'project_id'    => 'required',
             'category_id' => 'required',
             'reserved_price' => 'required',
             'description' => 'required|string',
             'status' => 'required',
             'Increment' => 'required',
-            'is_popular' => '',
+            'is_popular' => 'boolean',
             'image_path.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'end_price' =>'',
+            'start_price' => '',
         ]);
+        // return $data;
 
         // Generate the slug
-        $validatedData['slug'] = $this->getUniqueSlug($validatedData['title']);
+       $data['slug'] = $this->getUniqueSlug($data['title']);
+       $identifier = sprintf('%04d', mt_rand(1, 9999));
 
-        $pro = Product::create($validatedData);
+       // Generate the lot number
+       $lotNumber = 'Lot-' . $identifier;
+       
+       $data['lot_no'] = $lotNumber;
+
+        $pro = Product::create($data);
+     
         if ($request->hasFile('image_path')) {
             foreach ($request->file('image_path') as $file) {
                 $filename = date('YmdHi') . "-" . uniqid() . "." . $file->extension();
@@ -74,7 +87,6 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully!');
     }
-
     /**
      * Display the specified resource.
      */
@@ -129,9 +141,9 @@ class ProductController extends Controller
 
 
 
-    protected function getUniqueSlug($name)
+    protected function getUniqueSlug($title)
     {
-        $slug = Str::slug($name); // Generate the slug
+        $slug = Str::slug($title); // Generate the slug
 
         // Check if the slug is already taken
         $count = Product::where('slug', $slug)->count();

@@ -1,3 +1,29 @@
+
+<div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        
+        <div class="modal-body">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="login-mdl text-center">
+            <img src="{{asset('frontend/images/logo.svg')}}" alt="">
+            <h2 class="fndt-bld">Verify OTP</h2>
+            <p>Please enter 4-digit verification code that was send to your
+              Mobile number <a href="" class="text-btn edit-number">"+91 1234567890"</a></p>
+              <form action="" class="cmn-frm otp-filds">
+                <input type="number" name="" id="">
+                <input type="number" name="" id="">
+                <input type="number" name="" id="">
+                <input type="number" name="" id="">
+              </form>
+              <p>Didn’t Receive the Code? <a href="" class="text-btn edit-number">Resend</a></p>
+              <a href="my-account.html" class="mt-4 btn btn-secondary px-5" > Verify</a>
+          </div>
+        </div>
+         
+      </div>
+    </div>
+  </div>
 <footer>
       <div class="container">
         <div class="row">
@@ -12,7 +38,7 @@
           <div class="col-md-3 mange-text">
             <h3>SHOP</h3>
             <ul class="use-fulllink">
-              <li><a href="product-list.html">Products</a></li>
+              <li><a href="{{route('products-list')}}">Products</a></li>
               <li><a href="">Overview</a></li>
               <li><a href="">Pricing</a></li>
               <li><a href="">Releases</a></li>
@@ -21,8 +47,8 @@
           <div class="col-md-2">
             <h3>Company</h3>
             <ul class="use-fulllink">
-              <li><a href="">About us</a></li>
-              <li><a href="contact-us.html">Contact</a></li>
+              <li><a href="{{route('about-us')}}">About us</a></li>
+              <li><a href="{{route('contact-us')}}">Contact</a></li>
               <li><a href="">News</a></li>
               <li><a href="">Support</a></li>
             </ul>
@@ -62,62 +88,22 @@
         </div>
         <div class="privacy-link">
           <ul>
-            <li><a href="privacy.html">Terms</a></li>
-            <li><a href="privacy.html">Privacy</a></li>
+            <li><a href="{{route('terms-conditions')}}">Terms</a></li>
+            <li><a href="{{route('privacy-policy')}}">Privacy</a></li>
           </ul>
         </div>
       </div>
     </footer>
 
-
-    <div class="wts_fixed">
-    <a href="https://wa.me/966555424101" class="whatappFixBtn" target="_blank" id="">
-        <img src="{{asset('frontend/images/wts_ic.svg')}}" alt="whatsapp" width="45px" height="45px">
-    </a>
-</div>
-
-    
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="{{asset('frontend/js/jquery.min.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="{{asset('frontend/js/bootstrap.js')}}"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.js"></script>
+    <script src="{{asset('frontend/js/slick.min.js')}}"></script>
     <script src="{{asset('frontend/js/main.js')}}"></script>
-
-    <script type="text/javascript">
-        $('.home_slider .owl-carousel').owlCarousel({
-            loop: true,
-            margin: 0,
-            dots: true,
-            loop:true,
-            autoplay:true,
-            autoplaySpeed: 3000,
-            autoplayHoverPause: false,
-            nav: false,
-            items: 1,
-        });
-        $('.popular_slider.owl-carousel').owlCarousel({
-            items: 3,
-            margin: 30,
-            dots: false,
-            loop:true,
-            nav: false,
-            autoplay:true,
-            autoplaySpeed: 3000,
-            autoplayHoverPause: false,
-            responsive:{
-                0:{
-                    items:1,
-                },
-                600:{
-                    items:2,
-                },
-                1000:{
-                    items:3,
-                }
-            }
-        }); 
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput-jquery.min.js"></script>
+    
+ <script>
+   
+ </script>
   </body>
 </html>
