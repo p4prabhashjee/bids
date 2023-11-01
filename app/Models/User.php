@@ -34,7 +34,6 @@ class User extends Authenticatable implements JWTSubject
         'refer_code',
         'status',
         'password',
-        'country_code',
         'is_term',
     ];
 

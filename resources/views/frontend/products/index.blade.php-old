@@ -1,32 +1,15 @@
 @include('frontend.layouts.header')
-<section class="hero-ther inner_header">
+
+<section class="hero-ther">
     <div class="container-fluid">
       <div class="row justify-content-center">
         <div class="col-lg-5 col-md-6 text-center">
-           <h1>{{$projects->slug}}
-           </h1>
-           @php
-                $originalDateTime = $projects->start_date_time;
-                $timestamp = strtotime($originalDateTime);
-                $formattedDateTime = date("F j, g:i A", $timestamp);
-            @endphp
-           <p>{{$formattedDateTime}}</p>
-              <div class="bid-box-status">
-                <div class="bid-box-status-ic"><img src="{{ asset('frontend/images/private.svg') }}"><span>{{ $projects->auctionType->name }}</span></div>
-              </div>
-           <div class="inner_header_status">
-              <div class="countdown-time" id="countdown">
-                <ul>
-                  <li><span id="days"></span>days</li>
-                  <li><span id="hours"></span>Hours</li>
-                  <li><span id="minutes"></span>Minutes</li>
-                  <li><span id="seconds"></span>Seconds</li>
-                </ul>
-              </div>
-           </div>
+           <h1>Products</h1>
+           <p>Vivamus id ligula non turpis aliquam dignissim.  Fusce <br>
+            tempor vulputate urna, quis malesuada.</p>
             <form action="" class="search-frm-prdt">
               <input type="text" name="" id="" placeholder="Search products...">
-              <button><img class="w-100" src="{{ asset('frontend/images/rounded-sr.svg') }}" alt=""></button>
+              <button><img class="w-100" src="{{asset('frontend/images/rounded-sr.svg')}}" alt=""></button>
             </form>
         </div>
       </div>
@@ -45,34 +28,38 @@
               <option value="">Default sorting</option>
             </select>
           </form>
-          <button class="fliter-button btn btn-secondary" data-bs-target="#prtyfilter" data-bs-toggle="modal" data-bs-dismiss="modal" type="button">Filter <img class="ms-2" src="./images/filter.svg" alt=""></button>
+          <button class="fliter-button btn btn-secondary" data-bs-target="#prtyfilter" data-bs-toggle="modal" data-bs-dismiss="modal" type="button">Filter <img class="ms-2" src="{{asset('frontend/images/filter.svg')}}" alt=""></button>
         </div>
       </div>
     </div>
   </section>
 
   <section class="product-list-man">
+ 
     <div class="container">
+ 
       <div class="row">
       @foreach($products as $product)
         <div class="col-md-6">
           <a href="{{ url('productsdetail', $product->slug) }}">
             <div class="card-product">
               <div class="product-image">
-              @if ($product->galleries->isNotEmpty())
-                 <img src="{{ asset($product->galleries->first()->image_path) }}" alt="">
-             @else
-                <img src="{{asset('frontend/images/default-product-image.png')}}" alt="Default Image">
-             @endif
+                   @if ($product->galleries->isNotEmpty())
+                        <img src="{{ asset($product->galleries->first()->image_path) }}" alt="">
+                    @else
+                        <img src="{{asset('frontend/images/default-product-image.png')}}" alt="Default Image">
+                    @endif
                     <i class="fa fa-heart-o"></i>
-                <i class="fa fa-heart-o"></i>
+               
               </div>
               <div class="card-product-dtl">
-                <h3>{{$product->lot_no}}: {{$product->title}}</h3>
+                <h3>{{$product->title}}</h3>
                 <h5>${{$product->reserved_price}}</h5>
                 <p>Current Bid: <span> $1400.00</span></p>
-             
-                    @if ($product->name == 'Private'|| $product->name == 'Timed')
+                @if ($product->auctionType->name == 'Live')
+                  <p>Upcoming :  <span class="text-dark">{{ date('d M Y', strtotime($product->auction_start_date)) }} <span class="ms-2 text-dark">{{ date('h:i A', strtotime($product->auction_start_time)) }}</span></span></p>
+                    @endif
+                    @if ($product->auctionType->name == 'Timed')
                     <div class="countdown-time">
                       <ul>
                         <li><span id="days-{{$product->id}}"></span>days</li>
@@ -82,26 +69,26 @@
                       </ul>
                     </div>
                     @endif
-                <button class="text-btn">Bid Now <img class="img-fluid ms-3" src="./images/next-arrow.svg" alt=""></button>
+                
+                <button class="text-btn">Bid Now <img class="img-fluid ms-3" src="{{asset('frontend/images/next-arrow.svg')}}" alt=""></button>
               </div>
             </div>
           </a>
         </div>
         @endforeach
-
-       </div>
-      
+     
+      </div>
+   
         <ul class="pagination">
-          <li><a href=""><img src="./images/left-1.svg" alt=""></a></li>
+          <li><a href=""><img src="{{asset('frontend/images/left-1.svg')}}" alt=""></a></li>
           <li><a href="">1</a></li>
           <li><a   class="active" href="">2</a></li>
           <li><a href="">3</a></li>
-          <li><a href=""><img src="./images/left-1.svg" alt=""></a></li>
+          <li><a href=""><img src="{{asset('frontend/images/left-1.svg')}}" alt=""></a></li>
         </ul>
        
     </div>
   </section>
- 
   <div class="modal fade" id="prtyfilter" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -113,8 +100,8 @@
               <form action="" class="cmn-frm mt-4">
                 <div class="form-group">
                   <select name="" id="">
-                    <option value="">Auction type,</option>
-                    <option value="">Auction type,</option>
+                    <option value="">Room type,</option>
+                    <option value="">Room type,</option>
                   </select>
                 </div>
                 <div class="form-group mt-2">
@@ -139,6 +126,30 @@
                       <input type="range" class="range-max" min="0" max="10000" value="7500" step="100">
                     </div>
                   </div>
+                </div>
+                <div class="form-group ">
+                  <h3>Auction Type</h3>
+                  <ul class="categry-list">
+                    <li>
+                      <div class="form-check">
+                            <input class="form-check-input w-auto" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                            Private
+                            </label>
+                          </div> </li>
+                                              <li><div class="form-check">
+                            <input class="form-check-input w-auto" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                              Timed
+                            </label>
+                          </div> </li>
+                                              <li><div class="form-check">
+                            <input class="form-check-input w-auto" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                              Live
+                            </label>
+                          </div> </li>
+                  </ul>
                 </div>
                 <div class="form-group mt-4">
                   <h3>Auction</h3>
@@ -188,11 +199,11 @@
     
     
 
-    <script src="./js/jquery.min.js"></script>
+    <script src="{{asset('frontend/js/jquery.min.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-    <script src="./js/bootstrap.js"></script>
-    <script src="./js/slick.min.js"></script>
-    <script src="./js/main.js"></script>
+    <script src="{{asset('frontend/js/bootstrap.js')}}"></script>
+    <script src="{{asset('frontend/js/slick.min.js')}}"></script>
+    <script src="{{asset('frontend/js/main.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput-jquery.min.js"></script>
  <script>
   
@@ -240,7 +251,33 @@ rangeInput.forEach((input) => {
 });
 
  </script>
+  <!-- <script>
+            (function () {
+              const second = 1000,
+                  minute = second * 60,
+                  hour = minute * 60,
+                  day = hour * 24;
+              
+              let auctionStartDate = new Date("{{$product->auction_start_date}} {{$product->auction_start_time}}").getTime();
+                // console.log(auctionStartDate);
+              
+              const x = setInterval(function() {    
+                const now = new Date().getTime(),
+                  distance = auctionStartDate - now;
 
-
+                  document.getElementById("days-{{$product->id}}").textContent = Math.floor(distance / (day));
+                  document.getElementById("hours-{{$product->id}}").textContent = Math.floor((distance % (day)) / (hour));
+                  document.getElementById("minutes-{{$product->id}}").textContent = Math.floor((distance % (hour)) / (minute));
+                  document.getElementById("seconds-{{$product->id}}").textContent = Math.floor((distance % (minute)) / second);
+              
+                if (distance < 0) {
+                  document.getElementById("headline").innerText = "Auction Timed!";
+                  document.getElementById("countdown").style.display = "none";
+                  document.getElementById("content").style.display = "block";
+                  clearInterval(x);
+                } 
+              }, 1000); 
+            })();
+          </script> -->
 @include('frontend.layouts.footer')
  

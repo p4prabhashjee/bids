@@ -21,8 +21,8 @@
           <div class="col-md-2">
             <h3>Company</h3>
             <ul class="use-fulllink">
-              <li><a href="">About us</a></li>
-              <li><a href="contact-us.html">Contact</a></li>
+              <li><a href="{{route('about-us')}}">About us</a></li>
+              <li><a href="{{route('contact-us')}}">Contact</a></li>
               <li><a href="">News</a></li>
               <li><a href="">Support</a></li>
             </ul>
@@ -62,8 +62,8 @@
         </div>
         <div class="privacy-link">
           <ul>
-            <li><a href="privacy.html">Terms</a></li>
-            <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="{{route('terms-conditions')}}">Terms</a></li>
+            <li><a href="{{route('privacy-policy')}}">Privacy</a></li>
           </ul>
         </div>
       </div>

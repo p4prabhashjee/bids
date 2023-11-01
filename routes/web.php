@@ -43,8 +43,11 @@ Route::get('privacy-policy', [HomepageController::class,'privacy'])->name('priva
 Route::get('terms-conditions', [HomepageController::class,'terms'])->name('terms-conditions');
 Route::get('about-us', [HomepageController::class,'about'])->name('about-us');
 
+
 Route::get('products-list', [HomepageController::class,'productlist'])->name('products-list');
-Route::get('/products/{auction_type_slug}', [HomepageController::class,'productsByAuctionType'])->name('products.by_auction_type');
+Route::get('/projects/{auction_type_slug}', [HomepageController::class,'projectByAuctionType'])->name('projects.by_auction_type');
+Route::get('/products/{slug}', [HomepageController::class,'productsByProject'])->name('productsByProject');
+
 Route::get('/productsdetail/{slug}', [HomepageController::class,'productsdetail'])->name('productsdetail');
 Route::get('signin', [HomepageController::class,'login'])->name('signin');
 Route::get('register', [HomepageController::class,'registration'])->name('register');

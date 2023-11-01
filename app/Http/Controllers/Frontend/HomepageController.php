@@ -10,6 +10,7 @@ use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Project;
 use App\Models\Banner;
 use App\Models\Gallery;
 use App\Mail\ResetPasswordMail;
@@ -33,15 +34,24 @@ class HomepageController extends Controller
                             $query->where('status', 1)
                                 ->where('is_popular', 1);
                         }])->where('status', 1)->get();
+       
 
-       //p($auctionTypesWithProductCount);
+    //    p($productauction);
         return view('frontend.homepage',compact('auctionTypesWithProject','banners','productauction'));
     }
-    public function productsByAuctionType($slug) {
+    public function projectByAuctionType($slug) {
         $auctionType = AuctionType::where('slug', $slug)->first();
-        $products = Product::where('auction_type_id', $auctionType->id)->get();
+        $projects = Project::where('auction_type_id', $auctionType->id)->get();
     
-        return view('frontend.products.index', ['products' => $products]);
+        return view('frontend.projects.index', ['projects' => $projects]);
+    }
+
+    public function productsByProject($slug) {
+        $projects = Project::where('slug', $slug)->first();
+        $products = Product::where('project_id', $projects->id)->get();
+        // p($product);
+    
+        return view('frontend.products.index', ['products' => $products],['projects' =>$projects]);
     }
 
  
@@ -78,6 +88,7 @@ class HomepageController extends Controller
     {
         return view('frontend.about');
     }
+    
     // product listing
 
     public function productlist(Request $request)
@@ -116,7 +127,10 @@ class HomepageController extends Controller
                 'address' => 'required|string',
                 'password' => 'required|string|min:6',
                 'confirm_password' => 'required|same:password',
+                'country_code'  => 'required',
                 'is_term' => 'required|boolean',
+                
+
             ];
     
             $validator = Validator::make($request->all(), $rules);
@@ -137,6 +151,7 @@ class HomepageController extends Controller
                 'otp' => $otp,
                 'is_term' => $request->input('is_term'),
                 'is_otp_verify' => 0,
+                'country_code' => $request->input('country_code'),
             ]);
     
             $user->save();

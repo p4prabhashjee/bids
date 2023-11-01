@@ -58,7 +58,7 @@ $categories = App\Models\Category::where('status', 1)
                 </li>
 
                 <li><a href="{{route('about-us')}}">About Us</a></li>
-                  <li><a href="contact-us.html">Contact Us</a></li>
+                  <li><a href="{{route('contact-us')}}">Contact Us</a></li>
                   <li><button class="lange-drop" type="button">Eng <img src="{{asset('frontend/images/drop-nav.svg')}}" alt=""></button>
                     <div class="drop-lange-select">
                       <ul>

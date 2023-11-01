@@ -1,32 +1,15 @@
 @include('frontend.layouts.header')
-<section class="hero-ther inner_header">
+
+<section class="hero-ther">
     <div class="container-fluid">
       <div class="row justify-content-center">
         <div class="col-lg-5 col-md-6 text-center">
-           <h1>{{$projects->slug}}
-           </h1>
-           @php
-                $originalDateTime = $projects->start_date_time;
-                $timestamp = strtotime($originalDateTime);
-                $formattedDateTime = date("F j, g:i A", $timestamp);
-            @endphp
-           <p>{{$formattedDateTime}}</p>
-              <div class="bid-box-status">
-                <div class="bid-box-status-ic"><img src="{{ asset('frontend/images/private.svg') }}"><span>{{ $projects->auctionType->name }}</span></div>
-              </div>
-           <div class="inner_header_status">
-              <div class="countdown-time" id="countdown">
-                <ul>
-                  <li><span id="days"></span>days</li>
-                  <li><span id="hours"></span>Hours</li>
-                  <li><span id="minutes"></span>Minutes</li>
-                  <li><span id="seconds"></span>Seconds</li>
-                </ul>
-              </div>
-           </div>
+           <h1>Projects</h1>
+           <p>Vivamus id ligula non turpis aliquam dignissim.  Fusce <br>
+            tempor vulputate urna, quis malesuada.</p>
             <form action="" class="search-frm-prdt">
               <input type="text" name="" id="" placeholder="Search products...">
-              <button><img class="w-100" src="{{ asset('frontend/images/rounded-sr.svg') }}" alt=""></button>
+              <button><img class="w-100" src="./images/rounded-sr.svg" alt=""></button>
             </form>
         </div>
       </div>
@@ -35,7 +18,7 @@
   <section class="list-fliter">
     <div class="container">
       <div class="result-lst">
-        <h3>Showing all 9 results</h3>
+        <h3>Showing all  results</h3>
         <div class="fliter-short">
           <form action="" class="cmn-frm">
             <select name="" id="" class="m-0">
@@ -54,54 +37,51 @@
   <section class="product-list-man">
     <div class="container">
       <div class="row">
-      @foreach($products as $product)
-        <div class="col-md-6">
-          <a href="{{ url('productsdetail', $product->slug) }}">
-            <div class="card-product">
-              <div class="product-image">
-              @if ($product->galleries->isNotEmpty())
-                 <img src="{{ asset($product->galleries->first()->image_path) }}" alt="">
-             @else
-                <img src="{{asset('frontend/images/default-product-image.png')}}" alt="Default Image">
-             @endif
-                    <i class="fa fa-heart-o"></i>
-                <i class="fa fa-heart-o"></i>
-              </div>
-              <div class="card-product-dtl">
-                <h3>{{$product->lot_no}}: {{$product->title}}</h3>
-                <h5>${{$product->reserved_price}}</h5>
-                <p>Current Bid: <span> $1400.00</span></p>
-             
-                    @if ($product->name == 'Private'|| $product->name == 'Timed')
-                    <div class="countdown-time">
-                      <ul>
-                        <li><span id="days-{{$product->id}}"></span>days</li>
-                        <li><span id="hours-{{$product->id}}"></span>Hours</li>
-                        <li><span id="minutes-{{$product->id}}"></span>Minutes</li>
-                        <li><span id="seconds-{{$product->id}}"></span>Seconds</li>
-                      </ul>
-                    </div>
-                    @endif
-                <button class="text-btn">Bid Now <img class="img-fluid ms-3" src="./images/next-arrow.svg" alt=""></button>
-              </div>
+        @foreach($projects as $pro)
+            <div class="col-md-6">
+            <a href="{{ url('products', $pro->slug) }}">
+                <div class="card-product">
+                <div class="product-image">
+                
+                        @if (!empty($pro->image_path))
+                                <img src="{{ asset("img/projects/$pro->image_path") }}" alt="{{ $pro->title }}">
+                            @else
+                                <img src="{{ asset('frontend/images/default-product-image.png') }}" alt="Default Image">
+                            @endif
+                
+                </div>
+                <div class="bid-box-status">
+                    <div class="bid-box-status-ic"><img src="{{ asset('frontend/images/live.svg') }}"><span>{{ $pro->auctionType->name }}</span></div>
+                </div>
+                <div class="card-product-dtl">
+                    <h3>{{$pro->name}}  </h3>
+                    @php
+                            $originalDateTime = $pro->start_date_time;
+                            $timestamp = strtotime($originalDateTime);
+                            $formattedDateTime = date("F j, g:i A", $timestamp);
+                        @endphp
+                    <p>{{  $formattedDateTime }}</p>
+                 
+                    <a href="#" class="text-btn">Bid Now <img class="img-fluid ms-3" src="{{ asset('frontend/images/next-arrow.svg') }}" alt=""></a>
+                </div>
+                </div>
+            </a>
             </div>
-          </a>
-        </div>
-        @endforeach
-
-       </div>
+            @endforeach
+      </div>
       
         <ul class="pagination">
-          <li><a href=""><img src="./images/left-1.svg" alt=""></a></li>
+          <li><a href=""><img src="{{ asset('frontend/images/left-1.svg') }}" alt=""></a></li>
           <li><a href="">1</a></li>
           <li><a   class="active" href="">2</a></li>
           <li><a href="">3</a></li>
-          <li><a href=""><img src="./images/left-1.svg" alt=""></a></li>
+          <li><a href=""><img src="{{ asset('frontend/images/left-1.svg') }}" alt=""></a></li>
         </ul>
        
     </div>
   </section>
- 
+
+  
   <div class="modal fade" id="prtyfilter" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -113,8 +93,8 @@
               <form action="" class="cmn-frm mt-4">
                 <div class="form-group">
                   <select name="" id="">
-                    <option value="">Auction type,</option>
-                    <option value="">Auction type,</option>
+                    <option value="">Room type,</option>
+                    <option value="">Room type,</option>
                   </select>
                 </div>
                 <div class="form-group mt-2">
@@ -139,6 +119,30 @@
                       <input type="range" class="range-max" min="0" max="10000" value="7500" step="100">
                     </div>
                   </div>
+                </div>
+                <div class="form-group ">
+                  <h3>Auction Type</h3>
+                  <ul class="categry-list">
+                    <li>
+                      <div class="form-check">
+                            <input class="form-check-input w-auto" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                            Private
+                            </label>
+                          </div> </li>
+                                              <li><div class="form-check">
+                            <input class="form-check-input w-auto" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                              Timed
+                            </label>
+                          </div> </li>
+                                              <li><div class="form-check">
+                            <input class="form-check-input w-auto" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                              Live
+                            </label>
+                          </div> </li>
+                  </ul>
                 </div>
                 <div class="form-group mt-4">
                   <h3>Auction</h3>
@@ -184,9 +188,6 @@
         </div>
       </div>
     </div>
-
-    
-    
 
     <script src="./js/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
@@ -241,6 +242,7 @@ rangeInput.forEach((input) => {
 
  </script>
 
+ 
 
 @include('frontend.layouts.footer')
  

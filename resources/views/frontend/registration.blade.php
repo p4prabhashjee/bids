@@ -48,8 +48,15 @@
                     </div>
                     <div class="col-lg-6 col-md-12">
                       <div class="form-group">
+                        <label for="">Country code </label>
+                       <input type="text"  placeholder="country code" name="country_code" id="country_code">
+
+                      </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12">
+                      <div class="form-group">
                         <label for="">Phone Number </label>
-                       <input type="text"  placeholder="Phone Number" name="phone" id="mobile_code-login">
+                       <input type="number"  placeholder="Phone Number" name="phone" id="mobile_code-login">
 
                       </div>
                     </div>

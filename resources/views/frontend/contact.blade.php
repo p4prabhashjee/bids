@@ -28,25 +28,25 @@
                 <div class="col-md-12">
                   <div class="form-group">
                     <input type="text" placeholder="Your Name">
-                    <img class="lft-icon-ipt" src="./images/user.svg" alt="">
+                    <img class="lft-icon-ipt" src="{{asset('frontend/images/user.svg')}}" alt="">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <input type="text" placeholder="Enter Your Email ID">
-                    <img class="lft-icon-ipt" src="./images/email.svg" alt="">
+                    <img class="lft-icon-ipt" src="{{asset('frontend/images/email.svg')}}" alt="">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <input type="text" placeholder="Enter Your Phone Number">
-                    <img class="lft-icon-ipt" src="./images/phone.svg" alt="">
+                    <img class="lft-icon-ipt" src="{{asset('frontend/images/phone.svg')}}" alt="">
                   </div>
                 </div>
                 <div class="col-md-12">
                   <div class="form-group">
                     <textarea name="" id="" cols="30" rows="10" placeholder="Type Your Message"></textarea>
-                    <img class="lft-icon-ipt" src="./images/msg.svg" alt="">
+                    <img class="lft-icon-ipt" src="{{asset('frontend/images/msg.svg')}}" alt="">
                   </div>
                 </div>
                 <div class="text-center">
@@ -57,12 +57,14 @@
           </div>
           <div class="col-md-4">
             <div class="contact-img">
-              <img class="img-fluid" src="./images/contact.png" alt="">
+              <img class="img-fluid" src="{{asset('frontend/images/contact.png')}}" alt="">
             </div>
           </div>
         </div>
       </div>
     </div>
   </section>
+ 
+
  
   @include('frontend.layouts.footer')

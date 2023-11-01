@@ -39,7 +39,7 @@
           <div class="auction-type   align-just">
            <div> 
             <h2>{{$at->name}}</h2>
-            <a href="#" class="border-white-btn">VIEW ALL</a>
+            <a href="{{ url('projects', $at->slug) }}" class="border-white-btn">VIEW ALL</a>
             </div>
           </div>
         </div>
@@ -48,7 +48,7 @@
 
           @foreach($at->projects as $project)
         <div class="col-lg-6 col-md-12">
-            <a href="product-list-inner.html">
+            <a href="{{ url('projects', $at->slug) }}">
                 <div class="card-product">
                     <div class="product-image">
                         @if (!empty($project->image_path))
@@ -106,31 +106,25 @@
             </div>            
            
             <div class="popular_lnt">         
-            <span>${{ $product->reserved_price }}</span>
-              @if ($auctionType->name == 'Private')
-              <div class="countdown-time" id="countdown">
-                <ul>
-                  <li><span id="days-{{$product->id}}"></span>days</li>
-                  <li><span id="hours-{{$product->id}}"></span>Hours</li>
-                  <li><span id="minutes-{{$product->id}}"></span>Minutes</li>
-                  <li><span id="seconds-{{$product->id}}"></span>Seconds</li>
-                </ul>
-              </div>
-              @endif
-              @if ($auctionType->name == 'Timed')
-              <div class="countdown-time" id="countdown">
-                <ul>
-                  <li><span id="days-{{$product->id}}"></span>days</li>
-                  <li><span id="hours-{{$product->id}}"></span>Hours</li>
-                  <li><span id="minutes-{{$product->id}}"></span>Minutes</li>
-                  <li><span id="seconds-{{$product->id}}"></span>Seconds</li>
-                </ul>
-              </div>
-              @endif
-            </div>     
+    <span>${{ $product->reserved_price }}</span>
+    @if ($auctionType->name == 'Private' || $auctionType->name == 'Timed')
+        <div class="countdown-time" id="countdown-{{ $product->id }}">
+            <ul>
+                <li><span id="days-{{ $product->id }}"></span>days</li>
+                <li><span id="hours-{{ $product->id }}"></span>Hours</li>
+                <li><span id="minutes-{{ $product->id }}"></span>Minutes</li>
+                <li><span id="seconds-{{ $product->id }}"></span>Seconds</li>
+            </ul>
+        </div>
+    @endif
+</div> 
               
-            <h3><a href="detail.html">{{ $product->lot_no }}: {{ $product->title }}</a></h3>
-            <p>{{ strip_tags($product->description) }}</p>
+            <h3><a href="{{ url('productsdetail', $product->slug) }}">{{ $product->lot_no }}: {{ $product->title }}</a></h3>
+            <p>
+              {{ substr(strip_tags($product->description), 0, 100) }}
+              {{ strlen(strip_tags($product->description)) > 100 ? '...' : '' }}
+            </p>
+
             <span class="curnt-bid-man">Current Bid $10,000.00</span>
             <a href="detail.html" class="next-btn-img"><img src="{{asset('frontend/images/next-btn.svg')}}" alt=""></a>
           </div>
@@ -333,29 +327,62 @@
       </div>
     </div>
   </section>
-  <script>
-    const targetDate = {{$product->auction_end_date}};
+  <!-- <script>
+(function () {
+    const second = 1000,
+          minute = second * 60,
+          hour = minute * 60,
+          day = hour * 24;
 
-function updateCountdown() {
-    const currentDate = new Date().getTime();
-    
-    const timeRemaining = targetDate - currentDate;
+    const auctionEndDate = new Date("{{ $product->auction_end_date }}").getTime();
 
-    const days = Math.floor(timeRemaining / (1000  60  60 * 24));
-    const hours = Math.floor((timeRemaining % (1000  60  60  24)) / (1000  60 * 60));
-    const minutes = Math.floor((timeRemaining % (1000  60  60)) / (1000 * 60));
-    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+    const x = setInterval(function() {
+        const now = new Date().getTime(),
+              distance = auctionEndDate - now;
 
-    document.getElementById('days').textContent = days;
-    document.getElementById('hours').textContent = hours;
-    document.getElementById('minutes').textContent = minutes;
-    document.getElementById('seconds').textContent = seconds;
+        const days = Math.floor(distance / day);
+        const hours = Math.floor((distance % day) / hour);
+        const minutes = Math.floor((distance % hour) / minute);
+        const seconds = Math.floor((distance % minute) / second);
 
-    setTimeout(updateCountdown, 1000);
-}
+        // Update the countdown elements dynamically
+        document.getElementById("days-{{ $product->id }}").textContent = days;
+        document.getElementById("hours-{{ $product->id }}").textContent = hours;
+        document.getElementById("minutes-{{ $product->id }}").textContent = minutes;
+        document.getElementById("seconds-{{ $product->id }}").textContent = seconds;
 
-updateCountdown();
+        // Check if the countdown has reached zero
+        if (distance < 0) {
+            document.getElementById("countdown-{{ $product->id }}").style.display = "none";
+           
+            clearInterval(x);
+        }
+    }, 1000); 
+})();
+</script> -->
+<script>
+    const targetDate = new Date("{{ $product->auction_end_date }}").getTime();
+
+    function updateCountdown() {
+        const currentDate = new Date().getTime();
+        const timeRemaining = targetDate - currentDate;
+
+        const days = Math.floor(timeRemaining / (1000  60  60 * 24));
+        const hours = Math.floor((timeRemaining % (1000  60  60  24)) / (1000  60 * 60));
+        const minutes = Math.floor((timeRemaining % (1000  60  60)) / (1000 * 60));
+        const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+        document.getElementById("days-{{ $product->id }}").textContent = days;
+        document.getElementById("hours-{{ $product->id }}").textContent = hours;
+        document.getElementById("minutes-{{ $product->id }}").textContent = minutes;
+        document.getElementById("seconds-{{ $product->id }}").textContent = seconds;
+
+        setTimeout(updateCountdown, 1000);
+    }
+
+    updateCountdown();
 </script>
+
 
  
   @include('frontend.layouts.footer')
