@@ -1,13 +1,31 @@
+
+@php
+$social = App\Models\Setting::where('is_static',1)->orderBy('title','ASC')->get();
+$logo = App\Models\Setting::where('is_static', 2)->orderBy('title', 'ASC')->first();
+$pages =App\Models\Page::where('is_static', 1)->orderBy('title', 'ASC')->first();
+
+@endphp
+
 <footer>
       <div class="container">
         <div class="row">
           <div class="col-md-3">
+          @if ($logo)
+            <div class="ftr-mang-eb">
+              <img class="f-logo" src="{{ asset('img/settings/' . $logo->image) }}" alt="" />
+              <p>
+               {{$logo->value}}
+              </p>
+            </div>
+          @else
             <div class="ftr-mang-eb">
               <img class="f-logo" src="{{asset('frontend/images/logo.svg')}}" alt="" />
               <p>
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry.
               </p>
             </div>
+           @endif
+          
           </div>
           <div class="col-md-3 mange-text">
             <h3>SHOP</h3>
@@ -42,27 +60,19 @@
             </form>
             <h3>Social Media</h3>
             <ul class="social-link">
-              <li>
-                <a href=""><img src="{{asset('frontend/images/youtube.svg')}}" alt="" /></a>
-              </li>
-              <li>
-                <a href=""><img src="{{asset('frontend/images/twitter.svg')}}" alt="" /></a>
-              </li>
-              <li>
-                <a href=""><img src="{{asset('frontend/images/facebook.svg')}}" alt="" /></a>
-              </li>
-              <li>
-                <a href=""><img src="{{asset('frontend/images/instagram.svg')}}" alt="" /></a>
-              </li>
-              <li>
-                <a href=""><img src="{{asset('frontend/images/linkdin.png')}}" alt="" /></a>
-              </li>
+            
+            @foreach($social as $setting)
+                <li>
+                    <a href="{{ $setting->value }}"><img src="{{ asset('img/settings/' . $setting->image) }}" width="30px" alt="" /></a>
+                </li>
+            @endforeach
             </ul>
           </div>
         </div>
         <div class="privacy-link">
           <ul>
-          <li><a href="{{route('terms-conditions')}}">Terms</a></li>
+            
+            <li><a href="{{route('terms-conditions')}}">Terms</a></li>
             <li><a href="{{route('privacy-policy')}}">Privacy</a></li>
           </ul>
         </div>

@@ -68,9 +68,8 @@ class CountriesDataTable extends DataTable
         return [
             Column::make('#'),
             Column::make('name')->addClass('text-center'),
-            Column::make('code')->addClass('text-center'),
+            Column::make('phonecode')->addClass('text-center'),
             Column::make('status')->render('full[\'status\'] ? \'Active\' : \'Inactive\'')->addClass('text-center'),
-            Column::make('created_at')->render('new Date(full[\'created_at\']).toLocaleString()' ),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)

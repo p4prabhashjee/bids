@@ -24,12 +24,12 @@
                                                 @endif
                                             </div>
                                             <div class="col-12 col-sm-6 mt-3 mt-sm-0">
-                                                <label>Code</label>
-                                                <input class="multisteps-form__input form-control" name="code" type="text"
+                                                <label>Phonecode</label>
+                                                <input class="multisteps-form__input form-control" name="phonecode" type="text"
                                                     placeholder="eg. IN" onfocus="focused(this)"
-                                                    onfocusout="defocused(this)" value="{{old('code')}}">
-                                                @if($errors->has('code'))
-                                                <div class="error">{{$errors->first('code')}}</div>
+                                                    onfocusout="defocused(this)" value="{{old('phonecode')}}">
+                                                @if($errors->has('phonecode'))
+                                                <div class="error">{{$errors->first('phonecode')}}</div>
                                                 @endif
                                             </div>
                                             <div class="col-12 col-sm-6 mt-3 mt-sm-0">

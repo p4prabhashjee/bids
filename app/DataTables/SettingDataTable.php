@@ -70,7 +70,8 @@ class SettingDataTable extends DataTable
             Column::make('title'),
             Column::make('slug'),
             Column::make('value'),
-            Column::computed('image')->render('full[\'image\'] ? "<img src=\''.asset("img/settings/\" + full[\"image\"] + \"").'\' width=\'50\'>" : "<img src=\''.asset("img/noimage.jpg").'\' width=\'50\'>"' )->addClass('text-center'),
+            Column::computed('image')->render('full[\'image\'] ? "<img src=\'' . asset("img/settings/\" + full[\"image\"] + \"") . '\' width=\'50\'>" : "<img src=\'' . asset("img/noimage.jpg") . '\' width=\'50\'>"')->addClass('text-center'),
+            
             Column::make('created_at')->render('new Date(full[\'created_at\']).toLocaleString()'),
             // Column::make('updated_at'),
             Column::computed('action')

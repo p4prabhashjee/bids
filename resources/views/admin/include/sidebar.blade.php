@@ -152,7 +152,7 @@
                     </ul>
                 </div>
             </li> -->
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#brandSection"
                     class="nav-link {{Request::routeIs('admin.brands.*') ? '' : 'collapsed'}}"
                     aria-controls="brandSection" role="button" aria-expanded="false">
@@ -177,7 +177,7 @@
                         </li>
                     </ul>
                 </div>
-            </li>
+            </li> -->
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#auctiontypeSection"
                     class="nav-link {{Request::routeIs('admin.auctiontypes.*') ? '' : 'collapsed'}}"
@@ -209,7 +209,7 @@
                     class="nav-link {{Request::routeIs('admin.bidvalues.*') ? '' : 'collapsed'}}"
                     aria-controls="bidvaluesSection" role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                        <i class="ni ni-basket text-primary text-sm opacity-10"></i>
+                        <i class="ni ni-box-2 text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Bid Values</span>
                 </a>
@@ -235,7 +235,7 @@
                     class="nav-link {{Request::routeIs('admin.products.*') ? '' : 'collapsed'}}"
                     aria-controls="productSection" role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                        <i class="ni ni-basket text-primary text-sm opacity-10"></i>
+                        <i class="ni ni-book-bookmark text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Auction Management</span>
                 </a>

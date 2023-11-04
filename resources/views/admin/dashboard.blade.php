@@ -32,9 +32,9 @@
                             <div class="row">
                                 <div class="col-8">
                                     <div class="numbers">
-                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">No Of Blogs</p>
+                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">No Of Projects</p>
                                         <h5 class="font-weight-bolder">
-                                           {{$blogs}}
+                                           {{$projects}}
                                         </h5>
                                         
                                     </div>
@@ -55,9 +55,9 @@
                             <div class="row">
                                 <div class="col-8">
                                     <div class="numbers">
-                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">New Clients</p>
+                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">No Of Products</p>
                                         <h5 class="font-weight-bolder">
-                                            +3,462
+                                           {{$products}}
                                         </h5>
                                       
                                     </div>
@@ -78,9 +78,9 @@
                             <div class="row">
                                 <div class="col-8">
                                     <div class="numbers">
-                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">Sales</p>
+                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">Categories</p>
                                         <h5 class="font-weight-bolder">
-                                            $103,430
+                                           {{$cats}}
                                         </h5>
                                       
                                     </div>

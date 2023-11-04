@@ -32,7 +32,7 @@ class CountryController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:10',
+            'phonecode' => 'required|string|max:10',
             'status' => 'required|boolean',
         ]);
 
@@ -64,7 +64,7 @@ class CountryController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:10',
+            'phonecode' => 'required|string|max:10',
             'status' => 'required|boolean',
         ]);
 

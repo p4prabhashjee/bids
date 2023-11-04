@@ -1,5 +1,7 @@
 @php
 $cat = App\Models\Category::where('status',1)->orderBy('name','ASC')->get();
+$logo = App\Models\Setting::where('is_static', 2)->orderBy('title', 'ASC')->first();
+
 @endphp
 
 @php
@@ -27,9 +29,15 @@ $categories = App\Models\Category::where('status', 1)
   <body>
     <nav class="nav header"> 
           <div class="search-logo">
+          @if ($logo)
             <div class="logo">
+              <a href="{{url('/')}}"><img src="{{ asset('img/settings/' . $logo->image) }}" alt=""></a>
+            </div>
+          @else
+          <div class="logo">
               <a href="{{url('/')}}"><img src="{{asset('frontend/images/logo.svg')}}" alt=""></a>
-          </div>
+            </div>
+          @endif
            <div class="">
             <form action="" class="search-frm">
               <div class="form-group">
@@ -59,15 +67,48 @@ $categories = App\Models\Category::where('status', 1)
 
                 <li><a href="{{route('about-us')}}">About Us</a></li>
                   <li><a href="{{route('contact-us')}}">Contact Us</a></li>
-                  <li><button class="lange-drop" type="button">Eng <img src="{{asset('frontend/images/drop-nav.svg')}}" alt=""></button>
+                  <li class="lange-drop">
+                  
+                    <a href="#">Eng</a>
                     <div class="drop-lange-select">
-                      <ul>
+                        <ul>
                         <li><img src="{{asset('frontend/images/eng.svg')}}" alt=""> English <input type="radio" name="" id=""></li>
                         <li><img src="{{asset('frontend/images/Ara.svg')}}" alt=""> Arabic <input type="radio" name="" id=""></li>
-                      </ul>
+                        </ul>
                     </div>
-                  </li>
-                  <li><a class="btn btn-secondary px-5" href="{{route('signin')}}">Login</a></li>
+                    </li>
+
+
+                  @if (auth()->check())
+                  <li><button class="notification-btn"><img src="{{asset('frontend/images/notification.svg')}}" alt=""></button>
+                        <div class="notification-all">
+                        <h3>Notification</h3>
+                        <ul>
+                            <li>
+                            <a href="">
+                                <img src="{{asset('frontend/images/notificn-icon.svg')}}" alt="">
+                                <h4>New product added</h4>
+                            </a>
+                            </li>
+                            <li>
+                            <a href="">
+                                <img src="{{asset('frontend/images/notificn-icon.svg')}}" alt="">
+                                <h4>New product added <span>Shining Diva Fashion Latest Stylish Fancy</span></h4>
+                            </a>
+                            </li>
+                            
+                        </ul>
+                        </div>
+                    </li>
+                    <li><a href="favourite.html"><img src="{{asset('frontend/images/like.svg')}}" alt="" style="width: 25px;"></a></li> 
+                    <li><a  class="profile-hdr" href="{{route('userdashboard')}}" >{{Auth::user()->first_name }}
+                        <img src="{{asset('frontend/images/dummyuser.png')}}" alt=""></a></li>
+                    @else
+                        <li>
+                            <a class="btn btn-secondary px-5" href="{{route('signin')}}">Login</a>
+
+                        </li>
+                    @endif
               </ul>
           </div>
           <span class="navTrigger">
@@ -116,6 +157,26 @@ $categories = App\Models\Category::where('status', 1)
 .category-list a:hover {
     color: #555;
 }
+/* Hide the language dropdown by default */
+.drop-lange-select {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  z-index: 1;
+}
+
+/* Show the language dropdown on hover */
+.lange-drop:hover .drop-lange-select {
+  display: block;
+}
+
+/* Style for the button */
+.hover-trigger {
+  cursor: pointer; /* Add a cursor pointer to indicate interactivity */
+}
 
 </style>
 <script>
@@ -129,4 +190,13 @@ $(document).ready(function() {
         }
     );
 });
+
+// Close the dropdown when the mouse leaves the dropdown area
+const langeDrop = document.querySelector('.lange-drop');
+const dropLangeSelect = document.querySelector('.drop-lange-select');
+
+langeDrop.addEventListener('mouseleave', () => {
+  dropLangeSelect.style.display = 'none';
+});
+
 </script>

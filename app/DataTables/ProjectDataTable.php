@@ -36,7 +36,7 @@ class ProjectDataTable extends DataTable
      */
     public function query(Project $model): QueryBuilder
     {
-        return $model->newQuery();
+        $query = $model->newQuery();
         if ($this->request->has('created_at')) {
             $created_at = $this->request->get('created_at');
             if ($created_at) {

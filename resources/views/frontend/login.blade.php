@@ -13,20 +13,21 @@
           <div class="col-md-6">
             <div class="login-detail">
               <h2>Login</h2>
-              <p>Lorem Ipsum is simply dummy text of the printing <br>
-                and typesetting industry.</p>
-                <form action="" class="cmn-frm">
+               
+                <form action="{{ route('loggedin') }}" method="POST" class="cmn-frm">
+                   @csrf
                   <div class="form-group">
                     <label for="">Email or phone number </label>
-                    <input type="text" name="" id="">
+                    <input type="text" name="email" id="email">
                   </div>
                   <div class="form-group">
                     <label for="">Password </label>
-                    <input class="pe-4" type="password" name="" id="">
-                    <i class="fa fa-eye-slash input-icon"></i>
+                    <input class="pe-4" type="password" name="password" id="password">
+                    <i class="fa fa-eye-slash input-icon" id="password-toggle"></i>
                   </div>
                   <a  class="text-btn forgt-btn edit-number" data-bs-toggle="modal" href="#forgotpassword" type="button">Forgot Password?</a>
-                  <button class="btn btn-secondary login-btn" data-bs-toggle="modal" href="#exampleModalToggle" type="button"> Login</button>
+                  <!-- <button class="btn btn-secondary login-btn" data-bs-toggle="modal" href="#exampleModalToggle" type="button"> Login</button> -->
+                  <button class="btn btn-secondary login-btn" type="submit">Login</button>
                 </form>
                 <span class="sign-tag-line">if you don't have an account? <a href="{{route('register')}}" class="text-btn">Sign Up</a></span>
             </div>
@@ -103,7 +104,31 @@
     <script src="{{asset('frontend/js/jquery.min.js')}}"></script> 
     <script src="{{asset('frontend/js/bootstrap.js')}}"></script> 
     <script src="{{asset('frontend/js/main.js')}}"></script> 
- 
+    <script>
+$(document).ready(function() {
+    $('#password-toggle').click(function() {
+        const passwordInput = $('#password');
+        if (passwordInput.attr('type') === 'password') {
+            passwordInput.attr('type', 'text');
+            $('#password-toggle').removeClass('fa-eye-slash').addClass('fa-eye');
+        } else {
+            passwordInput.attr('type', 'password');
+            $('#password-toggle').removeClass('fa-eye').addClass('fa-eye-slash');
+        }
+    });
+
+    $('#confirm-password-toggle').click(function() {
+        const confirmPasswordInput = $('#confirm_password');
+        if (confirmPasswordInput.attr('type') === 'password') {
+            confirmPasswordInput.attr('type', 'text');
+            $('#confirm-password-toggle').removeClass('fa-eye-slash').addClass('fa-eye');
+        } else {
+            confirmPasswordInput.attr('type', 'password');
+            $('#confirm-password-toggle').removeClass('fa-eye').addClass('fa-eye-slash');
+        }
+    });
+});
+</script>
   </body>
 
   @include('frontend.layouts.footer')

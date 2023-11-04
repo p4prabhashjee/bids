@@ -112,14 +112,17 @@
             <h2 class="fndt-bld">Verify OTP</h2>
             <p>Please enter 4-digit verification code that was send to your
               Mobile/Email<a href="" class="text-btn edit-number">"+91 1234567890"</a></p>
-              <form action="" class="cmn-frm otp-filds">
-              <input type="number" name="otp" id="otp1" oninput="focusOnNextInput(this, 'otp2')">
-              <input type="number" name="otp" id="otp2" oninput="focusOnNextInput(this, 'otp3')">
-              <input type="number" name="otp" id="otp3" oninput="focusOnNextInput(this, 'otp4')">
-              <input type="number" name="otp" id="otp4" oninput="verifyOTP(this.value)">
+              <form action="{{ route('verify-otp') }}" method="post" class="cmn-frm otp-filds" id="otp-verification-form">
+              
+                <input type="number" name="otp" id="first" maxlength="1" />
+                <input type="number" name="otp" id="second" maxlength="1" />
+                <input type="number" name="otp" id="third" maxlength="1" />
+                <input type="number" name="otp" id="fourth" maxlength="1" />
               </form>
               <p>Didn’t Receive the Code? <a href="" class="text-btn edit-number">Resend</a></p>
-              <button type="submit" class="mt-4 btn btn-secondary px-5 btn-verify">Verify</button>
+              <!-- <button type="submit" class="mt-4 btn btn-secondary px-5 btn-verify">Verify</button> -->
+              <button type="submit" name="verify-otp" class="mt-4 btn btn-secondary px-5 btn-verify">Verify</button>
+
           </div>
         </div>
          
@@ -251,6 +254,33 @@ $(document).ready(function() {
         }
     });
 });
+</script>
+<script>
+
+function verifyOTP() {
+  const otpValue = document.getElementById("first").value + document.getElementById("second").value + document.getElementById("third").value + document.getElementById("fourth").value;
+
+  fetch("{{ route('verify-otp') }}", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRF-TOKEN": "{{ csrf_token() }}"
+    },
+    body: JSON.stringify({ otp: otpValue, phone: "{{ Auth::user()->phone }}" })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      window.location.href = "{{ url('/') }}";
+    } else {
+      alert("Invalid OTP. Please try again.");
+    }
+  })
+  .catch(error => {
+    console.error("Error:", error);
+    alert("An error occurred while verifying OTP.");
+  });
+}
 </script>
 
 

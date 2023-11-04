@@ -105,7 +105,7 @@ class RegistrationApiController extends Controller
         $rules = [
             'otp' => 'required',
             'phone' => 'required',
-            'country_code' => '',
+            'country_code' => 'required',
         ];
 
         $validator = Validator::make($request->all(), $rules);

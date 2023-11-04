@@ -51,6 +51,7 @@ class SettingController extends Controller
         if ($request->hasFile('image')) {
              $validatedData['image'] = $this->verifyAndUpload($request, 'image', null, 'settings');
         }
+
       
         // Create a new page
         Setting::create($validatedData);
@@ -89,7 +90,7 @@ class SettingController extends Controller
 
         // Upload the image
         if($request->hasFile('image')){
-            $data['image'] = $this->verifyAndUpload($request, 'image', null, 'pages');
+            $data['image'] = $this->verifyAndUpload($request, 'image', null, 'settings');
         }
 
        

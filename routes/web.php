@@ -21,6 +21,8 @@ use App\Http\Controllers\Admin\BidvalueController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Frontend\HomepageController;
+use App\Http\Controllers\Frontend\DashboardController;
+
 
 
 /*
@@ -37,7 +39,7 @@ use App\Http\Controllers\Frontend\HomepageController;
 // Route::get('/', function () {
 //     return view('frontend.homepage');
 // });
-Route::get('/', [HomepageController::class,'homepage']);
+Route::get('/', [HomepageController::class,'homepage'])->name('homepage');
 Route::get('contact-us', [HomepageController::class,'contactus'])->name('contact-us');
 Route::get('privacy-policy', [HomepageController::class,'privacy'])->name('privacy-policy');
 Route::get('terms-conditions', [HomepageController::class,'terms'])->name('terms-conditions');
@@ -50,15 +52,34 @@ Route::get('/products/{slug}', [HomepageController::class,'productsByProject'])-
 
 Route::get('/productsdetail/{slug}', [HomepageController::class,'productsdetail'])->name('productsdetail');
 Route::get('signin', [HomepageController::class,'login'])->name('signin');
+Route::post('loggedin', [HomepageController::class,'loggedin'])->name('loggedin');
 Route::get('register', [HomepageController::class,'registration'])->name('register');
 Route::post('registration', [HomepageController::class,'register'])->name('registration');
-Route::get('/login/google', [SocialController::class,'redirectToGoogle']);
-Route::get('/login/google/callback', [SocialController::class,'handleGoogleCallback']);
+Route::post('verify-otp', [HomepageController::class,'verifyOTP'])->name('verify-otp');
+
+
+// Route::get('/login/google', [SocialController::class,'redirectToGoogle']);
+// Route::get('/login/google/callback', [SocialController::class,'handleGoogleCallback']);
+// user Authenticated
+Route::group(['middleware' => 'auth'],function(){
+    Route::get('/userdashboard', [DashboardController::class, 'userdashboard'])->name('userdashboard');
+    Route::post('/profileupdate',[DashboardController::class,'profileupdate'])->name('profileupdate');
+    Route::get('/logout',[DashboardController::class,'logout']);
+    Route::get('/changepassword',[DashboardController::class,'changepassword']);
+    Route::post('/change-password',[DashboardController::class,'changePass'])->name('change-password');
+    Route::get('/useraddress',[DashboardController::class,'useraddress'])->name('useraddress');
+    Route::post('adduseraddress', [DashboardController::class, 'adduseraddress'])->name('adduseraddress');
+    Route::get('/addressesdelete/{id}', [DashboardController::class,'delete'])->name('addresses.delete');
+    Route::post('/addresses/update/{id}', [DashboardController::class,'update'])->name('addresses.update');
+
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
+// admin 
 Route::middleware(['user'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
