@@ -94,6 +94,7 @@
             @foreach ($productauction as $auctionType)
             @if ($auctionType->name == 'Live' || $auctionType->name == 'Private' || $auctionType->name == 'Timed')
             @foreach ($auctionType->products as $product)
+
             <div class="item">
                 <div class="popular_slider_item card-most-product">
                     <div class="img-card">
@@ -102,14 +103,7 @@
                         @else
                         <img src="{{asset('frontend/images/default-product-image.png')}}" alt="Default Image">
                         @endif
-                        <div class="heat-like">
-                        @auth
-                            <input type="checkbox" name="" id="">
-                            <img src="{{asset('frontend/images/heart.png')}}" alt="" class="wishlist-heart" data-product-id="{{ $product->id }}">
-                        @else
-                            <a href="{{ route('signin') }}"><img src="{{asset('frontend/images/heart.png')}}" alt=""></a>
-                        @endauth
-                        </div>
+                        <i class="fa fa-heart-o"></i>
                         <div class="bid-box-status">
                             <div class="bid-box-status-ic"><img
                                     src="{{asset('frontend/images/live.svg')}}"><span>{{ $auctionType->name }}</span>
@@ -120,12 +114,13 @@
                     <div class="popular_lnt">
                         <span>${{ $product->reserved_price }}</span>
                         @if ($auctionType->name == 'Private' || $auctionType->name == 'Timed')
-                        <div class="countdown-time" id="countdown-{{ $product->id }}">
+                        <div class="countdown-time thisisdemoclass" data-id='{{ $product->id }}'
+                            data-date='{{ $product->auction_end_date }}' id="countdown-{{ $product->id }}">
                             <ul>
-                                <li><span id="days-{{ $product->id }}"></span>days</li>
-                                <li><span id="hours-{{ $product->id }}"></span>Hours</li>
-                                <li><span id="minutes-{{ $product->id }}"></span>Minutes</li>
-                                <li><span id="seconds-{{ $product->id }}"></span>Seconds</li>
+                                <li><span class="days"></span>days</li>
+                                <li><span class="hours"></span>Hours</li>
+                                <li><span class="minutes"></span>Minutes</li>
+                                <li><span class="seconds"></span>Seconds</li>
                             </ul>
                         </div>
                         @endif
@@ -183,12 +178,8 @@
             <div class="col-lg-4 col-md-6">
                 <div class="bid-box">
                     <div class="heat-like">
-                    @auth
                         <input type="checkbox" name="" id="">
-                        <img src="{{asset('frontend/images/heart.png')}}" alt="" class="wishlist-heart" data-product-id="{{ $product->id }}">
-                    @else
-                        <a href="{{ route('signin') }}"><img src="{{asset('frontend/images/heart.png')}}" alt=""></a>
-                    @endauth
+                        <img src="{{asset('frontend/images/heart.png')}}" alt="">
                     </div>
                     <div class="box-img">
                         <img src="{{asset('frontend/images/bid-2.png')}}" alt="">
@@ -396,60 +387,6 @@
     }, 1000); 
 })();
 </script> -->
-<script>
-const targetDate = new Date("{{ $product->auction_end_date }}").getTime();
-
-function updateCountdown() {
-    const currentDate = new Date().getTime();
-    const timeRemaining = targetDate - currentDate;
-
-    const days = Math.floor(timeRemaining / (1000 60 60 * 24));
-    const hours = Math.floor((timeRemaining % (1000 60 60 24)) / (1000 60 * 60));
-    const minutes = Math.floor((timeRemaining % (1000 60 60)) / (1000 * 60));
-    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-    document.getElementById("days-{{ $product->id }}").textContent = days;
-    document.getElementById("hours-{{ $product->id }}").textContent = hours;
-    document.getElementById("minutes-{{ $product->id }}").textContent = minutes;
-    document.getElementById("seconds-{{ $product->id }}").textContent = seconds;
-
-    setTimeout(updateCountdown, 1000);
-}
-
-updateCountdown();
-</script>
-<!-- Add to Wishlist -->
-<script>
-    $(document).ready(function() {
-        $('.wishlist-heart').on('click', function() {
-            var productId = $(this).data('product-id');
-
-            var addToWishlistURL = "{{ route('wishlist.add', ['product' => $product->id]) }}";
-            addToWishlistURL = addToWishlistURL.replace('product', productId);
-
-            // Make an AJAX request to add the product to the wishlist
-            $.ajax({
-                url: addToWishlistURL,
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    if (response.message) {
-                        alert(response.message);
-                        
-                    }
-                },
-                error: function(response) {
-                    if (response.responseJSON.error) {
-                        alert(response.responseJSON.error);
-                        // You can redirect the user to the login page here.
-                    }
-                }
-            });
-        });
-    });
-</script>
 
 
 

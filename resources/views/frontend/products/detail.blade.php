@@ -77,13 +77,19 @@
     .bid-and-time {
     margin-top: 24px;
     }
+    .prty-sect{
+      background: #3e0269;
+      padding: 10px;
+    }
+        .prty-sect p, .prty-sect a{
+          color: #fff;
+        }
   </style>
-<section >
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-lg-5 col-md-6 ">
-                <h1> </h1>
-                <p>
+<section class="prty-sect">
+    <div class="container">
+        <div class="row ">
+            <div class=" ">
+                <p class="m-0">
                 <a href="#"> Home /</a> Auction Type /project 
                 </p>
 
@@ -138,22 +144,26 @@
           </div>
           
         </div>
+      
         <div class="col-md-6">
           <div class="bid-and-time">
             <h4>Current Bid <span>$20,0379.00</span></h4>
             <div class="crt_bid">
               <h6>Biding Closes In</h6>
-              <div class="countdown-time" id="countdown">
+              @if ($product->auctionType->name == 'Private' || $product->auctionType->name == 'Timed')
+              <div class="countdown-time thisisdemoclass" data-id='{{ $product->id }}'
+                            data-date='{{ $product->auction_end_date }}' id="countdown-{{ $product->id }}">
                 <ul>
-                  <li><span id="days"></span>D</li>
+                  <li><span class="days"></span>D</li>
                   <li>:</li>
-                  <li><span id="hours"></span>H</li>
+                  <li><span class="hours"></span>H</li>
                   <li>:</li>
-                  <li><span id="minutes"></span>M</li>
+                  <li><span class="minutes"></span>M</li>
                   <li>:</li>
-                  <li><span id="seconds"></span>S</li>
+                  <li><span class="seconds"></span>S</li>
                 </ul>
               </div>
+              @endif
             </div>
           </div>
          

@@ -8,13 +8,16 @@
                         <div class="card-body p-3">
                             <div class="row">
                                 <div class="col-8">
+                                
                                     <div class="numbers">
-                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">No of Users</p>
-                                        <h5 class="font-weight-bolder">
+                                   
+                                   <p class="text-sm mb-0 text-uppercase font-weight-bold">No of Users</p>  
+                                   <a href="{{route('admin.users.index')}}">  <h5 class="font-weight-bolder">
                                            {{$users}}
-                                        </h5>
-                                      
+                                        </h5></a>
                                     </div>
+                                  
+
                                 </div>
                                 <div class="col-4 text-end">
                                     <div

@@ -64,12 +64,12 @@
                                 <span class="sidenav-normal"> List </span>
                             </a>
                         </li>
-                        <li class="nav-item {{Request::routeIs('admin.banners.create') ? 'active' : ''}}">
+                        <!-- <li class="nav-item {{Request::routeIs('admin.banners.create') ? 'active' : ''}}">
                             <a class="nav-link {{Request::routeIs('admin.banners.create') ? 'active' : ''}}"
                                 href="{{route('admin.banners.create')}}">
                                 <span class="sidenav-normal"> Add Banner </span>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </li>
@@ -178,7 +178,7 @@
                     </ul>
                 </div>
             </li> -->
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#auctiontypeSection"
                     class="nav-link {{Request::routeIs('admin.auctiontypes.*') ? '' : 'collapsed'}}"
                     aria-controls="auctiontypeSection" role="button" aria-expanded="false">
@@ -203,7 +203,7 @@
                         </li>
                     </ul>
                 </div>
-            </li>
+            </li> -->
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#bidvaluesSection"
                     class="nav-link {{Request::routeIs('admin.bidvalues.*') ? '' : 'collapsed'}}"
@@ -256,7 +256,7 @@
                     </ul>
                 </div>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#blogSection"
                     class="nav-link {{Request::routeIs('admin.blogs.*') ? '' : 'collapsed'}}"
                     aria-controls="blogSection" role="button" aria-expanded="false">
@@ -281,7 +281,7 @@
                         </li>
                     </ul>
                 </div>
-            </li>
+            </li> -->
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#pageSection"
                     class="nav-link {{Request::routeIs('admin.pages.*') ? '' : 'collapsed'}}"

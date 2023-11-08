@@ -24,7 +24,7 @@ class Project extends Model
   
     public function auctiontype()
 {
-    return $this->belongsTo(AuctionType::class, 'auction_type_id');
+    return $this->belongsTo(Auctiontype::class, 'auction_type_id');
 }
 
 

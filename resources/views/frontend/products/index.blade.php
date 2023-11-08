@@ -15,14 +15,25 @@
                 <div class="bid-box-status-ic"><img src="{{ asset('frontend/images/private.svg') }}"><span>{{ $projects->auctionType->name }}</span></div>
               </div>
            <div class="inner_header_status">
-              <div class="countdown-time" id="countdown">
+              <!-- <div class="countdown-time" id="countdown">
                 <ul>
                   <li><span id="days"></span>days</li>
                   <li><span id="hours"></span>Hours</li>
                   <li><span id="minutes"></span>Minutes</li>
                   <li><span id="seconds"></span>Seconds</li>
                 </ul>
-              </div>
+              </div> -->
+              @if ($projects->auctionType->name == 'Private' || $projects->auctionType->name == 'Timed')
+                    <div class="countdown-time thisisdemoclass" data-id='{{ $projects->id }}'
+                            data-date='{{ $projects->start_date_time }}' id="countdown-{{ $projects->id }}">
+                            <ul>
+                                <li><span class="days"></span>days</li>
+                                <li><span class="hours"></span>Hours</li>
+                                <li><span class="minutes"></span>Minutes</li>
+                                <li><span class="seconds"></span>Seconds</li>
+                            </ul>
+                    </div>
+                    @endif
            </div>
             <form action="" class="search-frm-prdt">
               <input type="text" name="" id="" placeholder="Search products...">
@@ -72,14 +83,15 @@
                 <h5>${{$product->reserved_price}}</h5>
                 <p>Current Bid: <span> $1400.00</span></p>
              
-                    @if ($product->name == 'Private'|| $product->name == 'Timed')
-                    <div class="countdown-time">
-                      <ul>
-                        <li><span id="days-{{$product->id}}"></span>days</li>
-                        <li><span id="hours-{{$product->id}}"></span>Hours</li>
-                        <li><span id="minutes-{{$product->id}}"></span>Minutes</li>
-                        <li><span id="seconds-{{$product->id}}"></span>Seconds</li>
-                      </ul>
+                    @if ($product->auctionType->name == 'Private' || $product->auctionType->name == 'Timed')
+                    <div class="countdown-time thisisdemoclass" data-id='{{ $product->id }}'
+                            data-date='{{ $product->auction_end_date }}' id="countdown-{{ $product->id }}">
+                            <ul>
+                                <li><span class="days"></span>days</li>
+                                <li><span class="hours"></span>Hours</li>
+                                <li><span class="minutes"></span>Minutes</li>
+                                <li><span class="seconds"></span>Seconds</li>
+                            </ul>
                     </div>
                     @endif
                 <button class="text-btn">Bid Now <img class="img-fluid ms-3" src="./images/next-arrow.svg" alt=""></button>

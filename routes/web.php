@@ -22,8 +22,6 @@ use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Frontend\HomepageController;
 use App\Http\Controllers\Frontend\DashboardController;
-use App\Http\Controllers\Frontend\ProductWishController;
-
 
 
 
@@ -59,6 +57,7 @@ Route::get('register', [HomepageController::class,'registration'])->name('regist
 Route::post('registration', [HomepageController::class,'register'])->name('registration');
 Route::post('verify-otp', [HomepageController::class,'verifyOTP'])->name('verify-otp');
 
+
 // Route::get('/login/google', [SocialController::class,'redirectToGoogle']);
 // Route::get('/login/google/callback', [SocialController::class,'handleGoogleCallback']);
 // user Authenticated
@@ -72,10 +71,6 @@ Route::group(['middleware' => 'auth'],function(){
     Route::post('adduseraddress', [DashboardController::class, 'adduseraddress'])->name('adduseraddress');
     Route::get('/addressesdelete/{id}', [DashboardController::class,'delete'])->name('addresses.delete');
     Route::post('/addresses/update/{id}', [DashboardController::class,'update'])->name('addresses.update');
-    Route::post('/wishlist.add/{product}', [ProductWishController::class,'addToWishlist'])->name('wishlist.add');
-
-  
-
 
 });
 
