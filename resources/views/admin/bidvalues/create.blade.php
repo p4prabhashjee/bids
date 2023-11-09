@@ -15,13 +15,43 @@
                                     <p class="mb-0 text-sm">Mandatory informations</p>
                                     <div class="multisteps-form__content">
                                         <div class="row mt-3">
-                                            <div class="col-12 col-sm-6">
-                                                <label>Bid-Value</label>
+                                            <!-- <div class="col-12 col-sm-6">
+                                                <label>min_price</label>
                                                 <input class="multisteps-form__input form-control" type="number" name="bidvalue"
                                                     placeholder="eg. 4000" onfocus="focused(this)"
                                                     onfocusout="defocused(this)" value="{{old('bidvalue')}}">
                                                 @if($errors->has('bidvalue'))
                                                 <div class="error">{{$errors->first('bidvalue')}}</div>
+                                                @endif
+                                            </div> -->
+                                            <div class="col-12 col-sm-6">
+                                                <label><strong>Min Price</strong></label>
+                                                <input class="multisteps-form__input form-control" type="number"
+                                                    id="estimated_price" name="min_price"
+                                                    placeholder="eg.Min Price" onfocus="focused(this)"
+                                                    onfocusout="defocused(this)" value="{{ old('min_price') }}">
+                                                @if($errors->has('min_price'))
+                                                <div class="error">{{ $errors->first('min_price') }}</div>
+                                                @endif
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <label><strong>Max Price</strong></label>
+                                                <input class="multisteps-form__input form-control" type="number"
+                                                    id="estimated_price" name="max_price"
+                                                    placeholder="eg. Max Price" onfocus="focused(this)"
+                                                    onfocusout="defocused(this)" value="{{ old('max_price') }}">
+                                                @if($errors->has('max_price'))
+                                                <div class="error">{{ $errors->first('max_price') }}</div>
+                                                @endif
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <label><strong>Percentage Value</strong></label>
+                                                <input class="multisteps-form__input form-control" type="number"
+                                                    id="estimated_price" name="percentage"
+                                                    placeholder="eg. Percentage" onfocus="focused(this)"
+                                                    onfocusout="defocused(this)" value="{{ old('percentage') }}">
+                                                @if($errors->has('percentage'))
+                                                <div class="error">{{ $errors->first('percentage') }}</div>
                                                 @endif
                                             </div>
                                             <div class="col-12 col-sm-6 mt-3 mt-sm-0">

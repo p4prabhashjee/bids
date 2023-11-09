@@ -299,12 +299,12 @@
                                 <span class="sidenav-normal"> List </span>
                             </a>
                         </li>
-                        <li class="nav-item {{Request::routeIs('admin.pages.create') ? 'active' : ''}}">
+                        <!-- <li class="nav-item {{Request::routeIs('admin.pages.create') ? 'active' : ''}}">
                             <a class="nav-link {{Request::routeIs('admin.pages.create') ? 'active' : ''}}"
                                 href="{{route('admin.pages.create')}}">
                                 <span class="sidenav-normal"><strong> Add Pages </strong></span>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </li>
@@ -411,12 +411,12 @@
                                 <span class="sidenav-normal"> List </span>
                             </a>
                         </li>
-                        <li class="nav-item {{Request::routeIs('admin.settings.create') ? 'active' : ''}}">
+                        <!-- <li class="nav-item {{Request::routeIs('admin.settings.create') ? 'active' : ''}}">
                             <a class="nav-link {{Request::routeIs('admin.settings.create') ? 'active' : ''}}"
                                 href="{{route('admin.settings.create')}}">
                                 <span class="sidenav-normal"> Add Settings </span>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </li>

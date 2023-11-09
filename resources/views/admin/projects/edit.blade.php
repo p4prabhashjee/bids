@@ -57,6 +57,16 @@
                                                     @endforeach
                                                 </select>
                                             </div>
+                                            <div class="col-12 col-sm-6">
+                                                <label><strong>Buyers Premium</strong></label>
+                                                <input class="multisteps-form__input form-control" type="number"
+                                                    id="buyers_premium" name="buyers_premium"
+                                                    placeholder="eg.Min Price" onfocus="focused(this)"
+                                                    onfocusout="defocused(this)" value="{{ old('buyers_premium', $project->buyers_premium) }}">
+                                                @if($errors->has('buyers_premium'))
+                                                <div class="error">{{ $errors->first('buyers_premium') }}</div>
+                                                @endif
+                                            </div>
                                             <div class="col-12 col-sm-6 mt-3 mt-sm-0">
                                                 <label>status</label>
                                                 <select class="choices__list choices__list--single form-control"

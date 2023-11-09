@@ -24,7 +24,6 @@
                 </div>
             </div>
             @endforeach
-
         </div>
 </section>
 <section class="trending-auction-section">
@@ -45,10 +44,9 @@
             </div>
             <div class="col-lg-9 col-md-12">
                 <div class="row">
-
                     @foreach($at->projects as $project)
                     <div class="col-lg-6 col-md-12">
-                        <a href="{{ url('projects', $at->slug) }}">
+                        <a href="#">
                             <div class="card-product">
                                 <div class="product-image">
                                     @if (!empty($project->image_path))
@@ -127,7 +125,9 @@
                     </div>
 
                     <h3><a href="{{ url('productsdetail', $product->slug) }}">{{ $product->lot_no }}:
-                            {{ $product->title }}</a></h3>
+                            {{ substr(strip_tags($product->title), 0, 20) }}
+                            {{ strlen(strip_tags($product->title)) > 20 ? '...' : '' }}
+                        </a></h3>
                     <p>
                         {{ substr(strip_tags($product->description), 0, 100) }}
                         {{ strlen(strip_tags($product->description)) > 100 ? '...' : '' }}

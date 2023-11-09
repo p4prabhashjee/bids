@@ -31,12 +31,21 @@ class BidvalueController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'bidvalue' => 'required|string|max:255',
-            'status' => 'required|boolean', 
+        $request->validate([
+            'min_price' => 'required|numeric',
+            'max_price' => 'required|numeric',
+            'percentage' => 'required|numeric',
+            'status' => 'required|boolean',
         ]);
-        $bidvalue = Bidvalue::create($data);
-
+    
+        $previousMaxPrice = Bidvalue::max('max_price');
+    
+        if ($request->input('min_price') <= $previousMaxPrice) {
+            return redirect()->back()->withErrors(['min_price' => 'The minimum price must be greater than the maximum price of the previous bid value.']);
+        }
+    
+        $bidvalue = Bidvalue::create($request->all());
+    
         return redirect()->route('admin.bidvalues.index')->with('success', 'BidValue created successfully!');
     }
 
@@ -62,9 +71,17 @@ class BidvalueController extends Controller
     public function update(Request $request, Bidvalue $bidvalue)
     {
         $data = $request->validate([
-            'bidvalue' => 'required|string|max:255',
+            'min_price' => 'required',
+            'max_price' => 'required',
+            'percentage' => 'required',
             'status' => 'required|boolean', 
         ]);
+
+        $data = Bidvalue::max('max_price');
+    
+        if ($request->input('min_price') <= $data) {
+            return redirect()->back()->withErrors(['min_price' => 'The minimum price must be greater than the maximum price of the previous bid value.']);
+        }
 
         $bidvalue->update($data);
         

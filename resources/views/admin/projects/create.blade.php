@@ -43,6 +43,16 @@
                                                 <div class="error">{{ $errors->first('start_date_time') }}</div>
                                                 @endif
                                             </div>
+                                            <div class="col-12 col-sm-6">
+                                                <label><strong>Buyers_Premium</strong></label>
+                                                <input class="multisteps-form__input form-control" type="number"
+                                                    id="estimated_price" name="buyers_premium"
+                                                    placeholder="eg.Min Price" onfocus="focused(this)"
+                                                    onfocusout="defocused(this)" value="{{ old('buyers_premium') }}">
+                                                @if($errors->has('buyers_premium'))
+                                                <div class="error">{{ $errors->first('buyers_premium') }}</div>
+                                                @endif
+                                            </div>
 
                                             <div class="col-12 col-sm-6 mt-3 mt-sm-0">
                                                 <label>status</label>

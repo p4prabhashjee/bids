@@ -46,6 +46,7 @@ class ProjectController extends Controller
             'start_date_time' =>'required', 
             'is_trending'    => 'boolean',
             'auction_type_id' => 'required',
+            'buyers_premium'  =>'required',
         ]);
 
         // Generate the slug
@@ -91,6 +92,7 @@ class ProjectController extends Controller
             'start_date_time' =>'', 
             'is_trending'    => 'boolean',
             'auction_type_id' => '',
+            'buyers_premium'   => '',
         ]);
 
         // Generate the slug

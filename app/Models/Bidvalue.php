@@ -11,7 +11,9 @@ class Bidvalue extends Model
     protected $table ='bid_values';
     protected $fillable = [
         'id',
-        'bidvalue',
+        'min_price',
+        'max_price',
+        'percentage',
         'status',
        
     ];

@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bid_values', function (Blueprint $table) {
-            $table->id();
-            $table->string('bidvalue');
-            $table->boolean('status')->default(true);
-            $table->timestamps();
+        Schema::table('projects', function (Blueprint $table) {
+            $table->decimal('buyers_premium', 10, 2);
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bid_values');
+        Schema::table('projects', function (Blueprint $table) {
+            //
+        });
     }
 };

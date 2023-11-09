@@ -42,7 +42,6 @@
             <a href="{{ url('products', $pro->slug) }}">
                 <div class="card-product">
                 <div class="product-image">
-                
                         @if (!empty($pro->image_path))
                                 <img src="{{ asset("img/projects/$pro->image_path") }}" alt="{{ $pro->title }}">
                             @else

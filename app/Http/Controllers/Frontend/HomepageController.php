@@ -31,7 +31,7 @@ class HomepageController extends Controller
             $query->where('status', 1)
                 ->where('is_popular', 1);
         }])->where('status', 1)->get();
-
+     
         //    p($productauction);
         return view('frontend.homepage', compact('auctionTypesWithProject', 'banners', 'productauction'));
     }

@@ -71,6 +71,8 @@ Route::group(['middleware' => 'auth'],function(){
     Route::post('adduseraddress', [DashboardController::class, 'adduseraddress'])->name('adduseraddress');
     Route::get('/addressesdelete/{id}', [DashboardController::class,'delete'])->name('addresses.delete');
     Route::post('/addresses/update/{id}', [DashboardController::class,'update'])->name('addresses.update');
+    Route::get('/getwishlist',[DashboardController::class,'getwishlist'])->name('getwishlist');
+
 
 });
 

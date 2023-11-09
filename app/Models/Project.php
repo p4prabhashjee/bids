@@ -18,7 +18,7 @@ class Project extends Model
         'is_trending',
         'auction_type_id',
         'start_date_time',
-       
+        'buyers_premium',
     ];
 
   

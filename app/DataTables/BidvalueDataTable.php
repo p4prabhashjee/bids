@@ -77,7 +77,9 @@ class BidvalueDataTable extends DataTable
     {
         return [
             Column::make('#'),
-            Column::make('bidvalue'),
+            Column::make('min_price'),
+            Column::make('max_price'),
+            Column::make('percentage'),
             Column::make('status')->render('full[\'status\'] ? \'Published\' : \'Draft\'')->addClass('text-center'),
             Column::computed('action')
                   ->exportable(false)

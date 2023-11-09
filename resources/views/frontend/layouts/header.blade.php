@@ -10,6 +10,11 @@ $categories = App\Models\Category::where('status', 1)
 ->withCount('products')
 ->get();
 @endphp
+
+@php
+    $user = Auth::user();
+    $wishlistCount = $user ? App\Models\Wishlist::where('user_id', $user->id)->count() : 0;
+@endphp
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -100,7 +105,7 @@ $categories = App\Models\Category::where('status', 1)
                         </ul>
                         </div>
                     </li>
-                    <li><a href="favourite.html"><img src="{{asset('frontend/images/like.svg')}}" alt="" style="width: 25px;"></a></li> 
+                    <li><a href="{{route('getwishlist')}}"><img src="{{asset('frontend/images/like.svg')}}" alt="" style="width: 25px;"></a></li>
                     <li><a  class="profile-hdr" href="{{route('userdashboard')}}" >{{Auth::user()->first_name }}
                         <img src="{{asset('frontend/images/dummyuser.png')}}" alt=""></a></li>
                     @else

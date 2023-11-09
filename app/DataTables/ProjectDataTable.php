@@ -86,6 +86,7 @@ class ProjectDataTable extends DataTable
                    ->title('Auctiontype'),
             Column::make('status')->render('full[\'status\'] ? \'Active\' : \'Inactive\'')->addClass('text-center'),
             Column::make('is_trending')->render('full[\'is_trending\'] ? \'Yes\' : \'No\'')->addClass('text-center'),
+            Column::make('buyers_premium'),
             Column::make('created_at')->render('new Date(full[\'created_at\']).toLocaleString()' ),
             Column::computed('action')
                   ->exportable(false)

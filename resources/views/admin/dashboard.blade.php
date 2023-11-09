@@ -11,13 +11,12 @@
                                 
                                     <div class="numbers">
                                    
-                                   <p class="text-sm mb-0 text-uppercase font-weight-bold">No of Users</p>  
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">No of Users</p>  
                                    <a href="{{route('admin.users.index')}}">  <h5 class="font-weight-bolder">
                                            {{$users}}
                                         </h5></a>
                                     </div>
                                   
-
                                 </div>
                                 <div class="col-4 text-end">
                                     <div
@@ -36,9 +35,9 @@
                                 <div class="col-8">
                                     <div class="numbers">
                                         <p class="text-sm mb-0 text-uppercase font-weight-bold">No Of Projects</p>
-                                        <h5 class="font-weight-bolder">
+                                        <a href="{{route('admin.projects.index')}}"> <h5 class="font-weight-bolder">
                                            {{$projects}}
-                                        </h5>
+                                        </h5></a>
                                         
                                     </div>
                                 </div>
@@ -59,9 +58,9 @@
                                 <div class="col-8">
                                     <div class="numbers">
                                         <p class="text-sm mb-0 text-uppercase font-weight-bold">No Of Products</p>
-                                        <h5 class="font-weight-bolder">
+                                        <a href="{{route('admin.products.index')}}"><h5 class="font-weight-bolder">
                                            {{$products}}
-                                        </h5>
+                                        </h5>  </a>
                                       
                                     </div>
                                 </div>
@@ -82,9 +81,9 @@
                                 <div class="col-8">
                                     <div class="numbers">
                                         <p class="text-sm mb-0 text-uppercase font-weight-bold">Categories</p>
-                                        <h5 class="font-weight-bolder">
+                                        <a href="{{route('admin.categories.index')}}"><h5 class="font-weight-bolder">
                                            {{$cats}}
-                                        </h5>
+                                        </h5></a>
                                       
                                     </div>
                                 </div>

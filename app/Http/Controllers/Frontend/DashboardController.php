@@ -9,6 +9,8 @@ use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validator;
+use App\Models\Wishlist;
+
 
 class DashboardController extends Controller
 {
@@ -184,5 +186,15 @@ class DashboardController extends Controller
 
         return redirect('/user/addresses')->with('success', 'Address updated successfully.');
     }
+
+    public function getwishlist(Request $request)
+{
+    if (Auth::check()) {
+        $user = Auth::user();
+        $wishlistItems = Wishlist::with('products')->where('user_id', $user->id)->paginate(10); 
+        return view('frontend.products.wishlist', ['wishlistItems' => $wishlistItems]);
+    }
+    return view('frontend.products.wishlist'); 
+}
 
 }
