@@ -172,8 +172,6 @@ class DashboardController extends Controller
     public function update(Request $request, $id)
     {
         $address = UserAddress::find($id);
-
-
         $address->update([
             'first_name' => $request->input('first_name'),
             'last_name' => $request->input('last_name'),

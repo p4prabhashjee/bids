@@ -5,7 +5,7 @@
         <h1>My Account</h1>
       </div>
     </section>
-    
+
     <section class="dtl-user-box">
       <div class="container">
         <div class="account-outer-box">

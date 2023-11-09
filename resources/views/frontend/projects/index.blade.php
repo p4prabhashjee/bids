@@ -70,11 +70,7 @@
       </div>
       
         <ul class="pagination">
-          <li><a href=""><img src="{{ asset('frontend/images/left-1.svg') }}" alt=""></a></li>
-          <li><a href="">1</a></li>
-          <li><a   class="active" href="">2</a></li>
-          <li><a href="">3</a></li>
-          <li><a href=""><img src="{{ asset('frontend/images/left-1.svg') }}" alt=""></a></li>
+        {{ $projects->appends($_GET)->links('pagination::bootstrap-5') }} 
         </ul>
        
     </div>

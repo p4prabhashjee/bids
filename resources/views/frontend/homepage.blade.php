@@ -101,7 +101,14 @@
                         @else
                         <img src="{{asset('frontend/images/default-product-image.png')}}" alt="Default Image">
                         @endif
-                        <i class="fa fa-heart-o"></i>
+            
+                        @auth
+                            <i class="fa fa-heart-o wishlist-heart" data-product-id="{{ $product->id }}"></i>
+                            @else
+                                <a href="{{ route('signin') }}"> <i class="fa fa-heart-o "></i></a>
+                        @endauth
+                       
+                        <!-- <i class="fa fa-heart-o"></i> -->
                         <div class="bid-box-status">
                             <div class="bid-box-status-ic"><img
                                     src="{{asset('frontend/images/live.svg')}}"><span>{{ $auctionType->name }}</span>
@@ -134,7 +141,7 @@
                     </p>
 
                     <span class="curnt-bid-man">Current Bid $10,000.00</span>
-                    <a href="detail.html" class="next-btn-img"><img src="{{asset('frontend/images/next-btn.svg')}}"
+                    <a href="#" class="next-btn-img"><img src="{{asset('frontend/images/next-btn.svg')}}"
                             alt=""></a>
                 </div>
             </div>
@@ -354,41 +361,103 @@
         </div>
     </div>
 </section>
-<!-- <script>
-(function () {
-    const second = 1000,
-          minute = second * 60,
-          hour = minute * 60,
-          day = hour * 24;
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
-    const auctionEndDate = new Date("{{ $product->auction_end_date }}").getTime();
+<script>
+    $(document).ready(function () {
+        $('.wishlist-heart').click(function () {
+            var productId = $(this).data('product-id');
+            var action = $(this).hasClass('active') ? 'remove' : 'add';
 
-    const x = setInterval(function() {
-        const now = new Date().getTime(),
-              distance = auctionEndDate - now;
+            // Get the CSRF token from the meta tag
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-        const days = Math.floor(distance / day);
-        const hours = Math.floor((distance % day) / hour);
-        const minutes = Math.floor((distance % hour) / minute);
-        const seconds = Math.floor((distance % minute) / second);
+            $.ajax({
+                type: 'POST',
+                url: action === 'add' ? '/wishlist/add' : '/wishlist/remove',
+                data: { product_id: productId },
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function (response) {
+                    if (action === 'add') {
+                        $(this).addClass('active');
+                    } else {
+                        $(this).removeClass('active');
+                    }
+                    alert(response.message); 
+                },
+                error: function (xhr, status, error) {
+                    alert(xhr.responseJSON.error); 
+                }
+            });
+        });
+    });
+</script>
 
-        // Update the countdown elements dynamically
-        document.getElementById("days-{{ $product->id }}").textContent = days;
-        document.getElementById("hours-{{ $product->id }}").textContent = hours;
-        document.getElementById("minutes-{{ $product->id }}").textContent = minutes;
-        document.getElementById("seconds-{{ $product->id }}").textContent = seconds;
 
-        // Check if the countdown has reached zero
-        if (distance < 0) {
-            document.getElementById("countdown-{{ $product->id }}").style.display = "none";
-           
-            clearInterval(x);
+<!-- <script type="text/javascript">
+        function add_to_wish(hotel_id,c) {
+            var hotel_id = hotel_id;
+            // alert(product_id);
+            $.ajax({
+                url: "{{ url('/add-wishlist') }}",
+                datatType: 'json',
+                type: 'POST',
+                data: {
+                    '_token' : '<?php echo csrf_token() ?>',
+                    'hotel_id'    : hotel_id,
+                },
+                beforeSend: function() {
+                    $("#preloader").show(); 
+                },
+                success: function (res)
+                {
+                  $("#preloader").hide(); 
+                    if (res.status==1) {
+                        $(c).parent().html(res.wish_data);
+                    }
+                    else {
+                        location.href = "{{ route('login') }}";
+                    }
+                },
+                error: function (error) {
+                  $("#preloader").hide(); 
+                    swal({
+                      icon: 'error',
+                      title: 'Oops...',
+                      text: 'Something went wrong!',
+                    })
+                }
+            });   
         }
-    }, 1000); 
-})();
+
+        function remove_to_wish(hotel_id,c) {
+            var hotel_id = hotel_id;
+            // alert(product_id);
+            $.ajax({
+                url: "{{ url('/remove-wishlist') }}",
+                datatType: 'json',
+                type: 'POST',
+                data: {
+                    '_token' : '<?php echo csrf_token() ?>',
+                    'hotel_id'    : hotel_id,
+                },
+                
+                success: function (res)
+                {
+                    if (res.status==1) { 
+                        $(c).parent().html(res.wish_data);
+                    }
+                    else {
+                        // location.reload();
+                    }
+                }
+            });   
+        }
+
 </script> -->
-
-
 
 
 @include('frontend.layouts.footer')

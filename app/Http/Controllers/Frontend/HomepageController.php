@@ -38,7 +38,7 @@ class HomepageController extends Controller
     public function projectByAuctionType($slug)
     {
         $auctionType = AuctionType::where('slug', $slug)->first();
-        $projects = Project::where('auction_type_id', $auctionType->id)->get();
+        $projects = Project::where('auction_type_id', $auctionType->id)->paginate(10);
 
         return view('frontend.projects.index', ['projects' => $projects]);
     }
@@ -46,7 +46,7 @@ class HomepageController extends Controller
     public function productsByProject($slug)
     {
         $projects = Project::where('slug', $slug)->first();
-        $products = Product::where('project_id', $projects->id)->get();
+        $products = Product::where('project_id', $projects->id)->paginate(10);
         // p($product);
 
         return view('frontend.products.index', ['products' => $products], ['projects' => $projects]);

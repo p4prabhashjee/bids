@@ -22,6 +22,8 @@ use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Frontend\HomepageController;
 use App\Http\Controllers\Frontend\DashboardController;
+use App\Http\Controllers\Frontend\ProductWishController;
+
 
 
 
@@ -72,6 +74,8 @@ Route::group(['middleware' => 'auth'],function(){
     Route::get('/addressesdelete/{id}', [DashboardController::class,'delete'])->name('addresses.delete');
     Route::post('/addresses/update/{id}', [DashboardController::class,'update'])->name('addresses.update');
     Route::get('/getwishlist',[DashboardController::class,'getwishlist'])->name('getwishlist');
+    Route::post('/wishlist/add', [ProductWishController::class,'addToWishlist']);
+    Route::post('/wishlist/remove', [ProductWishController::class,'removeFromWishlist']);
 
 
 });

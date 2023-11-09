@@ -24,19 +24,22 @@
                             <div class="col-md-12 col-lg-6">
                                 <div class="form-group">
                                     <label for="current_password">Old Password</label>
-                                    <input type="password" name="current_password" id=""class="form-control" >
+                                    <input type="password" name="current_password" id="password"class="form-control" >
+                                    <i class="fa fa-eye-slash input-icon" id="password-toggle"></i>
                                 </div>
                             </div>
                             <div class="col-md-12 col-lg-6">
                                 <div class="form-group">
                                     <label for="password">New Password</label>
-                                    <input type="password" name="password" id="" class="form-control" >
+                                    <input type="password" name="password" id="newpassword" class="form-control" >
+                                    <i class="fa fa-eye-slash input-icon" id="new-password-toggle"></i>
                                 </div>
                             </div>
                             <div class="col-md-12 col-lg-6">
                                 <div class="form-group">
                                     <label for="confirm_password">Confirm Password</label>
-                                    <input type="password" name="confirm_password" id="" class="form-control" >
+                                    <input type="password" name="confirm_password" id="confirm_password" class="form-control" >
+                                    <i class="fa fa-eye-slash input-icon" id="confirm-password-toggle"></i>
                                 </div>
                             </div>
 
@@ -92,6 +95,44 @@
     });
 });
 
+</script>
+<script src="{{asset('frontend/js/jquery.min.js')}}"></script> 
+    <script src="{{asset('frontend/js/bootstrap.js')}}"></script> 
+    <script src="{{asset('frontend/js/main.js')}}"></script> 
+    <script>
+$(document).ready(function() {
+    $('#password-toggle').click(function() {
+        const passwordInput = $('#password');
+        if (passwordInput.attr('type') === 'password') {
+            passwordInput.attr('type', 'text');
+            $('#password-toggle').removeClass('fa-eye-slash').addClass('fa-eye');
+        } else {
+            passwordInput.attr('type', 'password');
+            $('#password-toggle').removeClass('fa-eye').addClass('fa-eye-slash');
+        }
+    });
+
+    $('#confirm-password-toggle').click(function() {
+        const confirmPasswordInput = $('#confirm_password');
+        if (confirmPasswordInput.attr('type') === 'password') {
+            confirmPasswordInput.attr('type', 'text');
+            $('#confirm-password-toggle').removeClass('fa-eye-slash').addClass('fa-eye');
+        } else {
+            confirmPasswordInput.attr('type', 'password');
+            $('#confirm-password-toggle').removeClass('fa-eye').addClass('fa-eye-slash');
+        }
+    });
+    $('#new-password-toggle').click(function() {
+        const confirmPasswordInput = $('#newpassword');
+        if (confirmPasswordInput.attr('type') === 'password') {
+            confirmPasswordInput.attr('type', 'text');
+            $('#new-password-toggle').removeClass('fa-eye-slash').addClass('fa-eye');
+        } else {
+            confirmPasswordInput.attr('type', 'password');
+            $('#new-password-toggle').removeClass('fa-eye').addClass('fa-eye-slash');
+        }
+    });
+});
 </script>
 
 @include('frontend.layouts.footer')
