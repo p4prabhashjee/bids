@@ -44,7 +44,7 @@
                                                 <div class="error">{{$errors->first('status')}}</div>
                                                 @endif
                                             </div>
-                                            <div class="col-12 col-sm-6 mt-3 mt-sm-0">
+                                            <!-- <div class="col-12 col-sm-6 mt-3 mt-sm-0">
                                                 <label><strong>Choose AuctionType:</strong></label>
                                                 <select name="auction_type_id"
                                                     class="choices__list choices__list--single form-control" id="brand"
@@ -54,7 +54,7 @@
                                                     <option value="{{ $at->id }}">{{ $at->name }}</option>
                                                     @endforeach
                                                 </select>
-                                            </div>
+                                            </div> -->
 
                                             <div class="col-12 col-sm-12 mt-3 mt-sm-0">
                                                 <label>Description</label>

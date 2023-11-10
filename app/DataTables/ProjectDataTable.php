@@ -43,7 +43,7 @@ class ProjectDataTable extends DataTable
                 $query->whereDate('created_at', '=', $created_at);
             }
         }
-        $query->with('auctiontype');
+        $query->with('auctiontype','category');
         return $query;
     }
 
@@ -84,6 +84,9 @@ class ProjectDataTable extends DataTable
             Column::computed('auctiontype')
                    ->data('auctiontype.name') 
                    ->title('Auctiontype'),
+            Column::computed('category_name')
+                   ->data('category.name') 
+                  ->title('Category'),
             Column::make('status')->render('full[\'status\'] ? \'Active\' : \'Inactive\'')->addClass('text-center'),
             Column::make('is_trending')->render('full[\'is_trending\'] ? \'Yes\' : \'No\'')->addClass('text-center'),
             Column::make('buyers_premium'),

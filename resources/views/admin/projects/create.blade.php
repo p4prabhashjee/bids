@@ -76,6 +76,18 @@
                                                     @endforeach
                                                 </select>
                                             </div>
+                                            <div class="col-12 col-sm-6 mt-3 mt-sm-0">
+                                                <label><strong>Choose a Category:</strong></label>
+                                                <select name="category_id"
+                                                    class="choices__list choices__list--single form-control"
+                                                    id="category" tabindex="-1" data-choice="active">
+                                                    <option value="">Select Category</option>
+                                                    @foreach ($categories as $cat)
+
+                                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
 
 
                                             <div class="col-12 col-sm-6 mt-3 test">

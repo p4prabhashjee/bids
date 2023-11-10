@@ -44,7 +44,7 @@ class CategoryController extends Controller
             'description' => 'required|string',
             'image_path' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|boolean', 
-            'auction_type_id' =>'required'
+            // 'auction_type_id' =>'required'
         ]);
         // Generate the slug
         $data['slug'] = $this->getUniqueSlug($data['name']);
@@ -83,7 +83,7 @@ class CategoryController extends Controller
             'description' => 'required|string',
             'image_path' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|boolean', 
-            'auction_type_id' => ''
+            // 'auction_type_id' => ''
         ]);
 
         // Generate the slug

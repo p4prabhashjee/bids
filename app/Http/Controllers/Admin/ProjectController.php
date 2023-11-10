@@ -8,6 +8,7 @@ use App\DataTables\ProjectDataTable;
 use Auth;
 use App\Traits\ImageTrait;
 use App\Models\Project;
+use App\Models\Category;
 use App\Models\Auctiontype;
 use Illuminate\Support\Str;
 
@@ -30,7 +31,8 @@ class ProjectController extends Controller
     public function create()
     {
         $auctiontype = Auctiontype::where('status', 1)->get();
-        return view('admin.projects.create',compact('auctiontype'));
+        $categories = Category::where('status', 1)->get();
+        return view('admin.projects.create',compact('auctiontype','categories'));
     }
 
     /**
@@ -47,6 +49,7 @@ class ProjectController extends Controller
             'is_trending'    => 'boolean',
             'auction_type_id' => 'required',
             'buyers_premium'  =>'required',
+            'category_id'     => 'required',
         ]);
 
         // Generate the slug
@@ -76,7 +79,8 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $auctiontype = Auctiontype::where('status', 1)->get();
-        return view('admin.projects.edit',compact('auctiontype','project'));
+        $categories = Category::where('status', 1)->get();
+        return view('admin.projects.edit',compact('auctiontype','project','categories'));
     }
 
     /**
@@ -93,6 +97,7 @@ class ProjectController extends Controller
             'is_trending'    => 'boolean',
             'auction_type_id' => '',
             'buyers_premium'   => '',
+            'category_id'      =>'',
         ]);
 
         // Generate the slug
