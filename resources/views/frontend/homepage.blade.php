@@ -16,7 +16,7 @@
                                 </h1>
                                 <p>{{ strip_tags($b->description) }}</p>
                                 <div class="hero-section-btn">
-                                    <a href="" class="btn btn-secondary">Explore Now</a>
+                                    <a href="{{ url('products', $b->url) }}" class="btn btn-secondary">Explore Now</a>
                                 </div>
                             </div>
                         </div>
