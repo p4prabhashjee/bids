@@ -5,11 +5,10 @@
       <div class="row justify-content-center">
         <div class="col-lg-5 col-md-6 text-center">
            <h1>Projects</h1>
-           <p>Vivamus id ligula non turpis aliquam dignissim.  Fusce <br>
-            tempor vulputate urna, quis malesuada.</p>
-            <form action="" class="search-frm-prdt">
-              <input type="text" name="" id="" placeholder="Search products...">
-              <button><img class="w-100" src="./images/rounded-sr.svg" alt=""></button>
+          
+            <form action="" class="search-frm-prdt" id="searchForm">
+              <input type="text" name="search" id="searchInput" placeholder="Search products...">
+              <button type="button" onclick="submitSearchForm()"><img class="w-100" src="{{ asset('frontend/images/rounded-sr.svg') }}" alt=""></button>
             </form>
         </div>
       </div>
@@ -235,6 +234,36 @@ rangeInput.forEach((input) => {
   });
 });
 
+
+function submitSearchForm() {
+  var searchInputValue = document.getElementById('searchInput').value.trim();
+  
+  // Check if the search input is not empty
+  if (searchInputValue !== '') {
+      // Get the current URL
+      var currentUrl = window.location.href;
+
+      // Check if the URL already has parameters
+      var separator = currentUrl.includes('?') ? '&' : '?';
+
+      // Add the search parameter to the current URL
+      var newUrl = currentUrl + separator + 'search=' + encodeURIComponent(searchInputValue);
+
+      // Redirect to the new URL
+      window.location.href = newUrl;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Retrieve the search parameter from the URL
+  var urlSearchParams = new URLSearchParams(window.location.search);
+  var searchInputValue = urlSearchParams.get('search');
+
+  // Set the search input value if it exists
+  if (searchInputValue !== null) {
+      document.getElementById('searchInput').value = decodeURIComponent(searchInputValue);
+  }
+});
  </script>
 
  

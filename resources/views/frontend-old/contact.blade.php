@@ -14,16 +14,15 @@
       </div>
     </section>
   <section class="contact-us">
-   
     <div class="container">
       <div class="outer-box">
         <div>
-        @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
+          @if(session('success'))
+          <div class="alert alert-success">
+              {{ session('success') }}
+          </div>
+          @endif
         </div>
-        @endif
-      </div>
         <div class="section-heading text-center">
           <span>Contact Us</span>
         <h2>Get In Touch</h2>

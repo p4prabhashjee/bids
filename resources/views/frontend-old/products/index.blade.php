@@ -14,16 +14,9 @@
               <div class="bid-box-status">
                 <div class="bid-box-status-ic"><img src="{{ asset('frontend/images/private.svg') }}"><span>{{ $projects->auctionType->name }}</span></div>
               </div>
-           {{-- <div class="inner_header_status">/ --}}
-              <!-- <div class="countdown-time" id="countdown">
-                <ul>
-                  <li><span id="days"></span>days</li>
-                  <li><span id="hours"></span>Hours</li>
-                  <li><span id="minutes"></span>Minutes</li>
-                  <li><span id="seconds"></span>Seconds</li>
-                </ul>
-              </div> -->
-              {{-- @if ($projects->auctionType->name == 'Private' || $projects->auctionType->name == 'Timed')
+           <!-- <div class="inner_header_status"> -->
+            
+              <!-- @if ($projects->auctionType->name == 'Private' || $projects->auctionType->name == 'Timed')
                     <div class="countdown-time thisisdemoclass" data-id='{{ $projects->id }}'
                             data-date='{{ $projects->start_date_time }}' id="countdown-{{ $projects->id }}">
                             <ul>
@@ -33,11 +26,11 @@
                                 <li><span class="seconds"></span>Seconds</li>
                             </ul>
                     </div>
-                    @endif --}}
-           {{-- </div> --}}
-           <form action="" class="search-frm-prdt" id="searchForm">
-              <input type="text" name="search" id="searchInput" placeholder="Search products...">
-              <button type="button" onclick="submitSearchForm()"><img class="w-100" src="{{ asset('frontend/images/rounded-sr.svg') }}" alt=""></button>
+                    @endif -->
+           <!-- </div>/ -->
+            <form action="" class="search-frm-prdt">
+              <input type="text" name="" id="" placeholder="Search products...">
+              <button><img class="w-100" src="{{ asset('frontend/images/rounded-sr.svg') }}" alt=""></button>
             </form>
         </div>
       </div>
@@ -75,12 +68,8 @@
              @else
                 <img src="{{asset('frontend/images/default-product-image.png')}}" alt="Default Image">
              @endif
-                    <!-- <i class="fa fa-heart-o"></i>
-                <i class="fa fa-heart-o"></i> -->
-                <div class="heat-like wishlist-heart @if(in_array($product->id, $wishlist)) active @endif" data-product-id="{{ $product->id }}">
-                    <input type="checkbox" name="" id="" @if(in_array($product->id, $wishlist)) checked @endif>
-                    <img src="{{asset('frontend/images/heart.png')}}" alt="">
-                </div>
+                    <i class="fa fa-heart-o"></i>
+                <i class="fa fa-heart-o"></i>
               </div>
               <div class="card-product-dtl">
                 <h3>{{$product->lot_no}}: {{$product->title}}</h3>
@@ -107,8 +96,7 @@
 
        </div>
       
-        
-        <ul class="pagination">
+       <ul class="pagination">
            
            {{ $products->appends($_GET)->links('pagination::bootstrap-5') }} 
        
@@ -254,39 +242,8 @@ rangeInput.forEach((input) => {
   });
 });
 
-
-function submitSearchForm() {
-  var searchInputValue = document.getElementById('searchInput').value.trim();
-  
-  // Check if the search input is not empty
-  if (searchInputValue !== '') {
-      // Get the current URL
-      var currentUrl = window.location.href;
-
-      // Check if the URL already has parameters
-      var separator = currentUrl.includes('?') ? '&' : '?';
-
-      // Add the search parameter to the current URL
-      var newUrl = currentUrl + separator + 'search=' + encodeURIComponent(searchInputValue);
-
-      // Redirect to the new URL
-      window.location.href = newUrl;
-  }
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  // Retrieve the search parameter from the URL
-  var urlSearchParams = new URLSearchParams(window.location.search);
-  var searchInputValue = urlSearchParams.get('search');
-
-  // Set the search input value if it exists
-  if (searchInputValue !== null) {
-      document.getElementById('searchInput').value = decodeURIComponent(searchInputValue);
-  }
-});
-
-</script>
+ </script>
 
 
 @include('frontend.layouts.footer')
-@include('frontend.products.script.addToWishListScript')
+ 

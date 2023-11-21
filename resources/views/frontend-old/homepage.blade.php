@@ -113,7 +113,6 @@
                         @else
                             <a href="{{ route('signin') }}"> <i class="fa fa-heart-o "></i></a>
                     @endauth
-                   
                        
                         <!-- <i class="fa fa-heart-o"></i> -->
                         <div class="bid-box-status">
@@ -405,6 +404,9 @@
     });
 </script>
 
+
+
+@include('frontend.layouts.footer')
 
 
 @include('frontend.layouts.footer')

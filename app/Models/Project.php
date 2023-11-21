@@ -28,10 +28,12 @@ class Project extends Model
     return $this->belongsTo(Auctiontype::class, 'auction_type_id');
 }
 
+
 public function category()
 {
     return $this->belongsTo(Category::class, 'category_id');
 }
+
     
     
 }

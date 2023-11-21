@@ -1,5 +1,12 @@
 @include('frontend.layouts.header')
-
+<style>
+  .hide{
+    display: none;
+  }
+  .pointer{
+    cursor: pointer;
+  }
+</style>
 <body>
   <div class="user-login align-just">
     <div class="container">
@@ -43,20 +50,36 @@
         
         <div class="modal-body">
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          <div class="login-mdl text-center">
+          <div class="login-mdl text-center ">
             <img src="{{asset('frontend/images/logo.svg')}}" alt="">
             <h2>Forgot Password</h2>
-            <p>Enter the email associated with youe account and we’ll send an
-              email with instructions to reset your password.</p>
+            <div class="numberArea">
+              
+              <p>Enter the email associated with youe account and we’ll send an
+                email with instructions to reset your password.</p>
               <form action="" class="cmn-frm mt-4">
                 <div class="form-group text-start">
-                  <label for=" ">Email or phone number </label>
-                  <input type="number" name="" id="">
+                  <label for=" ">Phone number </label>
+                  <input type="number" class="forgetPasswordPhone" name="" id="" required>
                 </div>
-                 
+                
               </form>
-              <a  class="my-4 btn btn-secondary px-5" data-bs-target="#newpassword" data-bs-toggle="modal" data-bs-dismiss="modal" type="button"> Send Link</a>
-              <a   class="text-btn d-flex justify-content-center gap-2 align-items-center" data-bs-dismiss="modal" aria-label="Close"><img src="{{asset('frontend/images/back-arrow.svg')}}" alt=""> Back to login </a>
+              <!-- data-bs-target="#newpassword" data-bs-toggle="modal" data-bs-dismiss="modal" -->
+              <a  class="my-4 btn btn-secondary px-5 sendForgotPasswordOtpBtn"   type="button"> Send Otp</a>
+              <a class="text-btn d-flex justify-content-center gap-2 align-items-center pointer" data-bs-dismiss="modal" aria-label="Close"><img src="{{asset('frontend/images/back-arrow.svg')}}" alt=""> Back to login </a>
+            </div>
+            <div class="otpArea hide">
+              <p>Verify otp to proceed.</p>
+              <form action="" class="cmn-frm mt-4">
+                <div class="form-group text-start">
+                  <label for=" ">OTP</label>
+                  <input type="number" class="forgetPasswordOTP" name="" id="" required>
+                </div>                
+              </form>
+              <a  class="my-4 btn btn-secondary px-5 verifyForgotPasswordOtpBtn"   type="button"> Verify Otp</a>
+              <a class="text-btn d-flex justify-content-center gap-2 align-items-center changeNumber pointer" ><img src="{{asset('frontend/images/back-arrow.svg')}}" alt=""> Change Number </a>
+            </div>
+                          
           </div>
         </div>
          
@@ -79,17 +102,17 @@
               <form action="" class="cmn-frm mt-4">
                 <div class="form-group text-start">
                   <label for="">New Password </label>
-                  <input class="pe-5" type="password" name="" id="">
+                  <input class="pe-5" type="password" name="" id="ResetPassword">
                   <i class="fa fa-eye-slash input-icon"></i>
                 </div>
                 <div class="form-group text-start">
                   <label for="">Confirm New Password </label>
-                  <input class="pe-5" type="password" name="" id="">
+                  <input class="pe-5" type="confirm_password" name="" id="ResetConfirmPassword">
                   <i class="fa fa-eye-slash input-icon"></i>
                 </div>
                  
               </form>
-              <a href="login.html" class="my-4 btn btn-secondary px-5" > Reset Password</a>
+              <a href="javascript:void(0);" class="my-4 btn btn-secondary px-5 resetPasswordButton" > Reset Password</a>
               <a   class="text-btn d-flex justify-content-center gap-2 align-items-center" data-bs-dismiss="modal" aria-label="Close"><img src="{{asset('frontend/images/back-arrow.svg')}}" alt=""> Back to login </a>
           </div>
         </div>
@@ -105,29 +128,113 @@
     <script src="{{asset('frontend/js/bootstrap.js')}}"></script> 
     <script src="{{asset('frontend/js/main.js')}}"></script> 
     <script>
-$(document).ready(function() {
-    $('#password-toggle').click(function() {
-        const passwordInput = $('#password');
-        if (passwordInput.attr('type') === 'password') {
-            passwordInput.attr('type', 'text');
-            $('#password-toggle').removeClass('fa-eye-slash').addClass('fa-eye');
-        } else {
-            passwordInput.attr('type', 'password');
-            $('#password-toggle').removeClass('fa-eye').addClass('fa-eye-slash');
-        }
+    $(document).ready(function() {
+        $('#password-toggle').click(function() {
+            const passwordInput = $('#password');
+            if (passwordInput.attr('type') === 'password') {
+                passwordInput.attr('type', 'text');
+                $('#password-toggle').removeClass('fa-eye-slash').addClass('fa-eye');
+            } else {
+                passwordInput.attr('type', 'password');
+                $('#password-toggle').removeClass('fa-eye').addClass('fa-eye-slash');
+            }
+        });
+
+        $('#confirm-password-toggle').click(function() {
+            const confirmPasswordInput = $('#confirm_password');
+            if (confirmPasswordInput.attr('type') === 'password') {
+                confirmPasswordInput.attr('type', 'text');
+                $('#confirm-password-toggle').removeClass('fa-eye-slash').addClass('fa-eye');
+            } else {
+                confirmPasswordInput.attr('type', 'password');
+                $('#confirm-password-toggle').removeClass('fa-eye').addClass('fa-eye-slash');
+            }
+        });
     });
 
-    $('#confirm-password-toggle').click(function() {
-        const confirmPasswordInput = $('#confirm_password');
-        if (confirmPasswordInput.attr('type') === 'password') {
-            confirmPasswordInput.attr('type', 'text');
-            $('#confirm-password-toggle').removeClass('fa-eye-slash').addClass('fa-eye');
-        } else {
-            confirmPasswordInput.attr('type', 'password');
-            $('#confirm-password-toggle').removeClass('fa-eye').addClass('fa-eye-slash');
-        }
+    $('body').on('click','.sendForgotPasswordOtpBtn', function(){
+      phoneNumber = $('.forgetPasswordPhone').val();
+      if(phoneNumber) {
+        $.ajax({
+          type:'get',
+          url:"{{route('sendOtpForgetPassword')}}",
+          data: {phoneNumber: phoneNumber},
+          success:function(res){
+            console.log("res", res);
+            if(res.status == 'success') {
+              $('.numberArea').addClass('hide');
+              $('.otpArea').removeClass('hide');
+
+            } else {
+              alert(`${res.message}: ${res.error}`);
+            }            
+          },error:function(res){
+            console.log("error in request!");
+          }
+        })
+      }
     });
-});
+
+    $('body').on('click','.changeNumber', function(){
+      $('.numberArea').removeClass('hide');
+      $('.otpArea').addClass('hide');
+    });
+
+    $('body').on('click', '.verifyForgotPasswordOtpBtn', function(){
+      otp = $('.forgetPasswordOTP').val();
+      phoneNumber = $('.forgetPasswordPhone').val();
+      if(otp) {
+        $.ajax({
+          type:'get',
+          url:"{{route('verifyOtpForgetPassword')}}",
+          data: {phoneNumber: phoneNumber, otp: otp},
+          success:function(res){
+            console.log("res", res);
+            if(res.status == 'success') {
+              $('#forgotpassword').modal('hide');              
+              $('#newpassword').modal('show');
+              $('.numberArea').removeClass('hide');
+              $('.otpArea').addClass('hide');
+            } else {
+              alert(`${res.message}: ${res.error}`);
+            }            
+          },error:function(res){
+            console.log("error in request!");
+          }
+        })
+      }
+    });
+
+    $('body').on('click','.resetPasswordButton', function(){
+      let password = $('#ResetPassword').val();
+      let confirmPassword = $('#ResetConfirmPassword').val();
+
+      if(password !== confirmPassword) {
+        alert("Confirm Password must be same as New Password.");
+        return false;
+      } else {
+
+        $.ajax({
+          type:'get',
+          url:"{{route('updateNewPassword')}}",
+          data: {phoneNumber: phoneNumber, password: password},
+          success:function(res){
+            console.log("res", res);
+            if(res.status == 'success') {
+              alert('Password reset successfully.');
+              location.reload();
+            } else {
+              alert(`${res.message}: ${res.error}`);
+            }            
+          },error:function(res){
+            console.log("error in request!");
+          }
+        })
+
+      }
+
+    })
+
 </script>
   </body>
 

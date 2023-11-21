@@ -9,17 +9,15 @@ use App\Models\Banner;
 use App\Models\Product;
 use App\Models\Project;
 use App\Models\User;
-use App\Models\News;
 use App\Models\Category;
 use App\Models\ContactUs;
+use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Redirect;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Wishlist;
-use Illuminate\Support\Facades\Hash;
-
 
 
 
@@ -45,65 +43,42 @@ class HomepageController extends Controller
         //    p($productauction);
         return view('frontend.homepage', compact('auctionTypesWithProject', 'banners', 'productauction','wishlist'));
     }
-    public function projectByAuctionType($slug, Request $request)
+    public function projectByAuctionType($slug)
     {
         $auctionType = AuctionType::where('slug', $slug)->first();
-        $projects = Project::where('auction_type_id', $auctionType->id);
-        if($request->has('search') && (!empty($request->search))) {
-            $searchTerm = $request->search;
-            $projects = $projects->when($searchTerm, function ($query) use ($searchTerm) {
-                return $query->where('name', 'like', '%' . $searchTerm . '%');
-            });
-        }
+        $projects = Project::where('auction_type_id', $auctionType->id)->paginate(10);
 
-        $projects = $projects->paginate(10);        
         return view('frontend.projects.index', ['projects' => $projects]);
     }
 
-    public function productsByProject($slug, Request $request)
+    public function productsByProject($slug)
     {
         $projects = Project::where('slug', $slug)->first();
-        $products = Product::where('project_id', $projects->id);
+        $products = Product::where('project_id', $projects->id)->paginate(10);
         // p($product);
 
-        if($request->has('search') && (!empty($request->search))) {
-            $searchTerm = $request->search;
-            $products = $products->when($searchTerm, function ($query) use ($searchTerm) {
-                return $query->where('title', 'like', '%' . $searchTerm . '%');
-            });
-        }
-        $products = $products->paginate(10);
-        $wishlist = [];
-        if(Auth::check()) {
-            $wishlist = Wishlist::where('user_id', Auth::id())->pluck('product_id')->toArray();
-        }
-
-        return view('frontend.products.index', ['products' => $products], ['projects' => $projects, 'wishlist' => $wishlist]);
+        return view('frontend.products.index', ['products' => $products], ['projects' => $projects]);
     }
+
+     // /based on category redirect to 
+
+     public function projectByCategory($slug)
+     {
+         $category = Category::where('slug', $slug)->first();
+         $projects = Project::where('category_id', $category->id)->paginate(10);
+         // dd($projects);//
+ 
+         return view('frontend.projects.index', ['projects' => $projects]);
+     }
 
     public function productsdetail($slug)
     {
         $product = Product::where('slug', $slug)->first();
-         
+
         if (!$product) {
             abort(404);
         }
-        $wishlist = [];
-        if(Auth::check()) {
-            $wishlist = Wishlist::where('user_id', Auth::id())->pluck('product_id')->toArray();
-        }
-
-        return view('frontend.products.detail', ['product' => $product, 'wishlist' => $wishlist]);
-    }
-    // /based on category redirect to 
-
-    public function projectByCategory($slug)
-    {
-        $category = Category::where('slug', $slug)->first();
-        $projects = Project::where('category_id', $category->id)->paginate(10);
-        // dd($projects);//
-
-        return view('frontend.projects.index', ['projects' => $projects]);
+        return view('frontend.products.detail', ['product' => $product]);
     }
 
     //contact us
@@ -211,19 +186,20 @@ class HomepageController extends Controller
 
             $user->save();
             $msg = $otp . ' is your Verification code for Bids.Sa ';
-        //    / Mail::to($user->email)->send(new ResetPasswordMail($user->otp));
-
-            // Redirect to a success page or another route
-            // return redirect()->route('success-page')->with('message', 'Registration successful');
             return response()->json([
                 'status' => 'success',
                 'message' => 'Registration successfull',
             ]);
+            // Mail::to($user->email)->send(new ResetPasswordMail($user->otp));
+
+            // // Redirect to a success page or another route
+            // return redirect()->route('success-page')->with('message', 'Registration successful');
+
         } catch (\Exception $e) {
             return Redirect::back()->with('error', $e->getMessage());
         }
     }
- 
+   
 
     public function verifyOTP(Request $request){
        
@@ -280,6 +256,7 @@ class HomepageController extends Controller
         }
     }
 
+
     public function subscribe(Request $request)
     {
         $request->validate([
@@ -295,161 +272,28 @@ class HomepageController extends Controller
     
         return response()->json(['success' => true, 'message' => 'Subscription successful!']);
     }
-    
 
-    // contact-us
-// 
-    public function contacstus(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'name'  =>'required',
-            'phone' => 'required|min:11|numeric',
-            'message' => ''
-        ]);
+     // contact-us
 
-        ContactUs::create([
-            'email' => $request->input('email'),
-            'name' => $request->input('name'),
-            'phone' => $request->input('phone'),
-            'message' => $request->input('message'),
-        ]);
-        return redirect()->back()->with('success', 'Thanks for Contacting us! We will be in touch with you Shortly.');
-}
+     public function contacstus(Request $request)
+     {
+         $request->validate([
+             'email' => 'required|email',
+             'name'  =>'required',
+             'phone' => 'required|min:11|numeric',
+             'message' => ''
+         ]);
+ 
+         ContactUs::create([
+             'email' => $request->input('email'),
+             'name' => $request->input('name'),
+             'phone' => $request->input('phone'),
+             'message' => $request->input('message'),
+         ]);
+ 
+         return redirect()->back()->with('success', 'Thanks for Contacting us! We will be in touch with you Shortly.');
 
-public function sendOtpForgetPassword(Request $request)
-{
-    $rules = [            
-        'phoneNumber' => 'required|numeric|digits:10',
-    ];
-
-    $validator = Validator::make($request->all(), $rules);
-
-    if ($validator->fails()) {
-        $firstErrorMessage = $validator->errors()->first();
-        // dd($firstErrorMessage);
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Validation error',
-            'error' => $firstErrorMessage,
-        ]);
-        // return redirect()->route('registration-form')->with('error', $firstErrorMessage);
-    }
-    $user = User::where('phone', $request->phoneNumber)->first();
-
-    if($user) {
-
-        $otp = rand(1000, 9999);
-        $msg = $otp . ' is your Verification code for Bids.Sa ';
-
-        User::where('id', $user->id)->update(['otp'=>$otp]);
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Success',
-            'error' => 'Otp sent successfully',
-        ]);
-
-    } else {         
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Error',
-            'error' => 'User not found',
-        ]);
-    }
-}
-
-public function verifyOtpForgetPassword(Request $request) {
-    $rules = [            
-        'phoneNumber' => 'required|numeric|digits:10',
-        'otp' => 'required|string|min:4',
-    ];
-
-    $validator = Validator::make($request->all(), $rules);
-
-    if ($validator->fails()) {
-        $firstErrorMessage = $validator->errors()->first();
-        // dd($firstErrorMessage);
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Validation error',
-            'error' => $firstErrorMessage,
-        ]);
-        // return redirect()->route('registration-form')->with('error', $firstErrorMessage);
-    }
-
-    $user = User::where('phone', $request->phoneNumber)->first();
-
-    if($user) {
-
-        if($user->otp == $request->otp || $request->otp == '1234')  {
-            User::where('id', $user->id)->update(['otp'=>null,'is_otp_verify'=>1]);
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Success',
-                'error' => 'Otp verified successfully',
-            ]);
-        } else {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Error',
-                'error' => 'OTP not matched',
-            ]);
-        }
-
-    }else {         
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Error',
-            'error' => 'User not found',
-        ]);
-    }
-}
-
-
-public function updateNewPassword(Request $request) {
-    $rules = [            
-        'phoneNumber' => 'required|numeric|digits:10',
-        'password' => 'required|string|min:6',
-    ];
-
-    $validator = Validator::make($request->all(), $rules);
-
-    if ($validator->fails()) {
-        $firstErrorMessage = $validator->errors()->first();
-        // dd($firstErrorMessage);
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Validation error',
-            'error' => $firstErrorMessage,
-        ]);
-        // return redirect()->route('registration-form')->with('error', $firstErrorMessage);
-    }
-
-    $user = User::where('phone', $request->phoneNumber)->first();
-
-    if($user) {
-        $user = User::find($user->id);
-        $user->update([
-            'password' => Hash::make($request->password),
-        ]);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Success',
-            'error' => 'Password reset successfully',
-        ]);
-
-    }else {         
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Error',
-            'error' => 'User not found',
-        ]);
-    }
-
-}
-
-    
+     }
     
     
 

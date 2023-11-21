@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\ContactUs;
+use App\Models\News;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class ContactUsDataTable extends DataTable
+class NewsDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -22,16 +22,31 @@ class ContactUsDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', 'admin.contactus.action')
+            ->addColumn('#', function () {
+                static $count = 0;
+                $count++;
+                return $count;
+            })
+            ->addColumn('action', 'admin.news.action')
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(ContactUs $model): QueryBuilder
+    public function query(News $model): QueryBuilder
     {
-        return $model->newQuery()->with('subject');
+        // return $model->newQuery();
+        $query = $model->newQuery();
+    
+        if ($this->request->has('created_at')) {
+            $created_at = $this->request->get('created_at');
+            if ($created_at) {
+                $query->whereDate('created_at', '=', $created_at);
+            }
+        }
+    
+        return $query;
     }
 
     /**
@@ -40,15 +55,16 @@ class ContactUsDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('contactus-table')
+                    ->setTableId('news-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
-                    ->orderBy(0)
+                    ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([
                         Button::make('excel'),
                         Button::make('csv'),
+                        Button::make('pdf'),
                         Button::make('print'),
                         Button::make('reset'),
                         Button::make('reload')
@@ -61,12 +77,9 @@ class ContactUsDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id'),
-            Column::make('name'),
+            Column::make('#'),
             Column::make('email'),
-            Column::make('phone'),
-            Column::make('message'),
-            Column::make('created_at')->render('new Date(full[\'created_at\']).toLocaleString()' ),
+            Column::make('ip_address'),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
@@ -80,6 +93,6 @@ class ContactUsDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'ContactUs_' . date('YmdHis');
+        return 'News_' . date('YmdHis');
     }
 }

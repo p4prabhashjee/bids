@@ -56,7 +56,7 @@ class ProductController extends Controller
             'status' => 'required',
             'Increment' => 'required',
             'is_popular' => 'boolean',
-            'image_path.*' => '',
+            'image_path.*' => 'required',
             'end_price' =>'',
             'start_price' => '',
         ]);

@@ -256,7 +256,7 @@ $(document).ready(function() {
         var selectedValue = $(this).val();
 
         // Check if the selected value is "3" (which corresponds to "Live" in your database)
-        if (selectedValue === "2") {
+        if (selectedValue === "3") {
             // Hide the "End Date & Time" container
             $("#end-date-container").hide();
         } else {

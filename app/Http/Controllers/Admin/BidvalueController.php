@@ -38,6 +38,7 @@ class BidvalueController extends Controller
             'status' => 'required|boolean',
         ]);
     
+        // Validate that min_price is greater than max_price of the previous bid value
         $previousMaxPrice = Bidvalue::max('max_price');
     
         if ($request->input('min_price') <= $previousMaxPrice) {
@@ -48,7 +49,6 @@ class BidvalueController extends Controller
     
         return redirect()->route('admin.bidvalues.index')->with('success', 'BidValue created successfully!');
     }
-
     /**
      * Display the specified resource.
      */

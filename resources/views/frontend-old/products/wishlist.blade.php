@@ -22,12 +22,6 @@
 <section class="product-list-man mt-5">
     <div class="container">
         <div class="row">
-            @php
-            $wishlist = [];
-            foreach($wishlistItems as $it) {
-                $wishlist[] = $it->product->id;
-            };              
-        @endphp
         @forelse ($wishlistItems as $item)
             <div class="col-md-6">
                 <a href="{{ url('productsdetail', $item->product->slug) }}">
@@ -35,16 +29,11 @@
                         <div class="product-image">
                             @if ($item->product->galleries->isNotEmpty())
                             <img src="{{ asset($item->product->galleries->first()->image_path) }}" alt="">
-                            <!-- <i class="fa fa-heart-o"></i> -->
+                            <i class="fa fa-heart-o"></i>
                             @else
                             <img src="{{asset('frontend/images/default-product-image.png')}}" alt="">
-                            <!-- <i class="fa fa-heart-o"></i> -->
+                            <i class="fa fa-heart-o"></i>
                             @endif
-
-                            <div class="heat-like wishlist-heart active" data-product-id="{{ $item->product->id }}">
-                                <input type="checkbox" name="" id="" @if(in_array($item->product->id, $wishlist)) checked @endif>
-                                <img src="{{asset('frontend/images/heart.png')}}" alt="">
-                            </div>
 
                         </div>
                         <div class="card-product-dtl">
@@ -62,11 +51,13 @@
                                     </ul>
                             </div>
                             @endif
+
+                            
                             <div class="bid-box-status">
-                            <div class="bid-box-status-ic"><img
-                                    src="{{asset('frontend/images/live.svg')}}"><span>{{ $item->product->auctionType->name }}</span>
+                                        <div class="bid-box-status-ic"><img
+                                                src="{{asset('frontend/images/live.svg')}}"><span>{{ $item->product->auctionType->name }}</span>
+                                        </div>
                             </div>
-                        </div>
                             <button class="text-btn">Bid Now <img class="img-fluid ms-3"
                                     src="{{ asset('images/next-arrow.svg') }}" alt=""></button>
                         </div>

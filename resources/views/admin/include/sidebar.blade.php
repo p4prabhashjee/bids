@@ -178,32 +178,32 @@
                     </ul>
                 </div>
             </li> -->
-            <!-- <li class="nav-item">
+            <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#auctiontypeSection"
-                    class="nav-link {{Request::routeIs('admin.auctiontypes.*') ? '' : 'collapsed'}}"
+                    class="nav-link {{Request::routeIs('admin.news.*') ? '' : 'collapsed'}}"
                     aria-controls="auctiontypeSection" role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
                         <i class="ni ni-basket text-primary text-sm opacity-10"></i>
                     </div>
-                    <span class="nav-link-text ms-1">AuctionType</span>
+                    <span class="nav-link-text ms-1">StayUpTodate</span>
                 </a>
-                <div class="collapse {{Request::routeIs('admin.auctiontypes.*') ? 'show' : ''}}" id="auctiontypeSection" style="">
+                <div class="collapse {{Request::routeIs('admin.news.*') ? 'show' : ''}}" id="auctiontypeSection" style="">
                     <ul class="nav ms-4">
-                        <li class="nav-item {{Request::routeIs('admin.auctiontypes.index') ? 'active' : ''}}">
-                            <a class="nav-link {{Request::routeIs('admin.auctiontypes.index') ? 'active' : ''}}"
-                                href="{{route('admin.auctiontypes.index')}}">
+                        <li class="nav-item {{Request::routeIs('admin.news.index') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.news.index') ? 'active' : ''}}"
+                                href="{{route('admin.news.index')}}">
                                 <span class="sidenav-normal"> List </span>
                             </a>
                         </li>
-                        <li class="nav-item {{Request::routeIs('admin.auctiontypes.create') ? 'active' : ''}}">
+                        {{-- <li class="nav-item {{Request::routeIs('admin.auctiontypes.create') ? 'active' : ''}}">
                             <a class="nav-link {{Request::routeIs('admin.auctiontypes.create') ? 'active' : ''}}"
                                 href="{{route('admin.auctiontypes.create')}}">
                                 <span class="sidenav-normal"> Add AuctionType </span>
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>
-            </li> -->
+            </li>
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#bidvaluesSection"
                     class="nav-link {{Request::routeIs('admin.bidvalues.*') ? '' : 'collapsed'}}"
@@ -421,7 +421,7 @@
                 </div>
             </li>
             
-            <!-- <li class="nav-item">
+            <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#contactusSection"
                     class="nav-link {{Request::routeIs('admin.contact-us.*') ? 'active' : ''}}"
                     aria-controls="contactusSection" role="button" aria-expanded="false">
@@ -430,8 +430,19 @@
                     </div>
                     <span class="nav-link-text ms-1">Contact Us</span>
                 </a>
+                <div class="collapse {{Request::routeIs('admin.contact-us.*') ? 'show' : ''}}" id="contactusSection" style="">
+                    <ul class="nav ms-4">
+                        <li class="nav-item {{Request::routeIs('admin.contact-us.index') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.contact-us.index') ? 'active' : ''}}"
+                                href="{{route('admin.contact-us.index')}}">
+                                <span class="sidenav-normal"> List </span>
+                            </a>
+                        </li>
+                       
+                    </ul>
+                </div>
                 
-            </li> -->
+            </li>
             
         </ul>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -1,4 +1,3 @@
-
 <style>
     .category-list {
         display: none; 
@@ -12,6 +11,8 @@
         text-align: left;
     }
     </style>
+
+
 @php
 $cat = App\Models\Category::where('status',1)->orderBy('name','ASC')->get();
 $logo = App\Models\Setting::where('is_static', 2)->orderBy('title', 'ASC')->first();
@@ -24,7 +25,6 @@ $categories = App\Models\Category::where('status', 1)
 ->withCount('projects')
 ->get();
 @endphp
-
 @php
     $user = Auth::user();
     $wishlistCount = $user ? App\Models\Wishlist::where('user_id', $user->id)->count() : 0;
@@ -67,7 +67,6 @@ $categories = App\Models\Category::where('status', 1)
             </form>
            </div>
           </div>
-          {{--  --}}
           <div id="mainListDiv" class="main_list">
               <ul class="navlinks">
               <li><a href="{{url('/')}}">Home</a></li>

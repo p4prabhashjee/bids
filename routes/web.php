@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\BidvalueController;
+use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Frontend\HomepageController;
@@ -51,6 +52,8 @@ Route::get('about-us', [HomepageController::class,'about'])->name('about-us');
 Route::get('products-list', [HomepageController::class,'productlist'])->name('products-list');
 Route::get('/projects/{auction_type_slug}', [HomepageController::class,'projectByAuctionType'])->name('projects.by_auction_type');
 Route::get('/products/{slug}', [HomepageController::class,'productsByProject'])->name('productsByProject');
+// based on categorys
+Route::get('/category/{categories_slug}', [HomepageController::class,'projectByCategory'])->name('projectByCategory');
 
 Route::get('/productsdetail/{slug}', [HomepageController::class,'productsdetail'])->name('productsdetail');
 Route::get('signin', [HomepageController::class,'login'])->name('signin');
@@ -58,6 +61,13 @@ Route::post('loggedin', [HomepageController::class,'loggedin'])->name('loggedin'
 Route::get('register', [HomepageController::class,'registration'])->name('register');
 Route::post('registration', [HomepageController::class,'register'])->name('registration');
 Route::post('verify-otp', [HomepageController::class,'verifyOTP'])->name('verify-otp');
+Route::get('/sendOtpForgetPassword', [HomepageController::class, 'sendOtpForgetPassword'])->name('sendOtpForgetPassword');
+Route::get('/verifyOtpForgetPassword', [HomepageController::class, 'verifyOtpForgetPassword'])->name('verifyOtpForgetPassword');
+Route::get('/updateNewPassword', [HomepageController::class, 'updateNewPassword'])->name('updateNewPassword');
+Route::post('/subscribe', [HomepageController::class, 'subscribe'])->name('subscribe');
+Route::post('/contactus', [HomepageController::class, 'contacstus'])->name('contactus');
+
+
 
 
 // Route::get('/login/google', [SocialController::class,'redirectToGoogle']);
@@ -74,8 +84,8 @@ Route::group(['middleware' => 'auth'],function(){
     Route::get('/addressesdelete/{id}', [DashboardController::class,'delete'])->name('addresses.delete');
     Route::post('/addresses/update/{id}', [DashboardController::class,'update'])->name('addresses.update');
     Route::get('/getwishlist',[DashboardController::class,'getwishlist'])->name('getwishlist');
-    Route::post('/wishlist/add', [ProductWishController::class,'addToWishlist']);
-    Route::post('/wishlist/remove', [ProductWishController::class,'removeFromWishlist']);
+    Route::post('/wishlist/add', [ProductWishController::class,'addToWishlist'])->name('addToWishlist');
+    Route::post('/wishlist/remove', [ProductWishController::class,'removeFromWishlist'])->name('removeFromWishlist');
 
 
 });
@@ -112,6 +122,8 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::resource('bidvalues', BidvalueController::class);
     Route::resource('banners', BannerController::class);
     Route::resource('projects', ProjectController::class);
+    Route::resource('news', NewsController::class);
+
     
 });
 

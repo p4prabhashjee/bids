@@ -105,10 +105,7 @@
        
 
           <div class="product-imgs mt-4">
-            <div class="heat-like wishlist-heart @if(in_array($product->id, $wishlist)) active @endif" data-product-id="{{ $product->id }}">
-              <input type="checkbox" name="" id="" @if(in_array($product->id, $wishlist)) checked @endif>
-              <img src="{{asset('frontend/images/heart.png')}}" alt="">
-          </div>
+            <i class="fa fa-heart-o"></i>
             <div class="img-display">
               <div class="img-showcase">
               @if ($product->galleries->isNotEmpty())
