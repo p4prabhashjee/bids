@@ -59,8 +59,8 @@
                 email with instructions to reset your password.</p>
               <form action="" class="cmn-frm mt-4">
                 <div class="form-group text-start">
-                  <label for=" ">Phone number </label>
-                  <input type="number" class="forgetPasswordPhone" name="" id="" required>
+                  <label for=" ">Phone number / Email</label>
+                  <input type="text" class="forgetPasswordPhone" name="" id="" required>
                 </div>
                 
               </form>
@@ -71,9 +71,15 @@
             <div class="otpArea hide">
               <p>Verify otp to proceed.</p>
               <form action="" class="cmn-frm mt-4">
-                <div class="form-group text-start">
+                <div class="form-group text-start otp-filds" id="otp-verification-form">
                   <label for=" ">OTP</label>
-                  <input type="number" class="forgetPasswordOTP" name="" id="" required>
+                  <!-- <input type="number" class="forgetPasswordOTP" name="" id="" required> -->
+              
+                  <input type="number" class="otpValue" name="otp" id="first" maxlength="1" oninput="moveToNextInput(this, 'second')" onkeydown="moveToPreviousInput(this, '')" />
+                  <input type="number" class="otpValue" name="otp" id="second" maxlength="1" oninput="moveToNextInput(this, 'third')" onkeydown="moveToPreviousInput(this, 'first')" />
+                  <input type="number" class="otpValue" name="otp" id="third" maxlength="1" oninput="moveToNextInput(this, 'fourth')" onkeydown="moveToPreviousInput(this, 'second')" />
+                  <input type="number" class="otpValue" name="otp" id="fourth" maxlength="1" onkeydown="moveToPreviousInput(this, 'third')" />
+
                 </div>                
               </form>
               <a  class="my-4 btn btn-secondary px-5 verifyForgotPasswordOtpBtn"   type="button"> Verify Otp</a>
@@ -103,12 +109,13 @@
                 <div class="form-group text-start">
                   <label for="">New Password </label>
                   <input class="pe-5" type="password" name="" id="ResetPassword">
-                  <i class="fa fa-eye-slash input-icon"></i>
+                  <i class="fa fa-eye-slash input-icon" id="password-toggle"></i>
                 </div>
+
                 <div class="form-group text-start">
                   <label for="">Confirm New Password </label>
                   <input class="pe-5" type="confirm_password" name="" id="ResetConfirmPassword">
-                  <i class="fa fa-eye-slash input-icon"></i>
+                  <i class="fa fa-eye-slash input-icon" id="password-toggle"></i>
                 </div>
                  
               </form>
@@ -181,7 +188,9 @@
     });
 
     $('body').on('click', '.verifyForgotPasswordOtpBtn', function(){
-      otp = $('.forgetPasswordOTP').val();
+      // otp = $('.forgetPasswordOTP').val();
+      const otp = document.getElementById("first").value + document.getElementById("second").value + document.getElementById("third").value + document.getElementById("fourth").value;
+
       phoneNumber = $('.forgetPasswordPhone').val();
       if(otp) {
         $.ajax({
@@ -235,7 +244,47 @@
 
     })
 
+    function moveToNextInput(currentInput, nextInputId) {
+        var maxLength = parseInt(currentInput.getAttribute('maxlength'));
+
+        if (currentInput.value.length === maxLength) {
+            // Move to the next input field
+            document.getElementById(nextInputId).focus();
+        }
+    }
+
+    function moveToPreviousInput(currentInput, previousInputId) {
+        if (event.key === 'Backspace' && currentInput.value.length === 0) {
+            // Move to the previous input field
+            document.getElementById(previousInputId).focus();
+        }
+    }
 </script>
+<script>
+   $(document).ready(function() {
+        $('#password-toggle').click(function() {
+            const passwordInput = $('#password');
+            if (passwordInput.attr('type') === 'password') {
+                passwordInput.attr('type', 'text');
+                $('#password-toggle').removeClass('fa-eye-slash').addClass('fa-eye');
+            } else {
+                passwordInput.attr('type', 'password');
+                $('#password-toggle').removeClass('fa-eye').addClass('fa-eye-slash');
+            }
+        });
+
+        $('#confirm-password-toggle').click(function() {
+            const confirmPasswordInput = $('#confirm_password');
+            if (confirmPasswordInput.attr('type') === 'password') {
+                confirmPasswordInput.attr('type', 'text');
+                $('#confirm-password-toggle').removeClass('fa-eye-slash').addClass('fa-eye');
+            } else {
+                confirmPasswordInput.attr('type', 'password');
+                $('#confirm-password-toggle').removeClass('fa-eye').addClass('fa-eye-slash');
+            }
+        });
+    });
+  </script>
   </body>
 
   @include('frontend.layouts.footer')

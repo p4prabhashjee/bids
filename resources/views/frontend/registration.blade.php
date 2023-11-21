@@ -114,10 +114,14 @@
               Mobile/Email <a href="" class="text-btn edit-number numberTag">"+91 1234567890"</a></p>
               <form action="{{ route('verify-otp') }}" method="post" class="cmn-frm otp-filds" id="otp-verification-form">
               
-                <input type="number otpValue" name="otp" id="first" maxlength="1" />
+                <!-- <input type="number otpValue" name="otp" id="first" maxlength="1" />
                 <input type="number otpValue" name="otp" id="second" maxlength="1" />
                 <input type="number otpValue" name="otp" id="third" maxlength="1" />
-                <input type="number otpValue" name="otp" id="fourth" maxlength="1" />
+                <input type="number otpValue" name="otp" id="fourth" maxlength="1" /> -->
+                <input type="number" class="otpValue" name="otp" id="first" maxlength="1" oninput="moveToNextInput(this, 'second')" onkeydown="moveToPreviousInput(this, '')" />
+                <input type="number" class="otpValue" name="otp" id="second" maxlength="1" oninput="moveToNextInput(this, 'third')" onkeydown="moveToPreviousInput(this, 'first')" />
+                <input type="number" class="otpValue" name="otp" id="third" maxlength="1" oninput="moveToNextInput(this, 'fourth')" onkeydown="moveToPreviousInput(this, 'second')" />
+                <input type="number" class="otpValue" name="otp" id="fourth" maxlength="1" onkeydown="moveToPreviousInput(this, 'third')" />
               </form>
               <p>Didn’t Receive the Code? <a href="" class="text-btn edit-number">Resend</a></p>
               <!-- <button type="submit" class="mt-4 btn btn-secondary px-5 btn-verify">Verify</button> -->
@@ -291,8 +295,43 @@ function verifyOTP() {
       }
   });
 
-
+  // fetch("{{ route('verify-otp') }}", {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     "X-CSRF-TOKEN": "{{ csrf_token() }}"
+  //   },
+  //   body: JSON.stringify({ otp: otpValue, phone: "" })
+  // })
+  // .then(response => response.json())
+  // .then(data => {
+  //   if (data.success) {
+  //     window.location.href = "{{ url('/') }}";
+  //   } else {
+  //     alert("Invalid OTP. Please try again.");
+  //   }
+  // })
+  // .catch(error => {
+  //   console.error("Error:", error);
+  //   alert("An error occurred while verifying OTP.");
+  // });
 }
+
+function moveToNextInput(currentInput, nextInputId) {
+        var maxLength = parseInt(currentInput.getAttribute('maxlength'));
+
+        if (currentInput.value.length === maxLength) {
+            // Move to the next input field
+            document.getElementById(nextInputId).focus();
+        }
+    }
+
+    function moveToPreviousInput(currentInput, previousInputId) {
+        if (event.key === 'Backspace' && currentInput.value.length === 0) {
+            // Move to the previous input field
+            document.getElementById(previousInputId).focus();
+        }
+    }
 </script>
 
 
