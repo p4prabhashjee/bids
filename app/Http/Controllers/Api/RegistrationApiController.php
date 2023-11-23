@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Models\Country;
+use App\Models\State;
+use App\Models\City;
+
 
 class RegistrationApiController extends Controller
 {
@@ -21,8 +25,91 @@ class RegistrationApiController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'verifyOTP', 'forgotpassword', 'resetpassword']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'verifyOTP', 'forgotpassword', 'resetpassword','countries']]);
     }
+
+
+  // country list
+
+public function countries(Request $request){
+    try {
+        $countries = Country::select('id', 'shortname', 'name', 'phonecode', 'status')
+                            ->where('status', 1)
+                            ->get();
+
+        $formattedCountries = $countries->map(function ($country) {
+            return [
+                'id' => $country->id,
+                'shortname' => $country->shortname,
+                'name' => $country->name,
+                'phonecode' => '+' . $country->phonecode,
+                'status' => $country->status,
+            ];
+        });
+
+        // Move country with phone code +966 to the top of the list
+        $formattedCountries = $formattedCountries->sortByDesc(function ($country) {
+            return $country['phonecode'] === '+966' ? 1 : 0;
+        });
+
+        return response()->json([
+            'ResponseCode' => 200,
+            'Status' => 'true',
+            'Message' => 'Country Code Retrieved Successfully',
+            'data' => $formattedCountries->values()->all(), // Reset array keys
+        ], 200);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'ResponseCode' => 500,
+            'Status' => 'False',
+            'Message' => $e->getMessage(),
+        ], 500);
+    }
+}
+
+// state list
+
+public function statesliist(Request $request)
+{
+    // Validate the incoming request
+    $request->validate([
+        'country_id' => 'required|integer',
+    ]);
+
+    $countryId = $request->input('country_id');
+
+    $states = State::where('country_id', $countryId)->get(['id', 'name']);
+
+    // Return the states list
+    return response()->json([
+        'success' => true,
+        'message' => 'States retrieved successfully',
+        'data' => $states,
+    ]);
+}
+
+// cities list
+
+public function citiesliist(Request $request)
+{
+    // Validate the incoming request
+    $request->validate([
+        'state_id' => 'required|integer',
+    ]);
+
+    $stateId = $request->input('state_id');
+
+    $states = City::where('state_id', $stateId)->get(['id', 'name']);
+
+    // Return the states list
+    return response()->json([
+        'success' => true,
+        'message' => 'cities retrieved successfully',
+        'data' => $states,
+    ]);
+}
+
     // register api.
     public function register(Request $request)
     {
@@ -104,8 +191,8 @@ class RegistrationApiController extends Controller
     {
         $rules = [
             'otp' => 'required',
-            'phone' => 'required',
-            'country_code' => 'required',
+            'email' => 'required',
+            // 'country_code' => 'required',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -122,8 +209,8 @@ class RegistrationApiController extends Controller
             }
         }
 
-        $otpUser = User::where('country_code', $request->country_code)
-            ->where('phone', $request->phone)
+        $otpUser = User::where('email', $request->email)
+            // ->where('phone', $request->phone)
             ->first();
 
         if (!$otpUser) {

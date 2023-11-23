@@ -23,6 +23,10 @@ use App\Http\Controllers\Api\ProductApiController;
 // });
 
 Route::group(['namespace' => 'API'], function () {
+    // country list
+    Route::get('countries', [RegistrationApiController::class, 'countries']);
+    Route::post('statesliist', [RegistrationApiController::class, 'statesliist']);
+    Route::post('citiesliist', [RegistrationApiController::class, 'citiesliist']);
     Route::post('registration', [RegistrationApiController::class, 'register']);
     Route::post('verifyOTP', [RegistrationApiController::class, 'verifyOTP']);
     Route::post('login', [RegistrationApiController::class, 'login']);
