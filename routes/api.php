@@ -46,6 +46,12 @@ Route::group(['namespace' => 'API'], function () {
     Route::get('profiledetail', [RegistrationApiController::class, 'profiledetail']);
     // homepage api.
     Route::post('homepage', [ProductApiController::class, 'homepage']);
+    Route::post('categories', [ProductApiController::class, 'categories']);
+    Route::post('productlistbasedproject', [ProductApiController::class, 'productlistbasedproject']);
+    Route::post('projectlistbasedauction', [ProductApiController::class, 'projectlistbasedauction']);
+    Route::post('projectlistbasedcategory', [ProductApiController::class, 'projectlistbasedcategory']);
+
+
     Route::post('productdetail', [ProductApiController::class, 'getProductDetail']);
      // wishlist related api 
     Route::post('addtowishlist', [ProductApiController::class,'addOrRemoveFromWishlist']);

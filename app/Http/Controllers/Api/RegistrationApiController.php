@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Mail\ResetPasswordMail;
+use App\Models\City;
+use App\Models\Country;
+use App\Models\State;
 use App\Models\User;
 use App\Models\Useraddress;
 use App\Traits\ImageTrait;
@@ -14,10 +17,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use App\Models\Country;
-use App\Models\State;
-use App\Models\City;
-
 
 class RegistrationApiController extends Controller
 {
@@ -25,90 +24,90 @@ class RegistrationApiController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'verifyOTP', 'forgotpassword', 'resetpassword','countries']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'verifyOTP', 'forgotpassword', 'resetpassword', 'countries']]);
     }
 
+    // country list
 
-  // country list
+    public function countries(Request $request)
+    {
+        try {
+            $countries = Country::select('id', 'shortname', 'name', 'phonecode', 'status')
+                ->where('status', 1)
+                ->get();
 
-public function countries(Request $request){
-    try {
-        $countries = Country::select('id', 'shortname', 'name', 'phonecode', 'status')
-                            ->where('status', 1)
-                            ->get();
+            $formattedCountries = $countries->map(function ($country) {
+                return [
+                    'id' => $country->id,
+                    'shortname' => $country->shortname,
+                    'name' => $country->name,
+                    'phonecode' => '+' . $country->phonecode,
+                    'status' => $country->status,
+                ];
+            });
 
-        $formattedCountries = $countries->map(function ($country) {
-            return [
-                'id' => $country->id,
-                'shortname' => $country->shortname,
-                'name' => $country->name,
-                'phonecode' => '+' . $country->phonecode,
-                'status' => $country->status,
-            ];
-        });
+            // Move country with phone code +966 to the top of the list
+            $formattedCountries = $formattedCountries->sortByDesc(function ($country) {
+                return $country['phonecode'] === '+966' ? 1 : 0;
+            });
 
-        // Move country with phone code +966 to the top of the list
-        $formattedCountries = $formattedCountries->sortByDesc(function ($country) {
-            return $country['phonecode'] === '+966' ? 1 : 0;
-        });
+            return response()->json([
+                'ResponseCode' => 200,
+                'Status' => 'true',
+                'Message' => 'Country Code Retrieved Successfully',
+                'data' => $formattedCountries->values()->all(), // Reset array keys
+            ], 200);
 
-        return response()->json([
-            'ResponseCode' => 200,
-            'Status' => 'true',
-            'Message' => 'Country Code Retrieved Successfully',
-            'data' => $formattedCountries->values()->all(), // Reset array keys
-        ], 200);
-
-    } catch (\Exception $e) {
-        return response()->json([
-            'ResponseCode' => 500,
-            'Status' => 'False',
-            'Message' => $e->getMessage(),
-        ], 500);
+        } catch (\Exception $e) {
+            return response()->json([
+                'ResponseCode' => 500,
+                'Status' => 'False',
+                'Message' => $e->getMessage(),
+            ], 500);
+        }
     }
-}
 
 // state list
 
-public function statesliist(Request $request)
-{
-    // Validate the incoming request
-    $request->validate([
-        'country_id' => 'required|integer',
-    ]);
+    public function statesliist(Request $request)
+    {
+        // Validate the incoming request
+        $request->validate([
+            'country_id' => 'required|integer',
+        ]);
 
-    $countryId = $request->input('country_id');
+        $countryId = $request->input('country_id');
 
-    $states = State::where('country_id', $countryId)->get(['id', 'name']);
+        $states = State::where('country_id', $countryId)->get(['id', 'name']);
 
-    // Return the states list
-    return response()->json([
-        'success' => true,
-        'message' => 'States retrieved successfully',
-        'data' => $states,
-    ]);
-}
+        // Return the states list
+        return response()->json([
+            'success' => true,
+            'message' => 'States retrieved successfully',
+            'data' => $states,
+        ]);
+    }
 
 // cities list
 
-public function citiesliist(Request $request)
-{
-    // Validate the incoming request
-    $request->validate([
-        'state_id' => 'required|integer',
-    ]);
+    public function citiesliist(Request $request)
+    {
+        // Validate the incoming request
+        $request->validate([
+            'state_id' => 'required|integer',
+        ]);
 
-    $stateId = $request->input('state_id');
+        $stateId = $request->input('state_id');
 
-    $states = City::where('state_id', $stateId)->get(['id', 'name']);
+        $states = City::where('state_id', $stateId)->get(['id', 'name']);
 
-    // Return the states list
-    return response()->json([
-        'success' => true,
-        'message' => 'cities retrieved successfully',
-        'data' => $states,
-    ]);
-}
+        // Return the states list
+        return response()->json([
+            'success' => true,
+            'message' => 'cities retrieved successfully',
+            'data' => $states,
+        ]);
+    }
 
     // register api.
     public function register(Request $request)
@@ -210,7 +209,7 @@ public function citiesliist(Request $request)
         }
 
         $otpUser = User::where('email', $request->email)
-            // ->where('phone', $request->phone)
+        // ->where('phone', $request->phone)
             ->first();
 
         if (!$otpUser) {
@@ -374,7 +373,7 @@ public function citiesliist(Request $request)
                     'Message' => 'Phone and country code are required',
                 ], 422);
             }
-          $user = User::where('phone', $phone)->where('country_code', $countryCode)->first();
+            $user = User::where('phone', $phone)->where('country_code', $countryCode)->first();
             if (!$user) {
                 // return response()->json(['error' => 'User not found'], 400);
                 return response()->json([
@@ -505,17 +504,17 @@ public function citiesliist(Request $request)
             $rules = [
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
-                'apartment' => 'nullable|string',
-                'city' => 'required|string',
                 'country' => 'required|string',
                 'state' => 'required|string',
+                'city' => 'required|string',
+                'apartment' => 'nullable|string',
                 'zipcode' => 'required|string',
-                'is_save' => 'required|boolean',
                 'address_type' => 'required',
+                'is_save' => 'required|boolean',
             ];
 
             $validator = Validator::make($request->all(), $rules);
-            
+
             if ($validator->fails()) {
                 $firstErrorMessage = $validator->errors()->first();
                 return response()->json([
@@ -559,13 +558,13 @@ public function citiesliist(Request $request)
             $rules = [
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
-                'apartment' => 'nullable|string',
-                'city' => 'required|string',
                 'country' => 'required|string',
                 'state' => 'required|string',
+                'city' => 'required|string',
+                'apartment' => 'nullable|string',
                 'zipcode' => 'required|string',
                 'address_type' => 'required',
-                'address_id'  =>'required|exists:useraddresses,id',
+                'address_id' => 'required|exists:useraddresses,id',
                 // 'is_save' => 'required|boolean',
 
             ];
@@ -622,11 +621,11 @@ public function citiesliist(Request $request)
     {
         try {
             $rules = [
-                'address_id'  => 'required|exists:useraddresses,id',
+                'address_id' => 'required|exists:useraddresses,id',
             ];
-    
+
             $validator = Validator::make($request->all(), $rules);
-    
+
             if ($validator->fails()) {
                 $firstErrorMessage = $validator->errors()->first();
                 return response()->json([
@@ -636,12 +635,12 @@ public function citiesliist(Request $request)
                 ], 422);
             }
             $user = auth()->user();
-            $addressId = $request->input('address_id'); 
-    
+            $addressId = $request->input('address_id');
+
             $userAddress = Useraddress::where('id', $addressId)
                 ->where('user_id', $user->id)
                 ->first();
-    
+
             if (!$userAddress) {
                 return response()->json([
                     'ResponseCode' => 422,
@@ -649,7 +648,7 @@ public function citiesliist(Request $request)
                     'message' => 'User Address not found',
                 ], 422);
             }
-    
+
             $userAddress->delete();
             return response()->json([
                 'ResponseCode' => 200,
@@ -660,54 +659,59 @@ public function citiesliist(Request $request)
             return response()->json([
                 'ResponseCode' => 500,
                 'Status' => 'error',
-                'Message'  => 'Error deleting user address',
+                'Message' => 'Error deleting user address',
                 'error' => $e->getMessage(),
             ], 500);
         }
     }
     // get address
     public function getUserAddresses(Request $request)
-{
-    try {
-        $user = auth()->user();
+    {
+        try {
+            $user = auth()->user();
 
-        $userAddresses = Useraddress::where('user_id', $user->id)->get();
+            $userAddresses = Useraddress::where('user_id', $user->id)->get();
 
-        if ($userAddresses->isEmpty()) {
-            return response()->json([
-                'ResponseCode' => 422,
-                'Status' => 'false',
-                'Message' => 'User Addresses not found',
-            ], 422);
-        }
+            if ($userAddresses->isEmpty()) {
+                return response()->json([
+                    'ResponseCode' => 422,
+                    'Status' => 'false',
+                    'Message' => 'User Addresses not found',
+                ], 422);
+            }
 
-        $addresses = [];
+            $addresses = [];
 
-        foreach ($userAddresses as $userAddress) {
-            $fullAddress = $userAddress->first_name . ' ' . $userAddress->last_name . '- ' . $userAddress->apartment . ', ' . $userAddress->city . ', ' . $userAddress->state . ', ' . $userAddress->zipcode;
-            
-            // Add the full address to the user address object
-            $userAddress->full_address = $fullAddress;
-
-            $addresses[] = $userAddress;
-        }
-
-        return response()->json([
-            'ResponseCode' => 200,
-            'Status' => 'true',
-            'Message' => 'User Addresses retrieved successfully',
-            'data' => $addresses,
-        ], 200);
-    } catch (\Exception $e) {
-        return response()->json([
-            'ResponseCode' => 500,
-            'Status' => 'error',
-            'Message' => 'Error retrieving user addresses',
-            'error' => $e->getMessage(),
-        ], 500);
-    }
-}
+            foreach ($userAddresses as $userAddress) {
+                $fullAddress = $userAddress->first_name . ' ' . $userAddress->last_name . '- ' . $userAddress->apartment . ', ';
+                $country = Country::find($userAddress->country);
+                $state = State::find($userAddress->state);
+                $city = City::find($userAddress->city);
+                if ($country && $state && $city) {
+                    $fullAddress .= $city->name . ', ' . $state->name . ', ' . $country->name . ', ' . $userAddress->zipcode;
     
+                    // Add the full address to the user address object
+                    $userAddress->full_address = $fullAddress;
+    
+                    $addresses[] = $userAddress;
+                }
+            }
+
+            return response()->json([
+                'ResponseCode' => 200,
+                'Status' => 'true',
+                'Message' => 'User Addresses retrieved successfully',
+                'data' => $addresses,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'ResponseCode' => 500,
+                'Status' => 'error',
+                'Message' => 'Error retrieving user addresses',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 
     // user update profile api
     public function profileupdate(Request $request)

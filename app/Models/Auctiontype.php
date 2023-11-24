@@ -32,6 +32,11 @@ class Auctiontype extends Model
         return $this->hasMany(Project::class,'auction_type_id');
     }
 
+    public function galleries()
+    {
+        return $this->hasMany(Gallery::class, 'product_id');
+    }
+
 
     
 
