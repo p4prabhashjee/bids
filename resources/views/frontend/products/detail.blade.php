@@ -105,10 +105,10 @@
        
 
           <div class="product-imgs mt-4">
-            <div class="heat-like wishlist-heart @if(in_array($product->id, $wishlist)) active @endif" data-product-id="{{ $product->id }}">
-              <input type="checkbox" name="" id="" @if(in_array($product->id, $wishlist)) checked @endif>
-              <img src="{{asset('frontend/images/heart.png')}}" alt="">
-          </div>
+              <div class="heat-like wishlist-heart @if(in_array($product->id, $wishlist)) active @endif" data-product-id="{{ $product->id }}">
+                    <input type="checkbox" name="" id="" @if(in_array($product->id, $wishlist)) checked @endif>
+                    <img src="{{asset('frontend/images/heart.png')}}" alt="">
+                </div>
             <div class="img-display">
               <div class="img-showcase">
               @if ($product->galleries->isNotEmpty())
@@ -639,3 +639,5 @@
     
      
     @include('frontend.layouts.footer')
+@include('frontend.products.script.addToWishListScript')
+

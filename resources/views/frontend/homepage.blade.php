@@ -42,6 +42,7 @@
                     </div>
                 </div>
             </div>
+            <!--  -->
             <div class="col-lg-9 col-md-12">
                 <div class="row">
                     @foreach($at->projects as $project)
@@ -108,7 +109,7 @@
                             <input type="checkbox" name="" id="" @if(in_array($product->id, $wishlist)) checked @endif>
                             <img src="{{asset('frontend/images/heart.png')}}" alt="">
                         </div>
-
+                        <!--  -->
                         <!-- <i class="fa fa-heart-o wishlist-heart" data-product-id="{{ $product->id }}"></i> -->
                         @else
                             <a href="{{ route('signin') }}"> <i class="fa fa-heart-o "></i></a>

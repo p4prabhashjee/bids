@@ -27,10 +27,15 @@ class HomepageController extends Controller
 {
     public function homepage(Request $request)
     {
+        // $auctionTypesWithProject = AuctionType::with(['projects' => function ($query) {
+        //     $query->where('status', 1)
+        //         ->where('is_trending', 1)
+        //         ->take(4);
+        // }])->where('status', 1)->get();
         $auctionTypesWithProject = AuctionType::with(['projects' => function ($query) {
             $query->where('status', 1)
                 ->where('is_trending', 1)
-                ->take(4);
+                ->take(16); // Limit to 4 projects per auction type
         }])->where('status', 1)->get();
 
         $banners = Banner::where('status', 1)->take(4)->get();
@@ -63,22 +68,41 @@ class HomepageController extends Controller
     public function productsByProject($slug, Request $request)
     {
         $projects = Project::where('slug', $slug)->first();
-        $products = Product::where('project_id', $projects->id);
-        // p($product);
-
-        if($request->has('search') && (!empty($request->search))) {
+    
+        $productsQuery = Product::where('project_id', $projects->id);
+    
+        if ($request->has('search') && !empty($request->search)) {
             $searchTerm = $request->search;
-            $products = $products->when($searchTerm, function ($query) use ($searchTerm) {
-                return $query->where('title', 'like', '%' . $searchTerm . '%');
-            });
+            $productsQuery->where('title', 'like', '%' . $searchTerm . '%');
         }
-        $products = $products->paginate(10);
+    
+        if ($request->has('sort')) {
+            $sortOrder = $request->sort;
+    
+            if ($sortOrder === 'price_high_low') {
+                $productsQuery->orderBy('reserved_price', 'desc');
+            } elseif ($sortOrder === 'price_low_high') {
+                $productsQuery->orderBy('reserved_price', 'asc');
+            }
+        } else {
+        
+            $productsQuery->orderBy('reserved_price', 'asc');
+        }
+    
+        $products = $productsQuery->paginate(10);
+        $totalItems = $products->total(); 
+    
+        $wishlist = [];
+        if (Auth::check()) {
+            $wishlist = Wishlist::where('user_id', Auth::id())->pluck('product_id')->toArray();
+        }
+    
         $wishlist = [];
         if(Auth::check()) {
             $wishlist = Wishlist::where('user_id', Auth::id())->pluck('product_id')->toArray();
         }
 
-        return view('frontend.products.index', ['products' => $products], ['projects' => $projects, 'wishlist' => $wishlist]);
+        return view('frontend.products.index', ['products' => $products], ['projects' => $projects, 'wishlist' => $wishlist, 'totalItems' => $totalItems]);
     }
 
     public function productsdetail($slug)
@@ -101,7 +125,6 @@ class HomepageController extends Controller
     {
         $category = Category::where('slug', $slug)->first();
         $projects = Project::where('category_id', $category->id)->paginate(10);
-        // dd($projects);//
 
         return view('frontend.projects.index', ['projects' => $projects]);
     }

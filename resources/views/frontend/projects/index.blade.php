@@ -27,7 +27,6 @@
               <option value="">Default sorting</option>
             </select>
           </form>
-          <button class="fliter-button btn btn-secondary" data-bs-target="#prtyfilter" data-bs-toggle="modal" data-bs-dismiss="modal" type="button">Filter <img class="ms-2" src="./images/filter.svg" alt=""></button>
         </div>
       </div>
     </div>

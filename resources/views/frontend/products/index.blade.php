@@ -15,14 +15,6 @@
                 <div class="bid-box-status-ic"><img src="{{ asset('frontend/images/private.svg') }}"><span>{{ $projects->auctionType->name }}</span></div>
               </div>
            {{-- <div class="inner_header_status">/ --}}
-              <!-- <div class="countdown-time" id="countdown">
-                <ul>
-                  <li><span id="days"></span>days</li>
-                  <li><span id="hours"></span>Hours</li>
-                  <li><span id="minutes"></span>Minutes</li>
-                  <li><span id="seconds"></span>Seconds</li>
-                </ul>
-              </div> -->
               {{-- @if ($projects->auctionType->name == 'Private' || $projects->auctionType->name == 'Timed')
                     <div class="countdown-time thisisdemoclass" data-id='{{ $projects->id }}'
                             data-date='{{ $projects->start_date_time }}' id="countdown-{{ $projects->id }}">
@@ -35,10 +27,17 @@
                     </div>
                     @endif --}}
            {{-- </div> --}}
-           <form action="" class="search-frm-prdt" id="searchForm">
+           <!-- <form action="" class="search-frm-prdt" id="searchForm">
               <input type="text" name="search" id="searchInput" placeholder="Search products...">
               <button type="button" onclick="submitSearchForm()"><img class="w-100" src="{{ asset('frontend/images/rounded-sr.svg') }}" alt=""></button>
+            </form> -->
+            <form action="" class="search-frm-prdt" id="searchForm">
+                <input type="text" name="search" id="searchInput" placeholder="Search products...">
+                <button type="button" onclick="submitSearchForm()">
+                    <img class="w-100" src="{{ asset('frontend/images/rounded-sr.svg') }}" alt="">
+                </button>
             </form>
+
         </div>
       </div>
     </div>
@@ -46,17 +45,16 @@
   <section class="list-fliter">
     <div class="container">
       <div class="result-lst">
-        <h3>Showing all 9 results</h3>
+      <h3>{{ $totalItems }} Items</h3>
         <div class="fliter-short">
           <form action="" class="cmn-frm">
-            <select name="" id="" class="m-0">
-              <option value="">Default sorting</option>
-              <option value="">Default sorting</option>
-              <option value="">Default sorting</option>
-              <option value="">Default sorting</option>
+            <select name="sort" class="m-0" onchange="this.form.submit()">
+                <option value="price_low_high">Price: Low to High</option>
+                <option value="price_high_low">Price: High to Low</option>
+                <option value="">Number of Bids: Low to High</option>
+                <option value="">Number of Bids: Low to High</option>
             </select>
           </form>
-          <button class="fliter-button btn btn-secondary" data-bs-target="#prtyfilter" data-bs-toggle="modal" data-bs-dismiss="modal" type="button">Filter <img class="ms-2" src="./images/filter.svg" alt=""></button>
         </div>
       </div>
     </div>
@@ -75,15 +73,15 @@
              @else
                 <img src="{{asset('frontend/images/default-product-image.png')}}" alt="Default Image">
              @endif
-                    <!-- <i class="fa fa-heart-o"></i>
-                <i class="fa fa-heart-o"></i> -->
+               
                 <div class="heat-like wishlist-heart @if(in_array($product->id, $wishlist)) active @endif" data-product-id="{{ $product->id }}">
                     <input type="checkbox" name="" id="" @if(in_array($product->id, $wishlist)) checked @endif>
                     <img src="{{asset('frontend/images/heart.png')}}" alt="">
                 </div>
               </div>
-              <div class="card-product-dtl">
-                <h3>{{$product->lot_no}}: {{$product->title}}</h3>
+              <div class="card-product-dtl" >
+                <div style="height: 15px;"></div>
+                <h3 >{{$product->lot_no}}: {{$product->title}}</h3>
                 <h5>${{$product->reserved_price}}</h5>
                 <p>Current Bid: <span> $1400.00</span></p>
              
@@ -99,6 +97,7 @@
                     </div>
                     @endif
                 <button class="text-btn">Bid Now <img class="img-fluid ms-3" src="./images/next-arrow.svg" alt=""></button>
+                <div style="height: 15px;"></div>
               </div>
             </div>
           </a>
@@ -116,92 +115,7 @@
        
     </div>
   </section>
- 
-  <div class="modal fade" id="prtyfilter" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          
-          <div class="modal-body">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            <div class="prty-filter p-4">
-              <h2 class="text-dark">Filter</h2>
-              <form action="" class="cmn-frm mt-4">
-                <div class="form-group">
-                  <select name="" id="">
-                    <option value="">Auction type,</option>
-                    <option value="">Auction type,</option>
-                  </select>
-                </div>
-                <div class="form-group mt-2">
-                  <div class="wrapper mb-4">
-                    <h3>Price</h3>
-                    <div class="price-input">
-                      <div class="field">
-                        <span>Min Price</span>
 
-                        <input type="number" class="input-min" value="2500">
-                      </div> 
-                      <div class="field">
-                        <span>Max Price</span>
-                        <input type="number" class="input-max" value="7500">
-                      </div>
-                    </div>
-                    <div class="slider">
-                      <div class="progress"></div>
-                    </div>
-                    <div class="range-input">
-                      <input type="range" class="range-min" min="0" max="10000" value="2500" step="100">
-                      <input type="range" class="range-max" min="0" max="10000" value="7500" step="100">
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group mt-4">
-                  <h3>Auction</h3>
-                  <ul class="categry-list">
-                    <li><div class="form-check">
-                            <input class="form-check-input w-auto" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                            <label class="form-check-label" for="flexRadioDefault1">
-                            Active
-                            </label>
-                          </div>
-                           </li>
-                    <li><div class="form-check">
-                            <input class="form-check-input w-auto" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                            <label class="form-check-label" for="flexRadioDefault1">
-                            Upcoming
-                            </label>
-                          </div>
-                           </li>
-                    <li><div class="form-check">
-                            <input class="form-check-input w-auto" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                            <label class="form-check-label" for="flexRadioDefault1">
-                            Ended
-                            </label>
-                          </div>
-                           </li>
-                    <li><div class="form-check">
-                            <input class="form-check-input w-auto" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                            <label class="form-check-label" for="flexRadioDefault1">
-                            All
-                            </label>
-                          </div>
-                           </li>
-                  </ul>
-                </div>
-                <div class="btn-submit-flter mt-5">
-                  <button class="btn btn-secondary w-100">Apply filters</button>
-                  <button class="btn btn-border w-100">Clear All</button>
-                </div>
-              </form>
-            </div>
-          </div>
-           
-        </div>
-      </div>
-    </div>
-
-    
-    
 
     <script src="./js/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
