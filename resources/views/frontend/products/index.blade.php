@@ -80,7 +80,7 @@
                 </div>
               </div>
               <div class="card-product-dtl" >
-                <div style="height: 15px;"></div>
+              
                 <h3 >{{$product->lot_no}}: {{$product->title}}</h3>
                 <h5>${{$product->reserved_price}}</h5>
                 <p>Current Bid: <span> $1400.00</span></p>
@@ -97,7 +97,7 @@
                     </div>
                     @endif
                 <button class="text-btn">Bid Now <img class="img-fluid ms-3" src="./images/next-arrow.svg" alt=""></button>
-                <div style="height: 15px;"></div>
+                
               </div>
             </div>
           </a>
