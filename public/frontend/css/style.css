@@ -1759,12 +1759,14 @@ section.detail-section h3 {
 }
 
 .product-imgs {
+    display: flex;
     position: relative;
 }
 
 .product-imgs img {
     width: 100%;
     display: block;
+        object-fit: contain;
 }
 
 .img-display {
@@ -1775,25 +1777,37 @@ section.detail-section h3 {
     display: flex;
     width: 100%;
     transition: all 0.5s ease;
-    height: 550px;
+    height: 400px;
 }
 
 .img-showcase img {
     width: 100%;
         flex: 0 0 auto;
-    object-fit: cover;
+    object-fit: contain;
     height: 100%;
 }
 
 .img-select {
-    display: flex;
-    gap: 40px;
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+        width: 90px;
+    flex: 0 0 auto;
+
 }
+
+
+.img-select::-webkit-scrollbar {
+    width: 0px;
+}
+ 
+ 
+
 
 .img-select .img-item {
     margin: 0.3rem;
     height: 96px;
-    width: 100%;
+    width: 86px;
 }
 
 .img-select .img-item img {

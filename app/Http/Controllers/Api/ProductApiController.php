@@ -463,6 +463,7 @@ class ProductApiController extends Controller
             }
             $auctionType = AuctionType::find($product->auction_type_id);
             $now = Carbon::now();
+            $auctionEndDate = null;
             if ($auctionType && ($auctionType->name === 'Private' || $auctionType->name === 'Timed')) {
                 $timestamp = strtotime($product->auction_end_date);
                 $milliseconds = $timestamp * 1000;

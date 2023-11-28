@@ -42,7 +42,6 @@
                     </div>
                 </div>
             </div>
-            <!--  -->
             <div class="col-lg-9 col-md-12">
                 <div class="row">
                     @foreach($at->projects as $project)
@@ -109,7 +108,7 @@
                             <input type="checkbox" name="" id="" @if(in_array($product->id, $wishlist)) checked @endif>
                             <img src="{{asset('frontend/images/heart.png')}}" alt="">
                         </div>
-                        <!--  -->
+
                         <!-- <i class="fa fa-heart-o wishlist-heart" data-product-id="{{ $product->id }}"></i> -->
                         @else
                             <a href="{{ route('signin') }}"> <i class="fa fa-heart-o "></i></a>
@@ -127,15 +126,24 @@
                     <div class="popular_lnt">
                         <span>${{ $product->reserved_price }}</span>
                         @if ($auctionType->name == 'Private' || $auctionType->name == 'Timed')
+                        @if(strtotime($product->auction_end_date) > strtotime('now'))
                         <div class="countdown-time thisisdemoclass" data-id='{{ $product->id }}'
                             data-date='{{ $product->auction_end_date }}' id="countdown-{{ $product->id }}">
                             <ul>
-                                <li><span class="days"></span>days</li>
-                                <li><span class="hours"></span>Hours</li>
-                                <li><span class="minutes"></span>Minutes</li>
-                                <li><span class="seconds"></span>Seconds</li>
-                            </ul>
+                                  @if ($product->auctionType->name == 'Private'|| $product->auctionType->name == 'Timed')
+                                      <li class="days-wrapper"><span class="days"></span>days</li>
+                                  @endif
+                                
+                                <li ><span class="hours"></span>Hours</li>
+                                 
+                                  <li><span class="minutes"></span>Minutes</li>
+                                  <li><span class="seconds"></span>Seconds </li>
+                              </ul>
                         </div>
+                        @else
+                          <p><span style="color: red;">Lot closed</span></p>
+                      
+                        @endif
                         @endif
                     </div>
 

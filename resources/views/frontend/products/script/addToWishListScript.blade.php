@@ -21,10 +21,11 @@
                         localStorage.setItem('redirect_url', window.location.href);
 
                         window.location.href = '{{ route("signin") }}';
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        window.location.reload();
                     }
-
                 });
-                return; 
+                return;
             }
           
 

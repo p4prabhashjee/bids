@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="row justify-content-center">
         <div class="col-lg-5 col-md-6 text-center">
-           <h1>{{$projects->slug}}
+           <h1>{{$projects->name}}
            </h1>
            @php
                 $originalDateTime = $projects->start_date_time;
@@ -14,23 +14,7 @@
               <div class="bid-box-status">
                 <div class="bid-box-status-ic"><img src="{{ asset('frontend/images/private.svg') }}"><span>{{ $projects->auctionType->name }}</span></div>
               </div>
-           {{-- <div class="inner_header_status">/ --}}
-              {{-- @if ($projects->auctionType->name == 'Private' || $projects->auctionType->name == 'Timed')
-                    <div class="countdown-time thisisdemoclass" data-id='{{ $projects->id }}'
-                            data-date='{{ $projects->start_date_time }}' id="countdown-{{ $projects->id }}">
-                            <ul>
-                                <li><span class="days"></span>days</li>
-                                <li><span class="hours"></span>Hours</li>
-                                <li><span class="minutes"></span>Minutes</li>
-                                <li><span class="seconds"></span>Seconds</li>
-                            </ul>
-                    </div>
-                    @endif --}}
-           {{-- </div> --}}
-           <!-- <form action="" class="search-frm-prdt" id="searchForm">
-              <input type="text" name="search" id="searchInput" placeholder="Search products...">
-              <button type="button" onclick="submitSearchForm()"><img class="w-100" src="{{ asset('frontend/images/rounded-sr.svg') }}" alt=""></button>
-            </form> -->
+         
             <form action="" class="search-frm-prdt" id="searchForm">
                 <input type="text" name="search" id="searchInput" placeholder="Search products...">
                 <button type="button" onclick="submitSearchForm()">
@@ -79,25 +63,32 @@
                     <img src="{{asset('frontend/images/heart.png')}}" alt="">
                 </div>
               </div>
-              <div class="card-product-dtl" >
-              
-                <h3 >{{$product->lot_no}}: {{$product->title}}</h3>
-                <h5>${{$product->reserved_price}}</h5>
-                <p>Current Bid: <span> $1400.00</span></p>
-             
-                    @if ($product->auctionType->name == 'Private' || $product->auctionType->name == 'Timed')
-                    <div class="countdown-time thisisdemoclass" data-id='{{ $product->id }}'
-                            data-date='{{ $product->auction_end_date }}' id="countdown-{{ $product->id }}">
-                            <ul>
-                                <li><span class="days"></span>days</li>
-                                <li><span class="hours"></span>Hours</li>
-                                <li><span class="minutes"></span>Minutes</li>
-                                <li><span class="seconds"></span>Seconds</li>
-                            </ul>
-                    </div>
-                    @endif
-                <button class="text-btn">Bid Now <img class="img-fluid ms-3" src="./images/next-arrow.svg" alt=""></button>
-                
+              <div class="card-product-dtl">
+                  <h3>{{$product->lot_no}}: {{$product->title}}</h3>
+                  <h5>${{$product->reserved_price}}</h5>
+                  <p>Current Bid: <span> $1400.00</span> <span style="color: black;">11 bids</span></p>
+                  @if ($product->auctionType->name == 'Private' || $product->auctionType->name == 'Timed')
+                      @if(strtotime($product->auction_end_date) > strtotime('now'))
+                          <div class="countdown-time thisisdemoclass" data-id='{{ $product->id }}' data-date='{{ $product->auction_end_date }}'
+                              id="countdown-{{ $product->id }}">
+                              <ul>
+                                  @if ($product->auctionType->name == 'Private'|| $product->auctionType->name == 'Timed')
+                                      <li class="days-wrapper"><span class="days"></span>days</li>
+                                  @endif
+                                
+                                  <li ><span class="hours"></span>Hours</li>
+                                
+                                  <li><span class="minutes"></span>Minutes</li>
+                                  <li><span class="seconds"></span>Seconds </li>
+                              </ul>
+                          </div>
+                          @else
+                          <p><span style="color: red;">Lot closed</span></p>
+                     
+                     
+                      @endif
+                  @endif
+                  <button class="text-btn">Bid Now <img class="img-fluid ms-3" src="./images/next-arrow.svg" alt=""></button>
               </div>
             </div>
           </a>

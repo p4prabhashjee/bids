@@ -27,15 +27,10 @@ class HomepageController extends Controller
 {
     public function homepage(Request $request)
     {
-        // $auctionTypesWithProject = AuctionType::with(['projects' => function ($query) {
-        //     $query->where('status', 1)
-        //         ->where('is_trending', 1)
-        //         ->take(4);
-        // }])->where('status', 1)->get();
         $auctionTypesWithProject = AuctionType::with(['projects' => function ($query) {
             $query->where('status', 1)
                 ->where('is_trending', 1)
-                ->take(16); // Limit to 4 projects per auction type
+                ->take(4);
         }])->where('status', 1)->get();
 
         $banners = Banner::where('status', 1)->take(4)->get();
@@ -125,6 +120,7 @@ class HomepageController extends Controller
     {
         $category = Category::where('slug', $slug)->first();
         $projects = Project::where('category_id', $category->id)->paginate(10);
+        // dd($projects);//
 
         return view('frontend.projects.index', ['projects' => $projects]);
     }

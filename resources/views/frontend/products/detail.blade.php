@@ -105,22 +105,11 @@
        
 
           <div class="product-imgs mt-4">
-              <div class="heat-like wishlist-heart @if(in_array($product->id, $wishlist)) active @endif" data-product-id="{{ $product->id }}">
-                    <input type="checkbox" name="" id="" @if(in_array($product->id, $wishlist)) checked @endif>
-                    <img src="{{asset('frontend/images/heart.png')}}" alt="">
-                </div>
-            <div class="img-display">
-              <div class="img-showcase">
-              @if ($product->galleries->isNotEmpty())
-                            @foreach ($product->galleries as $gallery)
-                            <img src="{{ asset($gallery->image_path) }}" alt="shoe image">
-                            @endforeach
-                            @else
-                            <img src="{{ asset('frontend/images/default-product-image.png') }}" alt="shoe image" />
-                            @endif
-              </div>
-            </div>
-            <div class="img-select">
+            <div class="heat-like wishlist-heart @if(in_array($product->id, $wishlist)) active @endif" data-product-id="{{ $product->id }}">
+              <input type="checkbox" name="" id="" @if(in_array($product->id, $wishlist)) checked @endif>
+              <img src="{{asset('frontend/images/heart.png')}}" alt="">
+          </div>
+           <div class="img-select">
             @if ($product->galleries->isNotEmpty())
                         @foreach ($product->galleries as $gallery)
                         <div class="img-item">
@@ -137,6 +126,18 @@
                         </div>
                         @endif
             </div>
+            <div class="img-display">
+              <div class="img-showcase">
+              @if ($product->galleries->isNotEmpty())
+                            @foreach ($product->galleries as $gallery)
+                            <img src="{{ asset($gallery->image_path) }}" alt="shoe image">
+                            @endforeach
+                            @else
+                            <img src="{{ asset('frontend/images/default-product-image.png') }}" alt="shoe image" />
+                            @endif
+              </div>
+            </div>
+           
           </div>
           <div class="product-desc">
             <h4>Description</h4>
@@ -151,23 +152,28 @@
         <div class="col-md-6">
           <div class="bid-and-time">
             <h4>Current Bid <span>$20,0379.00</span></h4>
+            @if ($product->auctionType->name == 'Private' || $product->auctionType->name == 'Timed')
             <div class="crt_bid">
               <h6>Biding Closes In</h6>
-              @if ($product->auctionType->name == 'Private' || $product->auctionType->name == 'Timed')
               <div class="countdown-time thisisdemoclass" data-id='{{ $product->id }}'
                             data-date='{{ $product->auction_end_date }}' id="countdown-{{ $product->id }}">
                 <ul>
-                  <li><span class="days"></span>D</li>
+                @if ($product->auctionType->name == 'Private'|| $product->auctionType->name == 'Timed')
+                  <li class="days-wrapper"><span class="days"></span>D</li>
                   <li>:</li>
-                  <li><span class="hours"></span>H</li>
+                  @endif
+                  <li ><span class="hours"></span>H</li>
                   <li>:</li>
+                 
                   <li><span class="minutes"></span>M</li>
                   <li>:</li>
                   <li><span class="seconds"></span>S</li>
                 </ul>
               </div>
-              @endif
+            
             </div>
+            @endif
+          
           </div>
          
           <div class="product-feature-box">
@@ -186,13 +192,15 @@
               </div>
             </form>
           </div>
-          <h4>{{$product->project->name}} <img src="{{ asset('frontend/images/line.svg') }}" alt="" /></h4>
+          <div class="product-feature-box">
+            <h4>{{$product->project->name}} <img src="{{ asset('frontend/images/line.svg') }}" alt="" /></h4>
           @php
             $originalDateTime = $product->project->start_date_time;
             $timestamp = strtotime($originalDateTime);
             $formattedDateTime = date("F j, g:i A", $timestamp);
          @endphp
-            <p>{{$formattedDateTime}} <img src="{{ asset('frontend/images/private.svg')}}"> <span>{{ $product->auctionType->name }}</span></p>
+            <p>{{$formattedDateTime}} <img class="ms-3" src="{{ asset('frontend/images/private.svg')}}"> <span >{{ $product->auctionType->name }}</span></p>
+          </div>
            
           <div class="product-feature-box">
             <h4>Share Now <img src="{{ asset('frontend/images/line.svg') }}" alt="" /></h4>
@@ -430,7 +438,7 @@
         <hr>
         <div class="row">
             <div class="col-md-12">
-              <h3>Shipping Address</h3>
+              <h3>Card Details</h3>
               <p>You won’t be charged unless you win. If you win, the auction house may auto-charge this card 2 days after the invoice is sent.</p>
             </div>
             <div class="col-md-12">

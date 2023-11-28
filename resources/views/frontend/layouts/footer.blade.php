@@ -126,7 +126,7 @@ $('.popular_slider.owl-carousel').owlCarousel({
     }
 });
 </script>
-<script>
+<!-- <script>
 $(document).ready(function() {
     setInterval(() => {
         $('.thisisdemoclass').each(function() {
@@ -147,7 +147,57 @@ $(document).ready(function() {
         });
     }, 1000);
 })
+</script> -->
+<script>
+    $(document).ready(function() {
+        setInterval(() => {
+            $('.thisisdemoclass').each(function() {
+                var date = $(this).data('date');
+                var id = $(this).data('id');
+                const targetDate = new Date(date).getTime();
+                const currentDate = new Date().getTime();
+                const timeRemaining = targetDate - currentDate;
+
+                if (timeRemaining <= 0) {
+                    $(this).find('ul').hide();
+                    $(this).parent().find('.countdown-time').html('<p><span style="color: red;">Lot closed</span></p>');
+                } else {
+                    const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+                   
+                      // Check if less than or equal to 5 minutes remaining
+                    if (timeRemaining <= 300000) {
+                    // Change color to red when 5 minutes or less remaining
+                    $(this).find('.days').css('color', 'red');
+                    $(this).find('.hours').css('color', 'red');
+                    $(this).find('.minutes').css('color', 'red');
+                    $(this).find('.seconds').css('color', 'red');
+                }
+                    // Update the display values and hide if equal to zero
+                    $(this).find('.days').text(days);
+                    if (days === 0) {
+                        $(this).find('.days-wrapper').hide();
+                    } else {
+                        $(this).find('.days-wrapper').show();
+                    }
+
+                    // $(this).find('.hours').text(hours);
+                    // if (hours === 0) {
+                    //     $(this).find('.hours-wrapper').hide();
+                    // } else {
+                    //     $(this).find('.hours-wrapper').show();
+                    // }
+                    $(this).find('.hours').text(hours);
+                    $(this).find('.minutes').text(minutes);
+                    $(this).find('.seconds').text(seconds);
+                }
+            });
+        }, 1000);
+    });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.getElementById('subscribeForm').addEventListener('submit', function (event) {
         event.preventDefault();
@@ -159,14 +209,26 @@ $(document).ready(function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Show pop-up or alert
-                alert('Thank you for subscribing!\nYou will receive bidding tips, auction updates, curated items, and more in your inbox.\nYou can unsubscribe at any time. View our Privacy Policy.');
-
+                const privacyPolicyLink = '<a href="{{route('privacy-policy')}}">Privacy Policy</a>';
+                // Show SweetAlert popup on success
+                Swal.fire({
+                    title: 'Thank you for subscribing!',
+                    html: `You will receive auction updates, curated items, and more in your inbox. You can unsubscribe at any time. View our ${privacyPolicyLink}.`,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    // Refresh the page
+                    location.reload();
+                });
             }
         })
         .catch(error => console.error('Error:', error));
     });
 </script>
+
+
 </body>
 
 </html>
+
+
