@@ -47,7 +47,7 @@
                                             <div class="col-12 col-sm-6 mt-3 mt-sm-0">
                                                 <label><strong>Choose a AuctionType::</strong></label>
                                                 <select name="auction_type_id"
-                                                    class="choices__list choices__list--single form-control" id="category"
+                                                    class="choices__list choices__list--single form-control" id="brand"
                                                     tabindex="-1" data-choice="active">
                                                     <option value="">Select AuctionType</option>
                                                     @foreach ($auctiontype as $at)
@@ -79,6 +79,14 @@
                                                     onfocusout="defocused(this)" value="{{ old('buyers_premium', $project->buyers_premium) }}">
                                                 @if($errors->has('buyers_premium'))
                                                 <div class="error">{{ $errors->first('buyers_premium') }}</div>
+                                                @endif
+                                            </div>
+                                            <div class="col-12 col-sm-6" id="end-date-container">
+                                                <label><strong>Deposit Amount</strong></label>
+                                                <input class="multisteps-form__input form-control" type="text" id="end_date" name="deposit_amount"
+                                                    value="{{ old('deposit_amount',$project->deposit_amount) }}">
+                                                @if($errors->has('deposit_amount'))
+                                                <div class="error">{{ $errors->first('deposit_amount') }}</div>
                                                 @endif
                                             </div>
                                             <div class="col-12 col-sm-6 mt-3 mt-sm-0">
@@ -131,6 +139,21 @@
         dateFormat: "Y-m-d H:i",
         minDate: "{{ date('Y-m-d') }}",
     });
+</script>
+<script>
+$(document).ready(function() {
+    $("#brand").on("change", function() {
+        // Get the selected value
+        var selectedValue = $(this).val();
+        if (selectedValue === "4") {
+            $("#end-date-container").hide();
+        } else {
+            $("#end-date-container").show();
+        }
+    });
+
+    $("#brand").trigger("change");
+});
 </script>
 
 <style>

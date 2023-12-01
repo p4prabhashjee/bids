@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Models\Wishlist;
+use App\Models\BidRequest;
+
 
 
 class DashboardController extends Controller
@@ -165,13 +167,23 @@ class DashboardController extends Controller
     public function edit($id)
     {
         $address = UserAddress::find($id);
+        if (!$address) {
+            return redirect()->back()->with('error', 'Address not found.');
+        }
 
-        return view('user.addresses.edit', compact('address'));
+        // return response()->json($address);
+
+        return view('frontend.dashboard.edituseraddress', compact('address'));
     }
+  
 
     public function update(Request $request, $id)
     {
         $address = UserAddress::find($id);
+        if (!$address) {
+            return redirect()->back()->with('error', 'Address not found.');
+        }
+        // return($address);
         $address->update([
             'first_name' => $request->input('first_name'),
             'last_name' => $request->input('last_name'),
@@ -182,7 +194,20 @@ class DashboardController extends Controller
             'zipcode' => $request->input('zipcode'),
         ]);
 
-        return redirect('/user/addresses')->with('success', 'Address updated successfully.');
+        return redirect()->back()->with('success', 'Address updated successfully.');
+    }
+
+        public function validateCurrentPassword(Request $request)
+    {
+        
+        $currentPassword = $request->input('current_password');
+        $user = auth()->user(); 
+
+        if (!password_verify($currentPassword, $user->password)) {
+            return response('invalid', 422); 
+        }
+
+        return response('valid');
     }
 
     public function getwishlist(Request $request)
@@ -194,6 +219,27 @@ class DashboardController extends Controller
         }
         return view('frontend.products.wishlist'); 
     }
+
+    // bid store
+    public function bidstore(Request $request)
+    {
+        $existingBid = BidRequest::where('user_id', $request->user_id)
+        ->where('project_id', $request->project_id)
+        ->exists();
+
+            if ($existingBid) {
+                return response()->json(['error' => 'You have already placed a bid for this project']);
+            }
+        BidRequest::create([
+            'user_id' => $request->user_id,
+            'project_id' => $request->project_id,
+            'auction_type_id' => $request->auction_type_id,
+            'deposit_amount' => $request->deposit_amount,
+        ]);
+
+        return response()->json(['message' => 'Bid request stored successfully']);
+    }
+    
     
 
 }

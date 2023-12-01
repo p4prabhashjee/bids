@@ -20,7 +20,6 @@ class Useraddress extends Model
         'zipcode',
         'is_save',
         'address_type',
-
     ];
 
     public function userAddress()

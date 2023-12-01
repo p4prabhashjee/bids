@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\BidvalueController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\BidrequestController;
 use App\Http\Controllers\Frontend\HomepageController;
 use App\Http\Controllers\Frontend\DashboardController;
 use App\Http\Controllers\Frontend\ProductWishController;
@@ -68,12 +69,11 @@ Route::post('/subscribe', [HomepageController::class, 'subscribe'])->name('subsc
 Route::post('/contactus', [HomepageController::class, 'contacstus'])->name('contactus');
 
 
-
-
 // Route::get('/login/google', [SocialController::class,'redirectToGoogle']);
 // Route::get('/login/google/callback', [SocialController::class,'handleGoogleCallback']);
 // user Authenticated
 Route::group(['middleware' => 'auth'],function(){
+    Route::post('/validate-current-password', [DashboardController::class, 'validateCurrentPassword']);
     Route::get('/userdashboard', [DashboardController::class, 'userdashboard'])->name('userdashboard');
     Route::post('/profileupdate',[DashboardController::class,'profileupdate'])->name('profileupdate');
     Route::get('/logout',[DashboardController::class,'logout']);
@@ -82,10 +82,11 @@ Route::group(['middleware' => 'auth'],function(){
     Route::get('/useraddress',[DashboardController::class,'useraddress'])->name('useraddress');
     Route::post('adduseraddress', [DashboardController::class, 'adduseraddress'])->name('adduseraddress');
     Route::get('/addressesdelete/{id}', [DashboardController::class,'delete'])->name('addresses.delete');
-    Route::post('/addresses/update/{id}', [DashboardController::class,'update'])->name('addresses.update');
+    Route::post('/addresses/update/{id}', [DashboardController::class,'update'])->name('addressesupdate');
     Route::get('/getwishlist',[DashboardController::class,'getwishlist'])->name('getwishlist');
     Route::post('/wishlist/add', [ProductWishController::class,'addToWishlist'])->name('addToWishlist');
     Route::post('/wishlist/remove', [ProductWishController::class,'removeFromWishlist'])->name('removeFromWishlist');
+    Route::post('/store-bid-request', [DashboardController::class, 'bidstore'])->name('store.bid.request');
 
 
 });
@@ -123,6 +124,8 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::resource('banners', BannerController::class);
     Route::resource('projects', ProjectController::class);
     Route::resource('news', NewsController::class);
+    Route::resource('bidrequests', BidrequestController::class);
+    Route::post('update-status', [BidrequestController::class, 'updateStatus'])->name('bidrequests.updateStatus');
 
     
 });

@@ -1,5 +1,5 @@
 <x-admin-layout>
-
+<!--  -->
     <main class="main-content position-relative border-radius-lg ">
         @include('admin.include.navbar', ['module' => 'Projects', 'link' => 'admin.projects.index', 'page' => 'Create
         Project'])
@@ -88,7 +88,14 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-
+                                            <div class="col-12 col-sm-6" id="end-date-container">
+                                                <label><strong>Deposit Amount</strong></label>
+                                                <input class="multisteps-form__input form-control" type="text" id="end_date" name="deposit_amount"
+                                                    value="{{ old('deposit_amount') }}">
+                                                @if($errors->has('deposit_amount'))
+                                                <div class="error">{{ $errors->first('deposit_amount') }}</div>
+                                                @endif
+                                            </div>
 
                                             <div class="col-12 col-sm-6 mt-3 test">
                                                 <label><strong>Is Trending:</strong></label>
@@ -126,6 +133,21 @@
         dateFormat: "Y-m-d H:i",
         minDate: "{{ date('Y-m-d') }}",
     });
+</script>
+<script>
+$(document).ready(function() {
+    $("#brand").on("change", function() {
+        // Get the selected value
+        var selectedValue = $(this).val();
+        if (selectedValue === "4") {
+            $("#end-date-container").hide();
+        } else {
+            $("#end-date-container").show();
+        }
+    });
+
+    $("#brand").trigger("change");
+});
 </script>
 
 <style>

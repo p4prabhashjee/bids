@@ -150,6 +150,9 @@ $(document).ready(function() {
 </script> -->
 <script>
     $(document).ready(function() {
+        // setTimeout(function() {
+        //     $('.bid-now-container').hide();
+        // }, 10000);
         setInterval(() => {
             $('.thisisdemoclass').each(function() {
                 var date = $(this).data('date');
@@ -161,13 +164,14 @@ $(document).ready(function() {
                 if (timeRemaining <= 0) {
                     $(this).find('ul').hide();
                     $(this).parent().find('.countdown-time').html('<p><span style="color: red;">Lot closed</span></p>');
+
+                    $('.bid-now-container').hide();
                 } else {
                     const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
                     const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                     const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
                     const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
                    
-                      // Check if less than or equal to 5 minutes remaining
                     if (timeRemaining <= 300000) {
                     // Change color to red when 5 minutes or less remaining
                     $(this).find('.days').css('color', 'red');
@@ -183,12 +187,6 @@ $(document).ready(function() {
                         $(this).find('.days-wrapper').show();
                     }
 
-                    // $(this).find('.hours').text(hours);
-                    // if (hours === 0) {
-                    //     $(this).find('.hours-wrapper').hide();
-                    // } else {
-                    //     $(this).find('.hours-wrapper').show();
-                    // }
                     $(this).find('.hours').text(hours);
                     $(this).find('.minutes').text(minutes);
                     $(this).find('.seconds').text(seconds);

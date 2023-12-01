@@ -33,7 +33,6 @@
                     <i class="fa fa-eye-slash input-icon" id="password-toggle"></i>
                   </div>
                   <a  class="text-btn forgt-btn edit-number" data-bs-toggle="modal" href="#forgotpassword" type="button">Forgot Password?</a>
-                  <!-- <button class="btn btn-secondary login-btn" data-bs-toggle="modal" href="#exampleModalToggle" type="button"> Login</button> -->
                   <button class="btn btn-secondary login-btn" type="submit">Login</button>
                 </form>
                 <span class="sign-tag-line">if you don't have an account? <a href="{{route('register')}}" class="text-btn">Sign Up</a></span>

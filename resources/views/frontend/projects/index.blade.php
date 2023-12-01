@@ -14,6 +14,7 @@
       </div>
     </div>
   </section>
+  
   <section class="list-fliter">
     <div class="container">
       <div class="result-lst">
@@ -38,32 +39,50 @@
       <div class="row">
         @foreach($projects as $pro)
             <div class="col-md-6">
-            <a href="{{ url('products', $pro->slug) }}">
                 <div class="card-product">
+                <a href="{{ url('products', $pro->slug) }}">
                 <div class="product-image">
-                        @if (!empty($pro->image_path))
-                                <img src="{{ asset("img/projects/$pro->image_path") }}" alt="{{ $pro->title }}">
-                            @else
-                                <img src="{{ asset('frontend/images/default-product-image.png') }}" alt="Default Image">
-                            @endif
+                  @if (!empty($pro->image_path))
+                          <img src="{{ asset("img/projects/$pro->image_path") }}" alt="{{ $pro->title }}">
+                      @else
+                          <img src="{{ asset('frontend/images/default-product-image.png') }}" alt="Default Image">
+                      @endif
                 
                 </div>
+                </a>
                 <div class="bid-box-status">
                     <div class="bid-box-status-ic"><img src="{{ asset('frontend/images/live.svg') }}"><span>{{ $pro->auctionType->name }}</span></div>
                 </div>
                 <div class="card-product-dtl">
                     <h3>{{$pro->name}}  </h3>
+                    @if ($pro->auctionType->name == 'Live' || $pro->auctionType->name == 'Private')
+                                    <h5>${{$pro->deposit_amount}}</h5>
+                                    @endif
                     @php
                             $originalDateTime = $pro->start_date_time;
                             $timestamp = strtotime($originalDateTime);
                             $formattedDateTime = date("F j, g:i A", $timestamp);
                         @endphp
                     <p>{{  $formattedDateTime }}</p>
-                 
-                    <a href="#" class="text-btn">Bid Now <img class="img-fluid ms-3" src="{{ asset('frontend/images/next-arrow.svg') }}" alt=""></a>
+                    @php
+                        $loggedInUserId = Auth::id();
+                        $bidRequest = \App\Models\BidRequest::where('user_id', $loggedInUserId)
+                            ->where('project_id', $pro->id)
+                            ->first();
+                    @endphp
+                    @if ($pro->auctionType->name == 'Timed')
+                    <button class="text-btn">Bid Now <img class="img-fluid ms-2"
+                            src="{{ asset('frontend/images/next-arrow.svg') }}" alt=""></button>
+                  @elseif($bidRequest && $bidRequest->status == 1)
+                              <button class="text-btn" onclick="bidNow()">Bid Now <img class="img-fluid ms-2"
+                                      src="{{ asset('frontend/images/next-arrow.svg') }}" alt=""></button>
+                          @else
+                          <button class="text-btn" onclick="requestBid('{{ $pro->name }}', '{{ $pro->id }}', '{{ $pro->auction_type_id }}', '{{ $pro->deposit_amount }}')">Request Bid <img class="img-fluid ms-2" src="{{ asset('frontend/images/next-arrow.svg') }}" alt=""></button>
+
+                          @endif
                 </div>
                 </div>
-            </a>
+           
             </div>
             @endforeach
       </div>
@@ -266,6 +285,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
  </script>
 
+@include('frontend.layouts.requestbidscript')
  
 
 @include('frontend.layouts.footer')

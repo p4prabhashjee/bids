@@ -652,7 +652,7 @@ class ProductApiController extends Controller
             $userId = auth()->user()->id;
 
             $help = new Helpsupport([
-                'user_id' => $userId, // Store the user's ID
+                'user_id' => $userId, 
                 'name' => $request->input('name'),
                 'mobile' => $request->input('mobile'),
                 'email' => $request->input('email'),
@@ -675,5 +675,7 @@ class ProductApiController extends Controller
             ], 500);
         }
     }
+
+    // bid request
 
 }

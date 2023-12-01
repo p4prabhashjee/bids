@@ -46,8 +46,9 @@
                 <div class="row">
                     @foreach($at->projects as $project)
                     <div class="col-lg-6 col-md-12">
-                        <a href="#">
+                       
                             <div class="card-product">
+                              <a href="{{ url('products', $project->slug) }}">
                                 <div class="product-image">
                                     @if (!empty($project->image_path))
                                     <img src="{{ asset("img/projects/$project->image_path") }}"
@@ -57,6 +58,7 @@
                                         alt="Default Image">
                                     @endif
                                 </div>
+                                </a>
 
                                 <div class="card-product-dtl">
                                     <h3>{{ $project->name }} </h3>
@@ -65,14 +67,29 @@
                                     $timestamp = strtotime($originalDateTime);
                                     $formattedDateTime = date("F j, g:i A", $timestamp);
                                     @endphp
-
-                                    <!-- echo "<p>" . $formattedDateTime . "</p>"; -->
+                                    @if ($at->name == 'Live' || $at->name == 'Private')
+                                    <h5>${{$project->deposit_amount}}</h5>
+                                    @endif
                                     <p>{{  $formattedDateTime }}</p>
-                                    <button class="text-btn">Bid Now <img class="img-fluid ms-2"
+                                    @php
+                                        $loggedInUserId = Auth::id();
+                                        $bidRequest = \App\Models\BidRequest::where('user_id', $loggedInUserId)
+                                            ->where('project_id', $project->id)
+                                            ->first();
+                                    @endphp
+                                    @if ($at->name == 'Timed')
+                                    <button class="text-btn" onclick="bidNow()">Bid Now <img class="img-fluid ms-2"
                                             src="{{ asset('frontend/images/next-arrow.svg') }}" alt=""></button>
+                                    @elseif($bidRequest && $bidRequest->status == 1)
+                                        <button class="text-btn" onclick="bidNow()">Bid Now <img class="img-fluid ms-2"
+                                                src="{{ asset('frontend/images/next-arrow.svg') }}" alt=""></button>
+                                    @else
+                                    <button class="text-btn" onclick="requestBid('{{ $project->name }}', '{{ $project->id }}', '{{ $project->auction_type_id }}', '{{ $project->deposit_amount }}')">Request Bid <img class="img-fluid ms-2" src="{{ asset('frontend/images/next-arrow.svg') }}" alt=""></button>
+
+                                    @endif
                                 </div>
                             </div>
-                        </a>
+                        
                     </div>
                     @endforeach
                 </div>
@@ -415,5 +432,7 @@
 </script>
 
 
+
+@include('frontend.layouts.requestbidscript')
 
 @include('frontend.layouts.footer')

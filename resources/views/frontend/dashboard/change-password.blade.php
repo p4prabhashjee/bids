@@ -14,10 +14,11 @@
                     <div class="heading-act">
                         <h2>Change Password</h2>
                     </div>
-                    @if(session('success'))
-                        <div class="alert alert-success">{{ session('success') }}</div>
-                    @endif
+                   
                     <div class="profile-detail-section">
+                    <div class="error-container">
+                            <ul class="error-messages"></ul>
+                        </div>
                         <form action="{{ route('change-password') }}" class="cmn-frm px-4" method="POST">
                           @csrf
            
@@ -54,8 +55,10 @@
         </div>
     </div>
 </section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
-    $(document).ready(function() {
+   $(document).ready(function() {
     $('form').submit(function(event) {
         var currentPassword = $('input[name="current_password"]').val();
         var newPassword = $('input[name="password"]').val();
@@ -66,6 +69,27 @@
         // Validate current password
         if (currentPassword === '') {
             errors.push('Current password is required.');
+        } else {
+
+            $.ajax({
+                type: 'POST',
+                url: '/validate-current-password', 
+                data: {
+                    current_password: currentPassword
+                },
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                async: false,
+                success: function(response) {
+                    if (response !== 'valid') {
+                        errors.push('Current password is incorrect.');
+                    }
+                },
+                error: function() {
+                    errors.push('Error validating current password.');
+                }
+            });
         }
 
         // Validate new password
@@ -89,11 +113,14 @@
             for (var i = 0; i < errors.length; i++) {
                 errorHtml += '<li>' + errors[i] + '</li>';
             }
-            errorHtml += '';
-            $('.error-messages').html(errorHtml);
+            $('.error-messages').html(errorHtml); // Update error messages container
+            $('.error-container').show(); // Show the error container
+        } else {
+            $('.error-container').hide(); // Hide the error container if there are no errors
         }
     });
 });
+
 
 </script>
 <script src="{{asset('frontend/js/jquery.min.js')}}"></script> 

@@ -1,4 +1,21 @@
 @include('frontend.layouts.header')
+
+<style>
+  
+button.text-btns {
+    position: absolute;
+    right: 50px;
+    top: 40px;
+    font-size: 20px;
+    border: 0;
+    background-color: transparent;
+    padding: 0;
+    color: #e93d14;
+    font-size: 29px;
+    font-weight: 500;
+    text-transform: uppercase
+}
+  </style>
 <section class="hero-ther inner_header">
     <div class="container-fluid">
       <div class="row justify-content-center">
@@ -14,7 +31,9 @@
               <div class="bid-box-status">
                 <div class="bid-box-status-ic"><img src="{{ asset('frontend/images/private.svg') }}"><span>{{ $projects->auctionType->name }}</span></div>
               </div>
-         
+              <!-- <button class="text-btns">Request Bid <img class="img-fluid ms-3" src="./images/next-arrow.svg" alt=""></button> -->
+              <button class="text-btns" onclick="requestBid('{{ $projects->name }}', '{{ $projects->id }}', '{{ $projects->auction_type_id }}', '{{ $projects->deposit_amount }}')">Request Bid</button>
+
             <form action="" class="search-frm-prdt" id="searchForm">
                 <input type="text" name="search" id="searchInput" placeholder="Search products...">
                 <button type="button" onclick="submitSearchForm()">
@@ -48,6 +67,7 @@
     <div class="container">
       <div class="row">
       @foreach($products as $product)
+
         <div class="col-md-6">
           <a href="{{ url('productsdetail', $product->slug) }}">
             <div class="card-product">
@@ -88,7 +108,16 @@
                      
                       @endif
                   @endif
-                  <button class="text-btn">Bid Now <img class="img-fluid ms-3" src="./images/next-arrow.svg" alt=""></button>
+                  @php
+            $projectBidRequestStatus = isset($userBidRequests[$product->project_id]) ? $userBidRequests[$product->project_id] : null;
+            @endphp
+
+            @if($projectBidRequestStatus === 1)
+                  @if(strtotime($product->auction_end_date) > strtotime('now'))
+                      <button class="text-btn">Bid Now <img class="img-fluid ms-3" src="./images/next-arrow.svg" alt=""></button>
+                  @endif
+              
+              @endif
               </div>
             </div>
           </a>
@@ -195,3 +224,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
 @include('frontend.layouts.footer')
 @include('frontend.products.script.addToWishListScript')
+@include('frontend.layouts.requestbidscript')

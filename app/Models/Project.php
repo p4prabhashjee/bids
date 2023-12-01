@@ -20,6 +20,7 @@ class Project extends Model
         'start_date_time',
         'buyers_premium',
         'category_id',
+        'deposit_amount',
     ];
 
   
@@ -34,6 +35,10 @@ public function category()
     return $this->belongsTo(Category::class, 'category_id');
 }
 
+public function bidRequest()
+{
+    return $this->belongsTo(BidRequest::class, 'project_id');
+}
     
     
 }

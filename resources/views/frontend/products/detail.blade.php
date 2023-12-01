@@ -84,6 +84,18 @@
         .prty-sect p, .prty-sect a{
           color: #fff;
         }
+        .popup {
+  display: none;
+  position: absolute;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 1;
+}
+
+.popup.show {
+  display: block;
+}
   </style>
 <section class="prty-sect">
     <div class="container">
@@ -150,9 +162,10 @@
         </div>
       
         <div class="col-md-6">
+        @if ($product->auctionType->name == 'Private' || $product->auctionType->name == 'Timed')
           <div class="bid-and-time">
             <h4>Current Bid <span>$20,0379.00</span></h4>
-            @if ($product->auctionType->name == 'Private' || $product->auctionType->name == 'Timed')
+           
             <div class="crt_bid">
               <h6>Biding Closes In</h6>
               <div class="countdown-time thisisdemoclass" data-id='{{ $product->id }}'
@@ -172,26 +185,32 @@
               </div>
             
             </div>
+            @else
+                <p><span style="color: red;">Lot closed</span></p>      
             @endif
           
           </div>
-         
-          <div class="product-feature-box">
+          <div class="bid-now-container">
+                  <div class="product-feature-box">
             <h4>BID NOW <img src="{{ asset('frontend/images/line.svg') }}" alt="" /></h4>
-            <p>Bid Amount : Minimum Bid 20.00$</p>
+            <p>Bid Amount: Minimum Bid {{$product->reserved_price}}$</p>
             <p>Set Max Bid</p>
             <form action="" class="news-letter">
-              <div class="form-group">
-                <select>
-                  <option>$00.00</option>
-                  <option>$01.00</option>
-                  <option>$02.00</option>
-                  <option>$03.00</option>
-                </select>
-                <button type="button" data-bs-toggle="modal" data-bs-target="#myModal">Place Bid</button>
-              </div>
+                <div class="form-group">
+                <select id="bidValueSelects">
+                      @foreach ($calculatedBids as $bidValue)
+                          <option value="{{ $bidValue }}">$ {{ $bidValue }}</option>
+                      @endforeach
+                  </select>
+                  @if(Auth::check())
+                      <button type="button" id="placeBidButton" data-bs-toggle="modal" data-bs-target="#myModal">Place Bid</button>
+                  @else
+                      <button type="button" id="loginFirstButton">Place Bid</button>
+                  @endif
+                </div>
             </form>
-          </div>
+        </div>
+      </div>
           <div class="product-feature-box">
             <h4>{{$product->project->name}} <img src="{{ asset('frontend/images/line.svg') }}" alt="" /></h4>
           @php
@@ -228,123 +247,10 @@
     </div>
   </section>
 
-  
-  <div class="modal fade" id="prtyfilter" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-body">
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          <div class="prty-filter p-4">
-            <h2>Filter</h2>
-            <form action="" class="cmn-frm mt-4">
-              <div class="form-group">
-                <select name="" id="">
-                  <option value="">Room type,</option>
-                  <option value="">Room type,</option>
-                </select>
-              </div>
-              <div class="form-group mt-2">
-                <div class="wrapper mb-4">
-                  <h3>Price</h3>
-                  <div class="price-input">
-                    <div class="field">
-                      <span>Min Price</span>
-
-                      <input type="number" class="input-min" value="2500" />
-                    </div>
-                    <div class="field">
-                      <span>Max Price</span>
-                      <input type="number" class="input-max" value="7500" />
-                    </div>
-                  </div>
-                  <div class="slider">
-                    <div class="progress"></div>
-                  </div>
-                  <div class="range-input">
-                    <input type="range" class="range-min" min="0" max="10000" value="2500" step="100" />
-                    <input type="range" class="range-max" min="0" max="10000" value="7500" step="100" />
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <h3>Auction Type</h3>
-                <ul class="categry-list">
-                  <li>
-                    <input type="radio" name="1" id="" class="w-auto" />
-                    Private
-                  </li>
-                  <li>
-                    <input type="radio" name="1" id="" class="w-auto" /> Timed
-                  </li>
-                  <li>
-                    <input type="radio" name="1" id="" class="w-auto" /> Live
-                  </li>
-                </ul>
-              </div>
-              <div class="form-group mt-4">
-                <h3>Auction</h3>
-                <ul class="categry-list">
-                  <li>
-                    <input type="radio" name="2" id="" class="w-auto" />
-                    Active
-                  </li>
-                  <li>
-                    <input type="radio" name="2" id="" class="w-auto" />
-                    Upcoming
-                  </li>
-                  <li>
-                    <input type="radio" name="2" id="" class="w-auto" /> Ended
-                  </li>
-                  <li>
-                    <input type="radio" name="2" id="" class="w-auto" /> All
-                  </li>
-                </ul>
-              </div>
-              <div class="btn-submit-flter mt-5">
-                <button class="btn btn-secondary w-100">Apply filters</button>
-                <button class="btn btn-border w-100">Clear All</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- <div id="alert-modal" class="modal fade " role="dialog">
-    <div class="modal-dialog">
-    
-      <div class="modal-content">
-         
-        <div class="modal-body timer-countdn text-center py-5" id="base-timer-path-background">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <div class=" text-center">
-            <h4>Live Auction</h4>
-          </div> 
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-md-12">
-                <div id="revese-timer" data-minute="1"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-      </div>
-
-    </div>
-  </div> -->
-
-
   <!-- The Modal -->
 <div class="modal" id="myModal">
   <div class="modal-dialog">
     <div class="modal-content">
-
-      <!-- Modal Header -->
-
-      <!-- Modal body -->
       <div class="modal-body">
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         <h4 class="modal-title">Submit Your Bid</h4>   
@@ -354,7 +260,7 @@
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <label>Estimate : $120 AUD - $140 AUD</label>
+              <label>Estimate : ${{$product->start_price}} - ${{$product->end_price}}</label>
             </div>
           </div>
           <div class="col-md-12">
@@ -363,25 +269,25 @@
             </div>
           </div>
           <div class="col-md-12">
-            <div class="form-group">
-              <label>Your max bid <i class="fa fa-info-circle" title="Max Bid"></i></label>
-              <select class="form-control">
-                <option>$60 AUD</option>
-                <option>$60 AUD</option>
-                <option>$60 AUD</option>
-                <option>$60 AUD</option>
-                <option>$60 AUD</option>
-              </select>
-            </div>
+              <div class="form-group">
+                  <label>Your max bid <i class="fa fa-info-circle" title="Max Bid"></i></label>
+                  <select class="form-control" id="bidValueSelect">
+                      @foreach ($calculatedBids as $bidValue)
+                          <option value="{{ $bidValue }}">$ {{ $bidValue }}</option>
+                      @endforeach
+                  </select>
+              </div>
           </div>
           <div class="col-md-12">
             <div class="form-group">
-              <label>Buyer's Premium <i class="fa fa-info-circle" title></i> : $19.60 AUD</label>
+              <label>Buyer's Premium <i class="fa fa-info-circle" id="buyerPremiumToolTip" data-toggle="tooltip" data-placement="right" title="If you win, you agree to pay a buyer's premium of up to bid value and any applicable taxes as described in the terms and conditions."><a href="#" class="ml-1" onclick="showTerms()">See Terms and Conditions</a></i> : ${{$project->buyers_premium}}</label>
             </div>
           </div>
+
+          
           <div class="col-md-12">
             <div class="form-group">
-              <label><b>Total : $89.60 AUD (+Shipping, taxes & fees)</b></label>
+            <label><b>Total : $<span id="totalAmount">0.00</span> AUD (+Shipping, taxes & fees)</b></label>
             </div>
           </div>
         </div>
@@ -390,12 +296,12 @@
           <div class="col-md-12"><h3>Shipping Address</h3></div>
           <div class="col-md-6">
             <div class="form-group">
-              <input type="text" name="" placeholder="laxmikant" class="form-control">
+              <input type="text" name="first_name" placeholder="First Name" class="form-control">
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <input type="text" name="" placeholder="sharma"  class="form-control">
+              <input type="text" name="last_name" placeholder="Last Name"  class="form-control">
             </div>
           </div>
           <div class="col-md-12">
@@ -475,6 +381,8 @@
     </div>
   </div>
 </div>
+
+
 
 <script src="{{ asset('frontend/js/jquery.min.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
@@ -643,6 +551,58 @@
 
 
   </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const placeBidButton = document.getElementById('placeBidButton');
+        const loginFirstButton = document.getElementById('loginFirstButton');
+
+        if (placeBidButton) {
+            placeBidButton.addEventListener('click', function () {
+               
+            });
+        }
+
+        if (loginFirstButton) {
+            loginFirstButton.addEventListener('click', function () {
+                // Prompt user to log in using SweetAlert when the user is not logged in
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Please Login First',
+                    text: 'You need to log in For Place Bid.',
+                    showCancelButton: true,
+                    confirmButtonText: 'Login'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+  
+                        localStorage.setItem('redirect_url', window.location.href);
+
+                        window.location.href = '{{ route("signin") }}';
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        window.location.reload();
+                    }
+                });
+                return;
+            });
+        }
+    });
+</script>
+
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#bidValueSelects').on('change', function() {
+            var bidValue = parseFloat($(this).val());
+            var buyersPremium = parseFloat({{ $project->buyers_premium }}); 
+            var totalAmount = (bidValue * buyersPremium) / 100;
+
+            $('#totalAmount').text(totalAmount.toFixed(2)); 
+        });
+    });
+</script>
+
+
+  
 
     
      

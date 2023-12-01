@@ -19,6 +19,10 @@ use Redirect;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Wishlist;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Bidvalue;
+use App\Models\BidRequest;
+
+
 
 
 
@@ -96,23 +100,56 @@ class HomepageController extends Controller
         if(Auth::check()) {
             $wishlist = Wishlist::where('user_id', Auth::id())->pluck('product_id')->toArray();
         }
-
-        return view('frontend.products.index', ['products' => $products], ['projects' => $projects, 'wishlist' => $wishlist, 'totalItems' => $totalItems]);
+        $userBidRequests = [];
+            if (Auth::check()) {
+                $userBidRequests = BidRequest::where('user_id', Auth::id())
+                    ->pluck('status', 'project_id')
+                    ->toArray();
+            }
+        return view('frontend.products.index', ['products' => $products], ['projects' => $projects, 'wishlist' => $wishlist, 'totalItems' => $totalItems,'userBidRequests' => $userBidRequests,]);
     }
 
     public function productsdetail($slug)
     {
         $product = Product::where('slug', $slug)->first();
+        $project = Project::where('id', $product->project_id)->first();
+        $bidValues = Bidvalue::where('status', 1)->orderBy('min_price')->get();
+
          
         if (!$product) {
             abort(404);
         }
         $wishlist = [];
+
+        $currentBid = $product->reserved_price;
+
+        $calculatedBids = [];
+        foreach ($bidValues as $bid) {
+            if ($currentBid >= $bid->min_price && $currentBid <= $bid->max_price) {
+                $bidIncrement = $currentBid;
+    
+                while ($bidIncrement <= $bid->max_price) {
+                    $calculatedBids[] = round($bidIncrement);
+                    $bidIncrement += ($bidIncrement * $bid->percentage) / 100;
+    
+                    // Check if the bid crossed the current range's max price
+                    if ($bidIncrement >= $bid->max_price) {
+                        $currentBid = $bid->max_price + 1; 
+                        break;
+                    }
+                }
+            }
+        }
+        // $countries = Country::where('status','1');
+        // $countryId = $countries->id;
+        // $states = State::where('country_id', $countryId)->get;
+        // $stateId = $states->id;
+        // $cities = City::where('state_id', $stateId)->get(['id', 'name']);
         if(Auth::check()) {
             $wishlist = Wishlist::where('user_id', Auth::id())->pluck('product_id')->toArray();
         }
 
-        return view('frontend.products.detail', ['product' => $product, 'wishlist' => $wishlist]);
+        return view('frontend.products.detail', ['product' => $product, 'wishlist' => $wishlist, 'calculatedBids' => $calculatedBids, 'project' => $project,]);
     }
     // /based on category redirect to 
 

@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Project;
+use App\Models\BidRequest;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class ProjectDataTable extends DataTable
+class BidRequestDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -22,32 +22,33 @@ class ProjectDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('#', function () {
-                static $count = 0;
-                $count++;
-                return $count;
-            })
-            ->addColumn('action', 'admin.projects.action')
+                ->addColumn('#', function () {
+                    static $count = 0;
+                    $count++;
+                    return $count;
+                })
+            ->addColumn('action', 'admin.bidrequest.action')
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(Project $model): QueryBuilder
+    public function query(BidRequest $model): QueryBuilder
     {
         $query = $model->newQuery();
+    
         if ($this->request->has('created_at')) {
             $created_at = $this->request->get('created_at');
             if ($created_at) {
-                $query->whereDate('created_at', '=', $created_at);
+               
+                $date = Carbon::parse($created_at)->toDateString();
+                $query->whereDate('created_at', '=', $date);
             }
         }
-        $query->with('auctiontype');
+        $query->with('auctiontype','project');
         return $query;
     }
-
-    
 
     /**
      * Optional method if you want to use the html builder.
@@ -55,7 +56,7 @@ class ProjectDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('project-table')
+                    ->setTableId('bid_requests-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
@@ -78,21 +79,21 @@ class ProjectDataTable extends DataTable
     {
         return [
             Column::make('#'),
-            Column::make('name'),
-            Column::computed('image_path')->render('full[\'image_path\'] ? "<img src=\'' . asset("img/projects/\" + full[\"image_path\"] + \"") . '\' width=\'50\'>" : "<img src=\'' . asset("img/noimage.jpg") . '\' width=\'50\'>"')->addClass('text-center'),
-            Column::make('start_date_time')->title('Start Date & Time'),
+            Column::make('user_id')->title('User Name'),
+            Column::computed('project')
+                    ->data('project.name') 
+                    ->title('Project'),
             Column::computed('auctiontype')
-                   ->data('auctiontype.name') 
-                   ->title('Auctiontype'),
-            Column::make('status')->render('full[\'status\'] ? \'Active\' : \'Inactive\'')->addClass('text-center'),
-            Column::make('is_trending')->render('full[\'is_trending\'] ? \'Yes\' : \'No\'')->addClass('text-center'),
-            Column::make('buyers_premium'),
-            Column::make('created_at')->render('new Date(full[\'created_at\']).toLocaleString()' ),
+                    ->data('auctiontype.name') 
+                    ->title('Auctiontype'),
+            Column::make('deposit_amount')->title('Deposit Amount'),
+            Column::make('status')->render('full[\'status\'] ? \'Approved\' : \'Decline\'')->addClass('text-center'),
+            Column::make('created_at'),
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
         ];
     }
 
@@ -101,6 +102,6 @@ class ProjectDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Project_' . date('YmdHis');
+        return 'BidRequest_' . date('YmdHis');
     }
 }
