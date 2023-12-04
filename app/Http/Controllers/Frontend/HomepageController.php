@@ -21,6 +21,8 @@ use App\Models\Wishlist;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Bidvalue;
 use App\Models\BidRequest;
+use App\Models\Country;
+
 
 
 
@@ -113,6 +115,9 @@ class HomepageController extends Controller
     {
         $product = Product::where('slug', $slug)->first();
         $project = Project::where('id', $product->project_id)->first();
+        $bidRequest = BidRequest::where('project_id', $product->project_id)
+            ->where('status', 1)
+            ->first();
         $bidValues = Bidvalue::where('status', 1)->orderBy('min_price')->get();
 
          
@@ -138,7 +143,7 @@ class HomepageController extends Controller
         }
     
 
-        return view('frontend.products.detail', ['product' => $product, 'wishlist' => $wishlist,'calculatedBids' => $calculatedBids,'project' => $project,]);
+        return view('frontend.products.detail', ['product' => $product, 'wishlist' => $wishlist,'calculatedBids' => $calculatedBids,'project' => $project,'bidRequest' =>$bidRequest]);
     }
     // /based on category redirect to 
 
@@ -196,7 +201,8 @@ class HomepageController extends Controller
 
     public function registration(Request $request)
     {
-        return view('frontend.registration');
+        $cont =Country::get();
+        return view('frontend.registration',compact('cont'));
     }
 
 

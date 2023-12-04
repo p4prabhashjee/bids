@@ -14,6 +14,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Models\BidRequest;
+
 
 class ProductApiController extends Controller
 {
@@ -85,6 +87,10 @@ class ProductApiController extends Controller
                 if (!isset($categorizedProjects[$type])) {
                     $categorizedProjects[$type] = [];
                 }
+                 // Check if bid request exists and is approved for the project
+                $isBidRequestedAndApproved = BidRequest::where('project_id', $project->id)
+                ->where('status', 1)
+                ->exists();
 
                 $categorizedProjects[$type][] = [
                     'id' => $project->id,
@@ -94,6 +100,7 @@ class ProductApiController extends Controller
                     'auction_type_id' => $project->auctionType->id,
                     'auction_type_name' =>$project->auctionType->name,
                     'deposit_amount'    => $project->deposit_amount,
+                    'is_bid' => $isBidRequestedAndApproved,
                 ];
             }
             $productauction = AuctionType::with(['products' => function ($query) {
@@ -124,10 +131,18 @@ class ProductApiController extends Controller
                     $auctionEndDate = "";
 
                     if ($auctionTypeName === 'Private' || $auctionTypeName === 'Timed') {
-                        $timestamp = strtotime($product->auction_end_date);
-                        $milliseconds = $timestamp * 1000;
-                        $auctionEndDate = $milliseconds;
+                        if (strtotime($product->auction_end_date) > strtotime('now')) {
+                            $timestamp = strtotime($product->auction_end_date);
+                            $milliseconds = $timestamp * 1000;
+                            $auctionEndDate = $milliseconds;
+                        } else {
+                            $auctionEndDate = 0;
+                        }
+                    } else {
+                        $auctionEndDate = 0;
                     }
+                
+                
 
                     $popular[] = [
                         'auction_type_name' => $auctionTypeName,
@@ -316,8 +331,12 @@ class ProductApiController extends Controller
                 'Message' => 'Data Retrieved Successfully',
                 'data' => [],
             ];
-
+           
             foreach ($projects as $project) {
+                  // Check if bid request exists and is approved for the project
+                $isBidRequestedAndApproved = BidRequest::where('project_id', $project->id)
+             ->where('status', 1)
+             ->exists();
                 $responseData['data'][] = [
                     'id' => $project->id,
                     'title' => $project->name,
@@ -326,6 +345,7 @@ class ProductApiController extends Controller
                     'auction_type_name' => $auctionType->name ?? null,
                     'auction_type_icon' => $auctionTypeIcon,
                     'deposit_amount'    => $project->deposit_amount,
+                    'is_bid' => $isBidRequestedAndApproved,
                 ];
             }
 
@@ -406,6 +426,10 @@ class ProductApiController extends Controller
 
                 $auctionTypeName = $auctionType ? $auctionType->name : null;
                 $auctionTypeIcon = '';
+                  // Check if bid request exists and is approved for the project
+                  $isBidRequestedAndApproved = BidRequest::where('project_id', $project->id)
+                                            ->where('status', 1)
+                                            ->exists();
 
                 if ($auctionTypeName === 'Private') {
                     $auctionTypeIcon = asset('auctionicon/private_icon.png');
@@ -422,6 +446,7 @@ class ProductApiController extends Controller
                     'auction_type_name' => $auctionTypeName,
                     'auction_type_icon' => $auctionTypeIcon,
                     'deposit_amount'    => $project->deposit_amount,
+                    'is_bid' => $isBidRequestedAndApproved,
                 ];
             }
 
@@ -680,4 +705,58 @@ class ProductApiController extends Controller
         }
     }
 
+
+    // bid request 
+    public function bidrequest(Request $request)
+    {
+        try {
+            $rules = [
+                'project_id' => 'required',
+                'auction_type_id' =>'required',
+                'deposit_amount' => 'required',
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                $firstErrorMessage = $validator->errors()->first();
+                return response()->json([
+                    'ResponseCode' => 422,
+                    'Status' => 'False',
+                    'Message' => $firstErrorMessage,
+                ], 422);
+            }
+
+            // Get the authenticated user's ID
+            $userId = auth()->user()->id;
+            $existingBid = BidRequest::where('user_id', $request->user_id)
+            ->where('project_id', $request->project_id)
+            ->exists();
+
+            if ($existingBid) {
+                return response()->json(['error' => 'You have already placed a bid for this project']);
+            }
+              $bids=  BidRequest::create([
+                    'user_id' =>  $userId,
+                    'project_id' => $request->project_id,
+                    'auction_type_id' => $request->auction_type_id,
+                    'deposit_amount' => $request->deposit_amount,
+                ]);
+
+         $bids->save();
+
+            return response()->json([
+                'ResponseCode' => 200,
+                'Status' => 'true',
+                'Message' => 'Bid Request Submitted successfully',
+                'data' =>  $bids,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'ResponseCode' => 500,
+                'Status' => 'False',
+                'Message' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }
