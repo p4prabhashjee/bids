@@ -1,5 +1,5 @@
 <x-admin-layout>
-<!--  -->
+
     <main class="main-content position-relative border-radius-lg ">
         @include('admin.include.navbar', ['module' => 'Projects', 'link' => 'admin.projects.index', 'page' => 'Create
         Project'])
@@ -97,6 +97,7 @@
                                                 @endif
                                             </div>
 
+
                                             <div class="col-12 col-sm-6 mt-3 test">
                                                 <label><strong>Is Trending:</strong></label>
                                                 <input type="checkbox" name="is_trending" value="1">
@@ -139,7 +140,7 @@ $(document).ready(function() {
     $("#brand").on("change", function() {
         // Get the selected value
         var selectedValue = $(this).val();
-        if (selectedValue === "4") {
+        if (selectedValue === "3") {
             $("#end-date-container").hide();
         } else {
             $("#end-date-container").show();

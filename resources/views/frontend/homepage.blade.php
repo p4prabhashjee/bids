@@ -46,9 +46,9 @@
                 <div class="row">
                     @foreach($at->projects as $project)
                     <div class="col-lg-6 col-md-12">
-                       
                             <div class="card-product">
-                              <a href="{{ url('products', $project->slug) }}">
+                            <a href="{{ url('products', $project->slug) }}">
+
                                 <div class="product-image">
                                     @if (!empty($project->image_path))
                                     <img src="{{ asset("img/projects/$project->image_path") }}"
@@ -70,6 +70,8 @@
                                     @if ($at->name == 'Live' || $at->name == 'Private')
                                     <h5>${{$project->deposit_amount}}</h5>
                                     @endif
+
+                                    <!-- echo "<p>" . $formattedDateTime . "</p>"; -->
                                     <p>{{  $formattedDateTime }}</p>
                                     @php
                                         $loggedInUserId = Auth::id();
@@ -78,7 +80,7 @@
                                             ->first();
                                     @endphp
                                     @if ($at->name == 'Timed')
-                                    <button class="text-btn" onclick="bidNow()">Bid Now <img class="img-fluid ms-2"
+                                    <button class="text-btn">Bid Now <img class="img-fluid ms-2"
                                             src="{{ asset('frontend/images/next-arrow.svg') }}" alt=""></button>
                                     @elseif($bidRequest && $bidRequest->status == 1)
                                         <button class="text-btn" onclick="bidNow()">Bid Now <img class="img-fluid ms-2"
@@ -89,7 +91,7 @@
                                     @endif
                                 </div>
                             </div>
-                        
+                       
                     </div>
                     @endforeach
                 </div>
@@ -430,7 +432,6 @@
         });
     });
 </script>
-
 
 
 @include('frontend.layouts.requestbidscript')

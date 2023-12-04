@@ -145,7 +145,7 @@ $(document).ready(function() {
     $("#brand").on("change", function() {
         // Get the selected value
         var selectedValue = $(this).val();
-        if (selectedValue === "4") {
+        if (selectedValue === "3") {
             $("#end-date-container").hide();
         } else {
             $("#end-date-container").show();

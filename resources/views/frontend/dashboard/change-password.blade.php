@@ -1,4 +1,12 @@
 @include('frontend.layouts.header')
+
+<style>
+  ul, .error-messages {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: red;
+}
+</style>
 <section class="account-hero-section">
       <div class="container">
         <h1>Change Password</h1>
@@ -73,7 +81,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: '/validate-current-password', 
+                url: 'validate-current-password', 
                 data: {
                     current_password: currentPassword
                 },

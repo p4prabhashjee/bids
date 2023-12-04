@@ -14,7 +14,6 @@
       </div>
     </div>
   </section>
-  
   <section class="list-fliter">
     <div class="container">
       <div class="result-lst">
@@ -39,14 +38,15 @@
       <div class="row">
         @foreach($projects as $pro)
             <div class="col-md-6">
+            
                 <div class="card-product">
                 <a href="{{ url('products', $pro->slug) }}">
                 <div class="product-image">
-                  @if (!empty($pro->image_path))
-                          <img src="{{ asset("img/projects/$pro->image_path") }}" alt="{{ $pro->title }}">
-                      @else
-                          <img src="{{ asset('frontend/images/default-product-image.png') }}" alt="Default Image">
-                      @endif
+                        @if (!empty($pro->image_path))
+                                <img src="{{ asset("img/projects/$pro->image_path") }}" alt="{{ $pro->title }}">
+                            @else
+                                <img src="{{ asset('frontend/images/default-product-image.png') }}" alt="Default Image">
+                            @endif
                 
                 </div>
                 </a>
@@ -70,16 +70,17 @@
                             ->where('project_id', $pro->id)
                             ->first();
                     @endphp
+                 
                     @if ($pro->auctionType->name == 'Timed')
                     <button class="text-btn">Bid Now <img class="img-fluid ms-2"
                             src="{{ asset('frontend/images/next-arrow.svg') }}" alt=""></button>
-                  @elseif($bidRequest && $bidRequest->status == 1)
-                              <button class="text-btn" onclick="bidNow()">Bid Now <img class="img-fluid ms-2"
-                                      src="{{ asset('frontend/images/next-arrow.svg') }}" alt=""></button>
-                          @else
-                          <button class="text-btn" onclick="requestBid('{{ $pro->name }}', '{{ $pro->id }}', '{{ $pro->auction_type_id }}', '{{ $pro->deposit_amount }}')">Request Bid <img class="img-fluid ms-2" src="{{ asset('frontend/images/next-arrow.svg') }}" alt=""></button>
+                    @elseif($bidRequest && $bidRequest->status == 1)
+                      <button class="text-btn" onclick="bidNow()">Bid Now <img class="img-fluid ms-2"
+                              src="{{ asset('frontend/images/next-arrow.svg') }}" alt=""></button>
+                  @else
+                  <button class="text-btn" onclick="requestBid('{{ $pro->name }}', '{{ $pro->id }}', '{{ $pro->auction_type_id }}', '{{ $pro->deposit_amount }}')">Request Bid <img class="img-fluid ms-2" src="{{ asset('frontend/images/next-arrow.svg') }}" alt=""></button>
 
-                          @endif
+                  @endif
                 </div>
                 </div>
            
@@ -285,8 +286,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
  </script>
 
-@include('frontend.layouts.requestbidscript')
  
+@include('frontend.layouts.requestbidscript')
 
 @include('frontend.layouts.footer')
  

@@ -6,17 +6,15 @@
                 <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                     <div class="card">
                         <div class="card-body p-3">
+                        <a href="{{route('admin.users.index')}}">
                             <div class="row">
                                 <div class="col-8">
-                                <a href="{{route('admin.users.index')}}">
                                     <div class="numbers">
-                                   
                                     <h6 class="text-sm mb-0 text-uppercase font-weight-bold">No of Users</h6>  
-                                  <h5 class="font-weight-bolder">
+                                   <h5 class="font-weight-bolder">
                                            {{$users}}
                                         </h5>
                                     </div>
-                                    </a>
                                 </div>
                                 <div class="col-4 text-end">
                                     <div
@@ -24,20 +22,24 @@
                                         <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
                                     </div>
                                 </div>
+                               
                             </div>
+                            </a>
                         </div>
                     </div>
                 </div>
                 <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                     <div class="card">
                         <div class="card-body p-3">
+                        <a href="{{route('admin.projects.index')}}">
                             <div class="row">
+                              
                                 <div class="col-8">
                                     <div class="numbers">
-                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">No Of Projects</p>
-                                        <a href="{{route('admin.projects.index')}}"> <h5 class="font-weight-bolder">
+                                        <h6 class="text-sm mb-0 text-uppercase font-weight-bold">No Of Projects</h6>
+                                         <h5 class="font-weight-bolder">
                                            {{$projects}}
-                                        </h5></a>
+                                        </h5>
                                         
                                     </div>
                                 </div>
@@ -47,20 +49,24 @@
                                         <i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
                                     </div>
                                 </div>
+                               
                             </div>
+                            </a>
                         </div>
                     </div>
                 </div>
                 <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                     <div class="card">
                         <div class="card-body p-3">
+                        <a href="{{route('admin.products.index')}}">
                             <div class="row">
+                            
                                 <div class="col-8">
                                     <div class="numbers">
-                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">No Of Products</p>
-                                        <a href="{{route('admin.products.index')}}"><h5 class="font-weight-bolder">
+                                        <h6 class="text-sm mb-0 text-uppercase font-weight-bold">No Of Products</h6>
+                                       <h5 class="font-weight-bolder">
                                            {{$products}}
-                                        </h5>  </a>
+                                        </h5>  
                                       
                                     </div>
                                 </div>
@@ -70,7 +76,9 @@
                                         <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
                                     </div>
                                 </div>
+                              
                             </div>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -78,10 +86,11 @@
                     <div class="card">
                         <div class="card-body p-3">
                             <div class="row">
+                            <a href="{{route('admin.categories.index')}}">
                                 <div class="col-8">
                                     <div class="numbers">
-                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">Categories</p>
-                                        <a href="{{route('admin.categories.index')}}"><h5 class="font-weight-bolder">
+                                        <h6 class="text-sm mb-0 text-uppercase font-weight-bold">Categories</h6>
+                                       <h5 class="font-weight-bolder">
                                            {{$cats}}
                                         </h5></a>
                                       
@@ -93,6 +102,7 @@
                                         <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
                                     </div>
                                 </div>
+                            </a>
                             </div>
                         </div>
                     </div>

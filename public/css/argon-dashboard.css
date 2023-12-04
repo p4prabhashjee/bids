@@ -21632,13 +21632,20 @@ fieldset:disabled .btn {
 .form-select {
   transition: box-shadow 0.15s ease, border-color 0.15s ease;
 }
+label, .tests {
+  font-size: 0.98rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #edebeb;
+  margin-left: 0.25rem;
+}
 
 label,
 .form-label {
-  font-size: 0.75rem;
+  font-size: 0.98rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  color:#b95c5c;
+  color:#161515;
   margin-left: 0.25rem;
 }
 

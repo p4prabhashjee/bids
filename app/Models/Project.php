@@ -35,10 +35,6 @@ public function category()
     return $this->belongsTo(Category::class, 'category_id');
 }
 
-public function bidRequest()
-{
-    return $this->belongsTo(BidRequest::class, 'project_id');
-}
     
     
 }

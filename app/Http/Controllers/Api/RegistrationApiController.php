@@ -119,7 +119,7 @@ class RegistrationApiController extends Controller
                 'phone' => 'required|numeric|digits:10|unique:users,phone',
                 'email' => 'required|string|email|max:255|unique:users',
                 'device_token' => '',
-                'password' => 'required|string|min:8',
+                'password' => ['required', 'string', 'min:8', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$&*])[A-Za-z\d!@#$&*]{8,}$/'],
                 'confirm_password' => 'required|same:password',
                 'country_code' => 'required',
                 'is_term' => 'required|boolean',
@@ -151,8 +151,6 @@ class RegistrationApiController extends Controller
             $user->save();
             $msg = $otp . ' is your Verification code for Bids.Sa ';
             Mail::to($user->email)->send(new ResetPasswordMail($user->otp));
-
-            // $result = sendOtp($msg, $request->phone, $request->country_code);
 
             $isTerm = (int) $request->input('is_term');
 

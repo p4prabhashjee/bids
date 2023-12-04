@@ -40,8 +40,8 @@ $pages =App\Models\Page::where('is_static', 1)->orderBy('title', 'ASC')->first()
                 <ul class="use-fulllink">
                     <li><a href="{{route('about-us')}}">About us</a></li>
                     <li><a href="{{route('contact-us')}}">Contact</a></li>
-                    <li><a href="">News</a></li>
-                    <li><a href="">Support</a></li>
+                    <!-- <li><a href="">News</a></li>
+                    <li><a href="">Support</a></li> -->
                 </ul>
             </div>
             <div class="col-md-4">
@@ -150,9 +150,9 @@ $(document).ready(function() {
 </script> -->
 <script>
     $(document).ready(function() {
-        // setTimeout(function() {
-        //     $('.bid-now-container').hide();
-        // }, 10000);
+        setTimeout(function() {
+            $('.bid-now-container').hide();
+        }, 10000);
         setInterval(() => {
             $('.thisisdemoclass').each(function() {
                 var date = $(this).data('date');

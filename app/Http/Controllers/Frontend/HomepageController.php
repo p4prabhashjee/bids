@@ -120,36 +120,25 @@ class HomepageController extends Controller
             abort(404);
         }
         $wishlist = [];
-
+        if(Auth::check()) {
+            $wishlist = Wishlist::where('user_id', Auth::id())->pluck('product_id')->toArray();
+        }
         $currentBid = $product->reserved_price;
 
         $calculatedBids = [];
         foreach ($bidValues as $bid) {
             if ($currentBid >= $bid->min_price && $currentBid <= $bid->max_price) {
-                $bidIncrement = $currentBid;
-    
+                $bidIncrement = $currentBid; 
+
                 while ($bidIncrement <= $bid->max_price) {
-                    $calculatedBids[] = round($bidIncrement);
-                    $bidIncrement += ($bidIncrement * $bid->percentage) / 100;
-    
-                    // Check if the bid crossed the current range's max price
-                    if ($bidIncrement >= $bid->max_price) {
-                        $currentBid = $bid->max_price + 1; 
-                        break;
-                    }
+                    $calculatedBids[] = round($bidIncrement); 
+                    $bidIncrement += ($bidIncrement * $bid->percentage) / 100; 
                 }
             }
         }
-        // $countries = Country::where('status','1');
-        // $countryId = $countries->id;
-        // $states = State::where('country_id', $countryId)->get;
-        // $stateId = $states->id;
-        // $cities = City::where('state_id', $stateId)->get(['id', 'name']);
-        if(Auth::check()) {
-            $wishlist = Wishlist::where('user_id', Auth::id())->pluck('product_id')->toArray();
-        }
+    
 
-        return view('frontend.products.detail', ['product' => $product, 'wishlist' => $wishlist, 'calculatedBids' => $calculatedBids, 'project' => $project,]);
+        return view('frontend.products.detail', ['product' => $product, 'wishlist' => $wishlist,'calculatedBids' => $calculatedBids,'project' => $project,]);
     }
     // /based on category redirect to 
 

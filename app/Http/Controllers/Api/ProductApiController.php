@@ -92,6 +92,8 @@ class ProductApiController extends Controller
                     'image_path' => asset("img/projects/" . $project->image_path),
                     'start_date_time' => Carbon::parse($project->start_date_time)->format('F j, h:i A'),
                     'auction_type_id' => $project->auctionType->id,
+                    'auction_type_name' =>$project->auctionType->name,
+                    'deposit_amount'    => $project->deposit_amount,
                 ];
             }
             $productauction = AuctionType::with(['products' => function ($query) {
@@ -323,6 +325,7 @@ class ProductApiController extends Controller
                     'start_date_time' => Carbon::parse($project->start_date_time)->format('F j, h:i A'),
                     'auction_type_name' => $auctionType->name ?? null,
                     'auction_type_icon' => $auctionTypeIcon,
+                    'deposit_amount'    => $project->deposit_amount,
                 ];
             }
 
@@ -418,6 +421,7 @@ class ProductApiController extends Controller
                     'start_date_time' => Carbon::parse($project->start_date_time)->format('F j, h:i A'),
                     'auction_type_name' => $auctionTypeName,
                     'auction_type_icon' => $auctionTypeIcon,
+                    'deposit_amount'    => $project->deposit_amount,
                 ];
             }
 
@@ -652,7 +656,7 @@ class ProductApiController extends Controller
             $userId = auth()->user()->id;
 
             $help = new Helpsupport([
-                'user_id' => $userId, 
+                'user_id' => $userId, // Store the user's ID
                 'name' => $request->input('name'),
                 'mobile' => $request->input('mobile'),
                 'email' => $request->input('email'),
@@ -675,7 +679,5 @@ class ProductApiController extends Controller
             ], 500);
         }
     }
-
-    // bid request
 
 }

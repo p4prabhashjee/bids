@@ -70,13 +70,10 @@
                 success: function(response) {
                     Swal.fire('Success!', 'Bid submitted Wait for Admin Approval.', 'success');
                 },
-                error: function (xhr, status, error) {
-                    if (xhr.responseJSON && xhr.responseJSON.error) {
-                        Swal.fire('Error!', xhr.responseJSON.error, 'error');
-                    } else {
-                        console.error(xhr.responseText);
-                        Swal.fire('Error!', 'Failed to submit bid.', 'error');
-                    }
+                error: function(xhr, status, error) {
+                    
+                    console.error(xhr.responseText);
+                    Swal.fire('Error!', 'Failed to submit bid.', 'error');
                 }
             });
         }

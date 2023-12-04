@@ -50,7 +50,7 @@ class ProjectController extends Controller
             'auction_type_id' => 'required',
             'buyers_premium'  =>'required',
             'category_id'     => 'required',
-            'deposit_amount'  => ''
+            'deposit_amount' =>'',
         ]);
 
         // Generate the slug
@@ -131,7 +131,7 @@ class ProjectController extends Controller
         // Check if the slug is already taken
         $count = Project::where('slug', $slug)->count();
         if ($count > 0) {
-            $slug .= '-' . ($count + 1); 
+            $slug .= '-' . ($count + 1); // Append a number to make it unique
         }
 
         return $slug;

@@ -6,7 +6,7 @@
           <div class="col-lg-5 col-md-6 text-center">
              <h1>Contact US</h1>
              <p>
-              <a href="index.html"><i class="fa fa-home"></i> Home /</a> Contact Us
+              <a href="{{url('/')}}"><i class="fa fa-home"></i> Home /</a> Contact Us
             </p>
              
           </div>

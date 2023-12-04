@@ -1,3 +1,11 @@
+
+
+<style>
+    .sidenav-normal{
+        color:brown;
+    }
+</style>
+
 <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 "
     id="sidenav-main">
     <div class="sidenav-header">
@@ -256,7 +264,6 @@
                     </ul>
                 </div>
             </li>
-
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#bidrequestSection"
                     class="nav-link {{Request::routeIs('admin.bidrequests.*') ? '' : 'collapsed'}}"
@@ -283,7 +290,32 @@
                     </ul>
                 </div>
             </li>
-
+            <!-- <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#blogSection"
+                    class="nav-link {{Request::routeIs('admin.blogs.*') ? '' : 'collapsed'}}"
+                    aria-controls="blogSection" role="button" aria-expanded="false">
+                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                        <i class="ni ni-ui-04 text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Blogs</span>
+                </a>
+                <div class="collapse {{Request::routeIs('admin.blogs.*') ? 'show' : ''}}" id="blogSection" style="">
+                    <ul class="nav ms-4">
+                        <li class="nav-item {{Request::routeIs('admin.blogs.index') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.blogs.index') ? 'active' : ''}}"
+                                href="{{route('admin.blogs.index')}}">
+                                <span class="sidenav-normal"> List </span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{Request::routeIs('admin.blogs.create') ? 'active' : ''}}">
+                            <a class="nav-link {{Request::routeIs('admin.blogs.create') ? 'active' : ''}}"
+                                href="{{route('admin.blogs.create')}}">
+                                <span class="sidenav-normal"> Add Blog </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li> -->
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#pageSection"
                     class="nav-link {{Request::routeIs('admin.pages.*') ? '' : 'collapsed'}}"
