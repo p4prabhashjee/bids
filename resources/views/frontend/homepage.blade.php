@@ -76,8 +76,9 @@
                                     @php
                                         $loggedInUserId = Auth::id();
                                         $bidRequest = \App\Models\BidRequest::where('user_id', $loggedInUserId)
-                                            ->where('project_id', $project->id)
-                                            ->first();
+                                                                ->where('project_id', $project->id)
+                                                                ->where('status',1)
+                                                                ->first();
                                     @endphp
                                     @if ($at->name == 'Timed')
                                     <button class="text-btn">Bid Now <img class="img-fluid ms-2"

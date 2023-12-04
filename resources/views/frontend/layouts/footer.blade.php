@@ -150,7 +150,7 @@ $(document).ready(function() {
 </script> -->
 <script>
     $(document).ready(function() {
-       
+      
         setInterval(() => {
             $('.thisisdemoclass').each(function() {
                 var date = $(this).data('date');
@@ -160,10 +160,10 @@ $(document).ready(function() {
                 const timeRemaining = targetDate - currentDate;
 
                 if (timeRemaining <= 0) {
-                    // $(this).find('ul').hide();
-                    // $(this).parent().find('.countdown-time').html('<p><span style="color: red;">Lot closed</span></p>');
+                    $(this).find('ul').hide();
+                    $(this).parent().find('.countdown-time').html('<p><span style="color: red;">Lot closed</span></p>');
 
-                    // $('.bid-now-container').hide();
+                    // $('.bid-now-containersdd').hide();
                 } else {
                     const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
                     const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));

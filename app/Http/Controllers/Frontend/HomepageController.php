@@ -48,6 +48,7 @@ class HomepageController extends Controller
         if(Auth::check()) {
             $wishlist = Wishlist::where('user_id', Auth::id())->pluck('product_id')->toArray();
         }
+        
         //    p($productauction);
         return view('frontend.homepage', compact('auctionTypesWithProject', 'banners', 'productauction','wishlist'));
     }
@@ -114,6 +115,7 @@ class HomepageController extends Controller
     public function productsdetail($slug)
     {
         $product = Product::where('slug', $slug)->first();
+        $project = Project::where('id', $product->project_id)->first();
         $project = Project::where('id', $product->project_id)->first();
         $bidRequest = BidRequest::where('project_id', $product->project_id)
             ->where('status', 1)

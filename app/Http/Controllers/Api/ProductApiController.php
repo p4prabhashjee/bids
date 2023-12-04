@@ -255,6 +255,9 @@ class ProductApiController extends Controller
             } elseif ($auctionTypeName === 'Live') {
                 $auctionTypeIcon = asset('auctionicon/live.png');
             }
+            $isBidRequestedAndApproved = BidRequest::where('project_id', $project->id)
+            ->where('status', 1)
+            ->exists();
             return response()->json([
                 'ResponseCode' => 200,
                 'Status' => 'True',
@@ -262,6 +265,8 @@ class ProductApiController extends Controller
                 'data' => [
                     'project_id' => $project->id,
                     'project_name' => $project->name,
+                    'deposit_amount'    => $project->deposit_amount,
+                    'is_bid' => $isBidRequestedAndApproved,
                     'project_start_date' => Carbon::parse($project->start_date_time)->format('F j, h:i A'),
                     'auction_type_name' => $auctionType->name ?? null,
                     'auction_type_icon' => $auctionTypeIcon,

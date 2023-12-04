@@ -49,7 +49,7 @@
                     <div class="col-lg-6 col-md-12">
                       <div class="form-group">
                         <label for="">Country code </label>
-                       <select name="country_code" class="choices__list choices__list--single form-control" id="country_code" tabindex="-1" data-choice="active">
+                        <select name="country_code" class="choices__list choices__list--single form-control" id="country_code" tabindex="-1" data-choice="active">
                           <option value="">Choose Country</option>
                           @foreach ($cont as $at)
                           <option value="+{{ $at->phonecode }}">+{{ $at->phonecode }}</option>
@@ -215,6 +215,7 @@ $(document).ready(function() {
                   if(response.status == 'error') {
                     alert(`${response.message}: ${response.error}`)
                   } else {
+                    // $('.numberTag').text(" "+ $('#country_code').val()+' '+$('#mobile_code-login').val())
                     $('.numberTag').text(" "+ ' '+$('#email').val())
                     openOtpVerificationModal();
                   }                    

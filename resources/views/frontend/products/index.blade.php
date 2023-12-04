@@ -36,14 +36,15 @@ button.text-btns {
               <div class="bid-box-status">
                 <div class="bid-box-status-ic"><img src="{{ asset('frontend/images/private.svg') }}"><span>{{ $projects->auctionType->name }}</span></div>
               </div>
-              @if($bidRequest)
-        <!-- If bid request with status=1 exists, hide the "Request Bid" button -->
-        <!-- <p>Bid already requested and approved.</p> -->
-    @else
-        <!-- Show the "Request Bid" button -->
-        <button class="text-btns" onclick="requestBid('{{ $projects->name }}', '{{ $projects->id }}', '{{ $projects->auction_type_id }}', '{{ $projects->deposit_amount }}')">Request Bid</button>
-    @endif
-            
+              @if ($projects->auctionType->name == 'Timed')
+                                    <!-- <button class="text-btn">Bid Now <img class="img-fluid ms-2"
+                                            src="{{ asset('frontend/images/next-arrow.svg') }}" alt=""></button> -->
+                                    @elseif($bidRequest)
+                                        
+                                    @else
+                                    <button class="text-btns" onclick="requestBid('{{ $projects->name }}', '{{ $projects->id }}', '{{ $projects->auction_type_id }}', '{{ $projects->deposit_amount }}')">Request Bid</button>
+
+                                    @endif
             <form action="" class="search-frm-prdt" id="searchForm">
                 <input type="text" name="search" id="searchInput" placeholder="Search products...">
                 <button type="button" onclick="submitSearchForm()">
@@ -121,13 +122,21 @@ button.text-btns {
                   @php
             $projectBidRequestStatus = isset($userBidRequests[$product->project_id]) ? $userBidRequests[$product->project_id] : null;
             @endphp
-
-            @if($projectBidRequestStatus === 1)
-                  @if(strtotime($product->auction_end_date) > strtotime('now'))
-                      <button class="text-btn">Bid Now <img class="img-fluid ms-3" src="./images/next-arrow.svg" alt=""></button>
-                  @endif
-              
-              @endif
+            @php
+            $currentTime = now()->timestamp; // Get current timestamp
+            $auctionEndTime = strtotime($product->auction_end_date); 
+        @endphp
+            @if ($projects->auctionType->name == 'Timed')
+            @unless ($currentTime >= $auctionEndTime)
+                                    <button class="text-btn">Bid Now <img class="img-fluid ms-2"
+                                            src="{{ asset('frontend/images/next-arrow.svg') }}" alt=""></button>
+                                            @endunless   
+                                    @elseif($projectBidRequestStatus === 1)
+                                    @unless ($currentTime >= $auctionEndTime)
+                                    <button class="text-btn">Bid Now <img class="img-fluid ms-2"
+                                            src="{{ asset('frontend/images/next-arrow.svg') }}" alt=""></button>
+                                            @endunless    
+                                    @endif
               </div>
             </div>
           </a>

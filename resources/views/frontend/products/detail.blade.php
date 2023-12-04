@@ -103,6 +103,7 @@
       <h3>{{$product->lot_no}} : {{$product->title}}</h3>
         <div class="col-md-6">
        
+
           <div class="product-imgs mt-4">
             <div class="heat-like wishlist-heart @if(in_array($product->id, $wishlist)) active @endif" data-product-id="{{ $product->id }}">
               <input type="checkbox" name="" id="" @if(in_array($product->id, $wishlist)) checked @endif>
@@ -150,61 +151,63 @@
       
         <div class="col-md-6">
         <div class="bid-and-time">
-    <h4>Current Bid <span>$20,0379.00</span></h4>
-    @if ($product->auctionType->name == 'Private' || $product->auctionType->name == 'Timed')
-        @php
-            $currentTime = now()->timestamp; // Get current timestamp
-            $auctionEndTime = strtotime($product->auction_end_date); 
-        @endphp
-        @if ($currentTime < $auctionEndTime)
-            <div class="crt_bid">
-                <h6>Bidding Closes In</h6>
-                <div class="countdown-time thisisdemoclass" data-id='{{ $product->id }}' data-date='{{ $product->auction_end_date }}' id="countdown-{{ $product->id }}">
-                    <ul>
-                        @if ($product->auctionType->name == 'Private' || $product->auctionType->name == 'Timed')
-                            <li class="days-wrapper"><span class="days"></span>D</li>
-                            <li>:</li>
-                        @endif
-                        <li><span class="hours"></span>H</li>
-                        <li>:</li>
-                        <li><span class="minutes"></span>M</li>
-                        <li>:</li>
-                        <li><span class="seconds"></span>S</li>
-                    </ul>
-                </div>
-            </div>
-        @else
-            <p><span style="color: red;">Lot closed</span></p>
-        @endif
-    @else
-        <p><span style="color: red;">Lot closed</span></p>
-    @endif
-  </div>
-    @if($bidRequest)
-         @unless ($currentTime >= $auctionEndTime)
-          <div class="bid-now-container">
-              <div class="product-feature-box">
-                <h4>BID NOW <img src="{{ asset('frontend/images/line.svg') }}" alt="" /></h4>
-                <p>Bid Amount: Minimum Bid {{$product->reserved_price}}$</p>
-                <p>Set Max Bid</p>
-                <form action="" class="news-letter">
-                  <div class="form-group">
-                  <select id="bidValueSelect">
-                            @foreach ($calculatedBids as $bidValue)
-                                <option value="{{ $bidValue }}">$ {{ $bidValue }}</option>
-                            @endforeach
-                        </select>
-                        @if(Auth::check())
-                        <button type="button" id="placeBidButton" data-bs-toggle="modal" data-bs-target="#myModal">Place Bid</button>
-                        @else
-                            <button type="button" id="loginFirstButton">Place Bid</button>
-                        @endif
+          <h4>Current Bid <span>$20,0379.00</span></h4>
+          @if ($product->auctionType->name == 'Private' || $product->auctionType->name == 'Timed')
+              @php
+                  $currentTime = now()->timestamp; // Get current timestamp
+                  $auctionEndTime = strtotime($product->auction_end_date); 
+              @endphp
+              @if ($currentTime < $auctionEndTime)
+                  <div class="crt_bid">
+                      <h6>Bidding Closes In</h6>
+                      <div class="countdown-time thisisdemoclass" data-id='{{ $product->id }}' data-date='{{ $product->auction_end_date }}' id="countdown-{{ $product->id }}">
+                          <ul>
+                              @if ($product->auctionType->name == 'Private' || $product->auctionType->name == 'Timed')
+                                  <li class="days-wrapper"><span class="days"></span>D</li>
+                                  <li>:</li>
+                              @endif
+                              <li><span class="hours"></span>H</li>
+                              <li>:</li>
+                              <li><span class="minutes"></span>M</li>
+                              <li>:</li>
+                              <li><span class="seconds"></span>S</li>
+                          </ul>
+                      </div>
                   </div>
-                </form>
+              @else
+                  <p><span style="color: red;">Lot closed</span></p>
+              @endif
+          @else
+              <p><span style="color: red;">Lot closed</span></p>
+          @endif
+        </div>
+        @if($bidRequest)
+        @unless ($currentTime >= $auctionEndTime)
+
+          <div class="bid-now-container">
+          <div class="product-feature-box">
+            <h4>BID NOW <img src="{{ asset('frontend/images/line.svg') }}" alt="" /></h4>
+            <p>Bid Amount: Minimum Bid {{$product->reserved_price}}$</p>
+            <p>Set Max Bid</p>
+            <form action="" class="news-letter">
+              <div class="form-group">
+              <select id="bidValueSelect">
+                        @foreach ($calculatedBids as $bidValue)
+                            <option value="{{ $bidValue }}">$ {{ $bidValue }}</option>
+                        @endforeach
+                    </select>
+                    @if(Auth::check())
+                    <button type="button" id="placeBidButton" data-bs-toggle="modal" data-bs-target="#myModal">Place Bid</button>
+                    @else
+                        <button type="button" id="loginFirstButton">Place Bid</button>
+                    @endif
               </div>
-           </div>
-           @endunless
-           @endif
+            </form>
+          </div>
+      </div>
+      @endunless
+      @endif
+
           <div class="product-feature-box">
             <h4>{{$product->project->name}} <img src="{{ asset('frontend/images/line.svg') }}" alt="" /></h4>
           @php
