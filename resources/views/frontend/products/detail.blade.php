@@ -181,32 +181,36 @@
               <p><span style="color: red;">Lot closed</span></p>
           @endif
         </div>
+        @php
+            $currentTime = now()->timestamp; 
+            $auctionEndTime = strtotime($product->auction_end_date); 
+        @endphp
         @if($bidRequest)
-        @unless ($currentTime >= $auctionEndTime)
+      <!-- @unless ($currentTime >= $auctionEndTime) -->
+        <div class="bid-now-container">
+            <div class="product-feature-box">
+                <h4>BID NOW <img src="{{ asset('frontend/images/line.svg') }}" alt="" /></h4>
+                <p>Bid Amount: Minimum Bid {{$product->reserved_price}}$</p>
+                <p>Set Max Bid</p>
+                <form action="" class="news-letter">
+                    <div class="form-group">
+                        <select id="bidValueSelect">
+                            @foreach ($calculatedBids as $bidValue)
+                                <option value="{{ $bidValue }}">$ {{ $bidValue }}</option>
+                            @endforeach
+                        </select>
+                        @if(Auth::check())
+                            <button type="button" id="placeBidButton" data-bs-toggle="modal" data-bs-target="#myModal">Place Bid</button>
+                        @else
+                            <button type="button" id="loginFirstButton">Place Bid</button>
+                        @endif
+                    </div>
+                </form>
+            </div>
+        </div>
+    <!-- @endunless -->
+    @endif
 
-          <div class="bid-now-container">
-          <div class="product-feature-box">
-            <h4>BID NOW <img src="{{ asset('frontend/images/line.svg') }}" alt="" /></h4>
-            <p>Bid Amount: Minimum Bid {{$product->reserved_price}}$</p>
-            <p>Set Max Bid</p>
-            <form action="" class="news-letter">
-              <div class="form-group">
-              <select id="bidValueSelect">
-                        @foreach ($calculatedBids as $bidValue)
-                            <option value="{{ $bidValue }}">$ {{ $bidValue }}</option>
-                        @endforeach
-                    </select>
-                    @if(Auth::check())
-                    <button type="button" id="placeBidButton" data-bs-toggle="modal" data-bs-target="#myModal">Place Bid</button>
-                    @else
-                        <button type="button" id="loginFirstButton">Place Bid</button>
-                    @endif
-              </div>
-            </form>
-          </div>
-      </div>
-      @endunless
-      @endif
 
           <div class="product-feature-box">
             <h4>{{$product->project->name}} <img src="{{ asset('frontend/images/line.svg') }}" alt="" /></h4>

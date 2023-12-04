@@ -226,10 +226,21 @@ class ProductApiController extends Controller
             foreach ($products as $product) {
                 $auctionEndDate = null;
 
+                // if ($auctionType && ($auctionType->name === 'Private' || $auctionType->name === 'Timed')) {
+                //     $timestamp = strtotime($product->auction_end_date);
+                //     $milliseconds = $timestamp * 1000;
+                //     $auctionEndDate = $milliseconds;
+                // }
                 if ($auctionType && ($auctionType->name === 'Private' || $auctionType->name === 'Timed')) {
-                    $timestamp = strtotime($product->auction_end_date);
-                    $milliseconds = $timestamp * 1000;
-                    $auctionEndDate = $milliseconds;
+                    if (strtotime($product->auction_end_date) > strtotime('now')) {
+                        $timestamp = strtotime($product->auction_end_date);
+                        $milliseconds = $timestamp * 1000;
+                        $auctionEndDate = $milliseconds;
+                    } else {
+                        $auctionEndDate = 0;
+                    }
+                } else {
+                    $auctionEndDate = 0;
                 }
                 $productImage = null;
                 if ($product->galleries->isNotEmpty()) {
