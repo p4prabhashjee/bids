@@ -52,6 +52,8 @@ Route::group(['namespace' => 'API'], function () {
     Route::post('projectlistbasedcategory', [ProductApiController::class, 'projectlistbasedcategory']);
 
 
+
+
     Route::post('productdetail', [ProductApiController::class, 'getProductDetail']);
      // wishlist related api 
     Route::post('addtowishlist', [ProductApiController::class,'addOrRemoveFromWishlist']);
@@ -60,7 +62,6 @@ Route::group(['namespace' => 'API'], function () {
 
     Route::post('help-support', [ProductApiController::class, 'helpsupport']);
     Route::post('bidrequest', [ProductApiController::class, 'bidrequest']);
-
 
 
     

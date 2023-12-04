@@ -90,7 +90,8 @@ Route::group(['middleware' => 'auth'],function(){
     Route::post('/wishlist/add', [ProductWishController::class,'addToWishlist'])->name('addToWishlist');
     Route::post('/wishlist/remove', [ProductWishController::class,'removeFromWishlist'])->name('removeFromWishlist');
     Route::post('/store-bid-request', [DashboardController::class, 'bidstore'])->name('store.bid.request');
-
+    Route::post('/bidplaced', [DashboardController::class, 'bidplaced'])->name('bidplaced');
+    
 
 
 });

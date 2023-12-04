@@ -192,7 +192,7 @@
                 <h4>BID NOW <img src="{{ asset('frontend/images/line.svg') }}" alt="" /></h4>
                 <p>Bid Amount: Minimum Bid {{$product->reserved_price}}$</p>
                 <p>Set Max Bid</p>
-                <form action="" class="news-letter">
+                <form action="" class="news-letter" id="bidForm">
                     <div class="form-group">
                         <select id="bidValueSelect">
                             @foreach ($calculatedBids as $bidValue)
@@ -201,11 +201,12 @@
                         </select>
                         @if(Auth::check())
                             <button type="button" id="placeBidButton" data-bs-toggle="modal" data-bs-target="#myModal">Place Bid</button>
+                            
                         @else
                             <button type="button" id="loginFirstButton">Place Bid</button>
                         @endif
                     </div>
-                </form>
+              </form>
             </div>
         </div>
     <!-- @endunless -->
@@ -661,40 +662,62 @@
 
 
   </script>
-   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const placeBidButton = document.getElementById('placeBidButton');
-        const loginFirstButton = document.getElementById('loginFirstButton');
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-        if (placeBidButton) {
-            placeBidButton.addEventListener('click', function () {
-               
-            });
-        }
+<script>
+ document.addEventListener('DOMContentLoaded', function () {
+ const placeBidButton = document.getElementById('placeBidButton');
+ const loginFirstButton = document.getElementById('loginFirstButton');
 
-        if (loginFirstButton) {
-            loginFirstButton.addEventListener('click', function () {
-                // Prompt user to log in using SweetAlert when the user is not logged in
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Please Login First',
-                    text: 'You need to log in For Place Bid.',
-                    showCancelButton: true,
-                    confirmButtonText: 'Login'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-  
-                        localStorage.setItem('redirect_url', window.location.href);
+ if (placeBidButton) {
+     placeBidButton.addEventListener('click', function () {
+         const bidValue = document.getElementById('bidValueSelect').value;
+         const projectId = '{{ $product->project->id }}'; 
+         const auctionTypeId = '{{ $product->auctionType->id }}'; 
+         const productId = '{{ $product->id }}'; 
 
-                        window.location.href = '{{ route("signin") }}';
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        window.location.reload();
-                    }
-                });
-                return;
-            });
-        }
-    });
+
+         axios.post('{{ route("bidplaced") }}', {
+             user_id: '{{ Auth::id() }}',
+             project_id: projectId,
+             auction_type_id:auctionTypeId, 
+             bid_amount: bidValue,
+             product_id: productId,
+         })
+         .then(function(response) {
+             console.log(response.data.message); 
+             
+         })
+         .catch(function(error) {
+             console.error(error); 
+             
+         });
+     });
+ }
+
+     if (loginFirstButton) {
+         loginFirstButton.addEventListener('click', function () {
+             
+             Swal.fire({
+                 icon: 'info',
+                 title: 'Please Login First',
+                 text: 'You need to log in For Place Bid.',
+                 showCancelButton: true,
+                 confirmButtonText: 'Login'
+             }).then((result) => {
+                 if (result.isConfirmed) {
+
+                     localStorage.setItem('redirect_url', window.location.href);
+
+                     window.location.href = '{{ route("signin") }}';
+                 } else if (result.dismiss === Swal.DismissReason.cancel) {
+                     window.location.reload();
+                 }
+             });
+             return;
+         });
+     }
+ });
 </script>
 
     
