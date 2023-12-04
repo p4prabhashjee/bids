@@ -497,7 +497,11 @@ class ProductApiController extends Controller
                 $timestamp = strtotime($product->auction_end_date);
                 $milliseconds = $timestamp * 1000;
                 $auctionEndDate = $milliseconds;
+            }else {
+                $auctionEndDate = 0;
             }
+        
+        
             $auctionTypeName = $auctionType->name ?? null;
             $auctionTypeIcon = '';
 
@@ -511,6 +515,9 @@ class ProductApiController extends Controller
 
             $loggedInUser = Auth::user();
             $project = Project::find($product->project_id);
+            $isBidRequestedAndApproved = BidRequest::where('project_id', $project->id)
+                ->where('status', 1)
+                ->exists();
 
             if ($project) {
                 $projectName = $project->name ?? null;
@@ -537,6 +544,7 @@ class ProductApiController extends Controller
                 'auction_type_icon' => $auctionTypeIcon,
                 'project_name' => $projectName,
                 'project_state_date' => Carbon::parse($projectStartDate)->format('F j, h:i A'),
+                'is_bid' => $isBidRequestedAndApproved,
                 'is_wishlist' => $loggedInUser ? $loggedInUser->wishlists->contains('product_id', $product->id) : false,
 
             ];
