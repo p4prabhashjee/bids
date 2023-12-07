@@ -11,6 +11,10 @@ use App\Models\Project;
 use App\Models\Category;
 use App\Models\Auctiontype;
 use Illuminate\Support\Str;
+use GoogleTranslate;
+use App\Models\Language;
+
+
 
 
 
@@ -53,15 +57,58 @@ class ProjectController extends Controller
             'deposit_amount' =>'',
         ]);
 
-        // Generate the slug
+        if (!array_key_exists('is_trending', $data)) {
+            $data['is_trending'] = false; 
+        }
         $data['slug'] = $this->getUniqueSlug($data['name']);
 
         // Upload the image
         if($request->hasFile('image_path')){
             $data['image_path'] = $this->verifyAndUpload($request, 'image_path', null, 'projects');
         }
+        $languages = Language::where('status', 1)->get();
+        foreach ($languages as $language) {
+            if ($language->short_name === 'en') {
+                $langId = 'en';
+    
+                $projectData = [
+                    'name' => $data['name'],
+                    'description' => $data['description'],
+                    'image_path' => $data['image_path'],
+                    'status' => $data['status'],
+                    'start_date_time' =>$data['start_date_time'],
+                    'is_trending' =>$data['is_trending'],
+                    'auction_type_id' =>$data['auction_type_id'],
+                    'buyers_premium'  =>$data['buyers_premium'],
+                    'category_id'  => $data['category_id'],
+                    'deposit_amount' =>$data['deposit_amount'],
+                    'slug' => $data['slug'],
+                    'lang_id' => $langId,
+                ];
+            } else {
+                $langIds = session('locale');
+                $translatedName = GoogleTranslate::trans($data['name'],  $langIds);
+                $translatedDesc = GoogleTranslate::trans($data['description'],  $langIds);
+    
+                $projectData = [
+                    'name' => $translatedName,
+                    'description' => $translatedDesc,
+                    'image_path' => $data['image_path'],
+                    'status' => $data['status'],
+                    'start_date_time' =>$data['start_date_time'],
+                    'is_trending' =>$data['is_trending'],
+                    'auction_type_id' =>$data['auction_type_id'],
+                    'buyers_premium'  =>$data['buyers_premium'],
+                    'category_id'  => $data['category_id'],
+                    'deposit_amount' =>$data['deposit_amount'],
+                    'slug' => $data['slug'],
+                    'lang_id' =>  $langIds,
+                ];
+            }
 
-        $pro = Project::create($data);
+        $pro = Project::create($projectData);
+
+        }
         
         return redirect()->route('admin.projects.index')->with('success', 'Project Created Successfully!');
     }

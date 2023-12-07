@@ -92,7 +92,7 @@ class CategoryDataTable extends DataTable
         return [
             Column::make('#'),
             Column::make('name'),
-            Column::make('slug'),
+            // Column::make('slug'),
             Column::make('status')->render('full[\'status\'] ? \'Published\' : \'Draft\'')->addClass('text-center'),
             Column::make('created_at')->render('new Date(full[\'created_at\']).toLocaleString()' ),
             Column::computed('action')

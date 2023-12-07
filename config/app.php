@@ -186,6 +186,7 @@ return [
         // 'Example' => App\Facades\Example::class,
         'GoogleTranslate' => Stichoza\GoogleTranslate\GoogleTranslate::class
     ])->toArray(),
+    
 
 ];
 

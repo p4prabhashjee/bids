@@ -16,6 +16,8 @@ use Illuminate\Support\Str;
 use App\Traits\ImageTrait;
 use Auth;
 use Illuminate\Validation\Rules;
+use GoogleTranslate;
+use App\Models\Language;
 
 
 class ProductController extends Controller
@@ -34,9 +36,10 @@ class ProductController extends Controller
     public function create()
     {
         $projects = Project::where('status', 1)->get();
+        $projectCategoryIds = $projects->pluck('category_id')->toArray();
         $auctiontype = Auctiontype::where('status', 1)->get();
-        $categories = Category::whereIn('auction_type_id', $auctiontype->pluck('id'))->get();
-        return view('admin.products.create', compact('categories', 'auctiontype','projects'));
+        // $categories = Category::whereIn('id', $projectCategoryIds)->get();
+        return view('admin.products.create', compact( 'auctiontype','projects'));
     }
 
     /**
@@ -44,34 +47,75 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-    //    return $request->all();
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'auction_type_id' => 'required',
             'auction_end_date' => '',
             'project_id'    => 'required',
-            'category_id' => 'required',
             'reserved_price' => 'required',
             'description' => 'required|string',
             'status' => 'required',
-            'Increment' => 'required',
             'is_popular' => 'boolean',
             'image_path.*' => 'required',
             'end_price' =>'',
             'start_price' => '',
         ]);
-        // return $data;
-
         // Generate the slug
        $data['slug'] = $this->getUniqueSlug($data['title']);
        $identifier = sprintf('%04d', mt_rand(1, 9999));
-
        // Generate the lot number
        $lotNumber = 'Lot-' . $identifier;
        
        $data['lot_no'] = $lotNumber;
+       
+    
+       if ($request->has('start_price')) {
+        $data['start_price'] = $request->input('start_price');
+        } else {
+            $data['start_price'] = null; 
+        }
+        $languages = Language::where('status', 1)->get();
+       foreach ($languages as $language) {
+           if ($language->short_name === 'en') {
+               $langId = 'en';
+   
+               $productData = [
+                   'title' => $data['title'],
+                   'auction_type_id' => $data['auction_type_id'],
+                   'project_id'      => $data['project_id'],
+                   'reserved_price' => $data['reserved_price'],
+                   'description' => $data['description'],
+                   'status' => $data['status'],
+                   'slug' => $data['slug'],
+                   'is_popular' => $data['is_popular'],
+                   'end_price'  => $data['end_price'],
+                   'start_price' => $data['start_price'],
+                   'lang_id' => $langId,
+                   'lot_no' => $data['lot_no']
+               ];
+           } else{
+                    $langIds = session('locale');
+                    $translatedTitle = GoogleTranslate::trans($data['title'],  $langIds);
+                    $translatedDesc = GoogleTranslate::trans($data['description'],  $langIds);
+                    $productData = [
+                        'title' =>  $translatedTitle,
+                        'auction_type_id' => $data['auction_type_id'],
+                        'project_id'      => $data['project_id'],
+                        'reserved_price' => $data['reserved_price'],
+                        'description' => $translatedDesc,
+                        'status' => $data['status'],
+                        'slug' => $data['slug'],
+                        'is_popular' => $data['is_popular'],
+                        'end_price'  => $data['end_price'],
+                        'start_price' => $data['start_price'],
+                        'lang_id' => $langIds,
+                        'lot_no' => $data['lot_no']
+                    ];
+                    
+           }
+        }
 
-        $pro = Product::create($data);
+       $pro = Product::create($productData);
      
         if ($request->hasFile('image_path')) {
             foreach ($request->file('image_path') as $file) {

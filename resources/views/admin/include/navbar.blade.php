@@ -1,4 +1,9 @@
         <!-- Navbar -->
+    <style>
+     .testlang{
+        width:8rem;
+     }
+    </style>
         <nav class="navbar navbar-main navbar-expand-lg px-0 shadow-none border-radius-xl " id="navbarBlur"
             data-scroll="false">
             <div class="container-fluid">
@@ -103,6 +108,15 @@
                                 </li>
                             </ul>
                         </li> -->
+                        <li>
+                        <div class="col-md-6 testlang">
+                        <select class="form-select changeLang">
+                            <option value="en" {{ session()->get('locale') == 'en' ? 'selected' : '' }}>English</option>
+                            <option value="ar" {{ session()->get('locale') == 'ar' ? 'selected' : '' }}>Arabic</option>
+                            
+                        </select>
+                       </div>
+                      </li>
                         <li class="nav-item d-flex align-items-center">
                             <form method="POST" class="nav-link text-white font-weight-bold px-0"
                                 action="{{ route('logout') }}">
@@ -119,5 +133,15 @@
             </div>
         </nav>
 
+
+    <script type="text/javascript">
+    
+    var url = "{{ route('changeLang') }}";
+    
+    $(".changeLang").change(function(){
+        window.location.href = url + "?lang="+ $(this).val();
+    });
+    
+</script>
         
         <!-- End Navbar -->

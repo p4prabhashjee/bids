@@ -1,18 +1,17 @@
 <x-admin-layout>
     <main class="main-content position-relative border-radius-lg ">
-        @include('admin.include.navbar', ['module' => 'Categories', 'link' => 'admin.categories.index', 'page' => 'Create
-        Blog'])
+        @include('admin.include.navbar', ['module' => 'language', 'link' => 'admin.language.index', 'page' => 'Create
+        language'])
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="col-12 col-lg-8 m-auto">
-                            <form action="{{route('admin.categories.store')}}" method="POST"
+                            <form action="{{route('admin.language.store')}}" method="POST"
                                 enctype="multipart/form-data">
                                 @csrf
                                 <div class="card p-3 border-radius-xl bg-white js-active" data-animation="FadeIn">
-                                    <h5 class="font-weight-bolder mb-0">Add Category</h5>
-                                    
+                                    <h5 class="font-weight-bolder mb-0">Add Language</h5>
                                     <p class="mb-0 text-sm">Mandatory informations</p>
                                     <div class="multisteps-form__content">
                                         <div class="row mt-3">
@@ -25,8 +24,17 @@
                                                 <div class="error">{{$errors->first('name')}}</div>
                                                 @endif
                                             </div>
+                                            <div class="col-12 col-sm-6">
+                                                <label>Short Name</label>
+                                                <input class="multisteps-form__input form-control" type="text" name="short_name"
+                                                    placeholder="eg. short_name" onfocus="focused(this)"
+                                                    onfocusout="defocused(this)" value="{{old('short_name')}}">
+                                                @if($errors->has('short_name'))
+                                                <div class="error">{{$errors->first('short_name')}}</div>
+                                                @endif
+                                            </div>
                                             <div class="col-12 col-sm-6 mt-3 mt-sm-0">
-                                                <label>Banner Image</label>
+                                                <label>Country Image</label>
                                                 <input class="form-control" type="file" placeholder="Banner Image"
                                                     onfocus="focused(this)" name="image_path"
                                                     accept="image/png, image/jpeg, image/jpg" onfocusout="defocused(this)">
@@ -45,22 +53,17 @@
                                                 <div class="error">{{$errors->first('status')}}</div>
                                                 @endif
                                             </div>
-
-                                            <div class="col-12 col-sm-12 mt-3 mt-sm-0">
-                                                <label>Description</label>
-                                                @php $description = old('description') @endphp
-                                                <x-forms.tinymce-editor :name="'description'" :data="$description" />
-                                            </div>
+                                           
                                             <div class="button-row d-flex mt-4">
                                                 <button class="btn bg-gradient-dark ms-auto mb-0 js-btn-next" type="submit"
-                                                    title="Submit">Add Category</button>
+                                                    title="Submit">Add Language</button>
                                             </div>
                                         </div>
                                     </div>
                             </form>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </main>

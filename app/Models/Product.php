@@ -16,15 +16,14 @@ class Product extends Model
         'auction_type_id',
         'auction_end_date',
         'project_id',
-        'category_id',
         'reserved_price',
         'description',
         'status', 
-        'Increment',
         'is_popular', 
         'slug', 
         'lot_no',
         'end_price',
+        'lang_id'
     ];
 
    

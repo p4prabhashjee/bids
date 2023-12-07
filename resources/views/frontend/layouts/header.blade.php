@@ -19,10 +19,15 @@ $logo = App\Models\Setting::where('is_static', 2)->orderBy('title', 'ASC')->firs
 @endphp
 
 @php
+$langId = session('locale');
+
 $categories = App\Models\Category::where('status', 1)
-->orderBy('name', 'ASC')
-->withCount('projects')
-->get();
+    ->where('lang_id', $langId)
+    ->orderBy('name', 'ASC')
+    ->withCount(['projects' => function ($query) use ($langId) {
+        $query->where('lang_id', $langId);
+    }])
+    ->get();
 @endphp
 
 @php
@@ -44,8 +49,12 @@ $categories = App\Models\Category::where('status', 1)
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
   </head>
-  <body>
+  <body style=" direction: {{ session()->get('locale') == 'ar' ? 'rtl' : '' }};">
+
     <nav class="nav header"> 
           <div class="search-logo">
           @if ($logo)
@@ -89,7 +98,7 @@ $categories = App\Models\Category::where('status', 1)
                     </div>
                 </li>
 
-                <li><a href="{{route('about-us')}}">About Us</a></li>
+                <!-- <li><a href="{{route('about-us')}}">About Us</a></li>
                   <li><a href="{{route('contact-us')}}">Contact Us</a></li>
                   <li class="lange-drop">
                   
@@ -99,8 +108,20 @@ $categories = App\Models\Category::where('status', 1)
                         <li><img src="{{asset('frontend/images/eng.svg')}}" alt=""> English <input type="radio" name="" id=""></li>
                         <li><img src="{{asset('frontend/images/Ara.svg')}}" alt=""> Arabic <input type="radio" name="" id=""></li>
                         </ul>
+                       
                     </div>
-                    </li>
+                    </li> -->
+                    <li><a href="{{ route('about-us') }}">About Us</a></li>
+                   <li><a href="{{ route('contact-us') }}">Contact Us</a></li>
+
+                    <!-- <div class="drop-lange-select"> -->
+                        <select class="form-select changeLang">
+                            <option value="en" {{ session()->get('locale') == 'en' ? 'selected' : '' }}>English</option>
+                            <option value="ar" {{ session()->get('locale') == 'ar' ? 'selected' : '' }}>Arabic</option>
+                  
+                        </select>
+                    <!-- </div> -->
+
 
 
                   @if (auth()->check())
@@ -223,4 +244,14 @@ langeDrop.addEventListener('mouseleave', () => {
   dropLangeSelect.style.display = 'none';
 });
 
+</script>
+
+<script type="text/javascript">
+    
+    var url = "{{ route('changeLang') }}";
+    
+    $(".changeLang").change(function(){
+        window.location.href = url + "?lang="+ $(this).val();
+    });
+    
 </script>

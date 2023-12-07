@@ -50,18 +50,7 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-12 col-sm-6 mt-3 mt-sm-0">
-                                                <label><strong>Choose a Category:</strong></label>
-                                                <select name="category_id"
-                                                    class="choices__list choices__list--single form-control"
-                                                    id="category" tabindex="-1" data-choice="active">
-                                                    <option value="">Select Category</option>
-                                                    @foreach ($categories as $cat)
-
-                                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
+                                          
 
                                             <div class="col-12 col-sm-6" id="end-date-container">
                                                 <label><strong>End Date & Time</strong></label>
@@ -132,13 +121,13 @@
                                                 @endif
                                             </div>
 
-                                            <div class="col-12 col-sm-6">
+                                            <!-- <div class="col-12 col-sm-6">
                                                 <label><strong>Increment Percentage</strong></label>
                                                 <input class="multisteps-form__input form-control" type="number" id="increment_percentage" name="Increment" placeholder="eg. Increment Percentage" onfocus="focused(this)" onfocusout="defocused(this)" value="{{ old('increment_percentage') }}">
                                                 @if($errors->has('increment_percentage'))
                                                 <div class="error">{{ $errors->first('increment_percentage') }}</div>
                                                 @endif
-                                            </div>
+                                            </div> -->
                                            
                                             <div class="col-12 col-sm-12 mt-3 mt-sm-0">
                                                 <label><strong>Gallery Images</strong></label>
@@ -179,7 +168,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!-- Add an event listener to the auction type select element -->
-<script>
+<!-- <script>
     $(document).ready(function () {
         $('#brand').on('change', function () {
             var selectedAuction = $(this).val();
@@ -205,7 +194,7 @@
             }
         });
     });
-</script>
+</script> -->
 
 <script>
     $('#brand').on('change', function () {

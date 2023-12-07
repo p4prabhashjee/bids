@@ -21,6 +21,7 @@ class Project extends Model
         'buyers_premium',
         'category_id',
         'deposit_amount',
+        'lang_id'
     ];
 
   

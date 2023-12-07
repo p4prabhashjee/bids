@@ -16,6 +16,7 @@ class Category extends Model
         'image_path',
         'status',
         'auction_type_id',
+        'lang_id'
        
     ];
 

@@ -8,6 +8,8 @@ use Illuminate\Validation\Rules;
 use App\Traits\ImageTrait;
 use Illuminate\Support\Str;
 use App\Models\Setting;
+use GoogleTranslate;
+use App\Models\Language;
 
 
 use App\DataTables\SettingDataTable;
@@ -47,9 +49,38 @@ class SettingController extends Controller
         ]);
            // Generate the slug
          $validatedData['slug'] = $this->getUniqueSlug( $validatedData['title']);
-        // Upload and save image if provided
         if ($request->hasFile('image')) {
              $validatedData['image'] = $this->verifyAndUpload($request, 'image', null, 'settings');
+        }
+        $languages = Language::where('status', 1)->get();
+
+        foreach ($languages as $language) {
+            if ($language->short_name === 'en') {
+                $langId = 'en';
+
+                $bannerData = [
+                    'title' => $validatedData['title'],
+                    'value' => $validatedData['value'],
+                    'image' => $validatedData['image'],
+                    'is_static' => $validatedData['is_static'],
+                    'slug' => $validatedData['slug'],
+                    'lang_id' => $langId,
+                ];
+            } else {
+                $langIds = session('locale');
+                $translatedTitle = GoogleTranslate::trans($validatedData['title'],  $langIds);
+                $translatedDesc = GoogleTranslate::trans($validatedData['value'],  $langIds);
+                $translateedslug = GoogleTranslate::trans($validatedData['slug'],  $langIds);
+
+                $bannerData = [
+                    'title' => $translatedTitle,
+                    'value' => $translatedDesc,
+                    'image' => $validatedData['image'],
+                    'is_static' => $validatedData['is_static'],
+                    'slug' => $translateedslug,
+                    'lang_id' =>  $langIds,
+                ];
+            }
         }
 
       

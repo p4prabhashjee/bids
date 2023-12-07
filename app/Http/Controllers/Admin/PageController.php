@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rules;
 use App\Traits\ImageTrait;
 use Illuminate\Support\Str;
+use GoogleTranslate;
+use App\Models\Language;
 
 use App\DataTables\PageDataTable;
 
@@ -37,7 +39,6 @@ class PageController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate the input
         $validatedData = $request->validate([
             'title' => 'required|max:255',
             'content' => 'required',
@@ -45,16 +46,46 @@ class PageController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'is_static' => 'boolean',
         ]);
-           // Generate the slug
+
          $validatedData['slug'] = $this->getUniqueSlug( $validatedData['title']);
-        // Upload and save image if provided
+         if (!array_key_exists('is_static', $validatedData)) {
+            $validatedData['is_static'] = false; 
+        }
         if ($request->hasFile('image')) {
              $validatedData['image'] = $this->verifyAndUpload($request, 'image', null, 'pages');
         }
-      
-        // Create a new page
-        Page::create($validatedData);
+        $languages = Language::where('status', 1)->get();
 
+        foreach ($languages as $language) {
+            $langId = 'en';
+            $pageData = [
+                'title' => $validatedData['title'],
+                'content' => $validatedData['content'],
+                'is_static' => $validatedData['is_static'],
+                'lang_id' => $langId, 
+            ];
+        
+            if ($language->short_name === 'en') {
+                if (isset($validatedData['image'])) {
+                    $pageData['image'] = $validatedData['image'];
+                }
+            } else {
+                $langIds = session('locale');
+                $translatedTitle = GoogleTranslate::trans($validatedData['title'], $langIds);
+                $translatedDesc = GoogleTranslate::trans($validatedData['content'], $langIds);
+        
+                $pageData['title'] = $translatedTitle;
+                $pageData['content'] = $translatedDesc;
+                $pageData['lang_id'] =  $langIds;
+        
+                if (isset($validatedData['image'])) {
+                    $pageData['image'] = $validatedData['image'];
+                }
+            }
+            
+            
+            Page::create($pageData);
+        }
         return redirect()->route('admin.pages.index')->with('success', 'Page created successfully');
     }
     /**
@@ -80,7 +111,7 @@ class PageController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Example image validation
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
 
         ]);
 

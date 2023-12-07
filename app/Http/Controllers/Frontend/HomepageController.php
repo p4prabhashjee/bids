@@ -27,23 +27,31 @@ use App\Models\Country;
 
 
 
-
-
 class HomepageController extends Controller
 {
     public function homepage(Request $request)
     {
-        $auctionTypesWithProject = AuctionType::with(['projects' => function ($query) {
+        $langId = session('locale');
+    
+        $auctionTypesWithProject = AuctionType::with(['projects' => function ($query) use ($langId) {
             $query->where('status', 1)
                 ->where('is_trending', 1)
+                ->where('lang_id', $langId)
                 ->take(4);
-        }])->where('status', 1)->get();
+        }])
+        ->where('status', 1)
+        ->whereHas('projects', function ($query) use ($langId) {
+            $query->where('lang_id', $langId);
+        })
+        ->get();
 
-        $banners = Banner::where('status', 1)->take(4)->get();
-        $productauction = AuctionType::with(['products' => function ($query) {
+        $banners = Banner::where('status', 1)->where('lang_id', $langId)->take(4)->get();
+        $productauction = AuctionType::with(['products' => function ($query) use ($langId) {
             $query->where('status', 1)
-                ->where('is_popular', 1);
+                ->where('is_popular', 1)
+                ->where('lang_id', $langId);
         }])->where('status', 1)->get();
+        // p($langId);
         $wishlist = [];
         if(Auth::check()) {
             $wishlist = Wishlist::where('user_id', Auth::id())->pluck('product_id')->toArray();
@@ -54,8 +62,9 @@ class HomepageController extends Controller
     }
     public function projectByAuctionType($slug, Request $request)
     {
-        $auctionType = AuctionType::where('slug', $slug)->first();
-        $projects = Project::where('auction_type_id', $auctionType->id);
+        $langId = session('locale');
+        $auctionType = AuctionType::where('slug', $slug)->where('lang_id', $langId)->first();
+        $projects = Project::where('auction_type_id', $auctionType->id)->where('lang_id', $langId);
         if($request->has('search') && (!empty($request->search))) {
             $searchTerm = $request->search;
             $projects = $projects->when($searchTerm, function ($query) use ($searchTerm) {
@@ -69,9 +78,10 @@ class HomepageController extends Controller
 
     public function productsByProject($slug, Request $request)
     {
-        $projects = Project::where('slug', $slug)->first();
+        $langId = session('locale');
+        $projects = Project::where('slug', $slug)->where('lang_id', $langId)->first();
     
-        $productsQuery = Product::where('project_id', $projects->id);
+        $productsQuery = Product::where('project_id', $projects->id)->where('lang_id', $langId);
     
         if ($request->has('search') && !empty($request->search)) {
             $searchTerm = $request->search;
@@ -151,8 +161,9 @@ class HomepageController extends Controller
 
     public function projectByCategory($slug)
     {
-        $category = Category::where('slug', $slug)->first();
-        $projects = Project::where('category_id', $category->id)->paginate(10);
+        $langId = session('locale');
+        $category = Category::where('slug', $slug)->where('lang_id', $langId)->first();
+        $projects = Project::where('category_id', $category->id)->where('lang_id', $langId)->paginate(10);
         // dd($projects);//
 
         return view('frontend.projects.index', ['projects' => $projects]);

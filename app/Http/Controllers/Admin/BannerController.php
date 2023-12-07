@@ -9,6 +9,8 @@ use Auth;
 use App\Traits\ImageTrait;
 use App\Models\Banner;
 use App\Models\Project;
+use GoogleTranslate;
+use App\Models\Language;
 
 
 
@@ -45,11 +47,42 @@ class BannerController extends Controller
             'url'        => 'required',
             'status' => 'required|boolean', 
         ]);
+
         if ($request->hasFile('image_path')) {
             $data['image_path'] = $this->verifyAndUpload($request, 'image_path');
         }
+        $languages = Language::where('status', 1)->get();
+
+        foreach ($languages as $language) {
+            if ($language->short_name === 'en') {
+                $langId = 'en';
+
+                $bannerData = [
+                    'title' => $data['title'],
+                    'description' => $data['description'],
+                    'image_path' => $data['image_path'],
+                    'status' => $data['status'],
+                    'url' => $data['url'],
+                    'lang_id' => $langId,
+                ];
+            } else {
+                $langIds = session('locale');
+                $translatedTitle = GoogleTranslate::trans($data['title'],  $langIds);
+                $translatedDesc = GoogleTranslate::trans($data['description'],  $langIds);
+
+                $bannerData = [
+                    'title' => $translatedTitle,
+                    'description' => $translatedDesc,
+                    'image_path' => $data['image_path'],
+                    'status' => $data['status'],
+                    'url' => $data['url'],
+                    'lang_id' =>  $langIds,
+                ];
+            }
+
         // Generate the slug
-        $banners = Banner::create($data);
+        $banners = Banner::create($bannerData);
+    }
 
         return redirect()->route('admin.banners.index')->with('success', 'Banner created successfully!');
     }

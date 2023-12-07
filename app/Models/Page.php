@@ -15,7 +15,8 @@ class Page extends Model
         'slug',
         'content',
         'image',
-        'is_static'
+        'is_static',
+        'lang_id'
     ];
 
     /**

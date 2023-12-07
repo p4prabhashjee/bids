@@ -22,9 +22,12 @@ use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\BidrequestController;
+use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Frontend\HomepageController;
 use App\Http\Controllers\Frontend\DashboardController;
 use App\Http\Controllers\Frontend\ProductWishController;
+use App\Http\Controllers\Frontend\LangController;
+
 
 
 
@@ -67,7 +70,8 @@ Route::get('/verifyOtpForgetPassword', [HomepageController::class, 'verifyOtpFor
 Route::get('/updateNewPassword', [HomepageController::class, 'updateNewPassword'])->name('updateNewPassword');
 Route::post('/subscribe', [HomepageController::class, 'subscribe'])->name('subscribe');
 Route::post('/contactus', [HomepageController::class, 'contacstus'])->name('contactus');
-
+Route::get('lang/home', [LangController::class, 'index']);
+Route::get('lang/change', [LangController::class, 'change'])->name('changeLang');
 
 
 
@@ -112,6 +116,8 @@ Route::get('get-project/{auction}', [ProductController::class,'getprojects'])->n
 
 Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+    Route::get('adlang', [LangController::class, 'index']);
+    Route::get('adlang/change', [LangController::class, 'change'])->name('changeLang');
     Route::resource('users', UserController::class);
     Route::resource('countries', CountryController::class);
     Route::resource('states', StateController::class);
@@ -131,6 +137,8 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::resource('news', NewsController::class);
     Route::resource('bidrequests', BidrequestController::class);
     Route::post('update-status', [BidrequestController::class, 'updateStatus'])->name('bidrequests.updateStatus');
+    Route::resource('language', LanguageController::class);
+
 
     
 });
